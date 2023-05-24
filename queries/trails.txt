@@ -6,7 +6,7 @@
   // These are the blazed trails
   relation["route"="hiking"](41.813,-74.652,42.352,-73.862);
   // More paths; some overlap w/ route=hiking but there are many others, too.
-  way["highway"="path"](41.813,-74.652,42.352,-73.862);
+  way["highway"="^(path|track)"](41.813,-74.652,42.352,-73.862);
 );
 // print results
 out body;
