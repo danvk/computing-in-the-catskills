@@ -1,0 +1,3506 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.60 f4c14d41",
+  "osm3s": {
+    "timestamp_osm_base": "2023-05-24T15:24:38Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 357544119,
+  "lat": 42.0303694,
+  "lon": -74.1731992,
+  "tags": {
+    "ele": "398",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "942153",
+    "gnis:state_id": "36",
+    "name": "Acorn Hill",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 357544128,
+  "lat": 42.2964745,
+  "lon": -74.0998591,
+  "tags": {
+    "ele": "948",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "942156",
+    "gnis:state_id": "36",
+    "name": "Acra Point",
+    "natural": "peak",
+    "wikidata": "Q34802014"
+  }
+},
+{
+  "type": "node",
+  "id": 357544300,
+  "lat": 42.1125900,
+  "lon": -73.9829130,
+  "tags": {
+    "ele": "186",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "942222",
+    "gnis:state_id": "36",
+    "name": "Mount Airy",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 357546166,
+  "lat": 42.2948070,
+  "lon": -74.3876474,
+  "tags": {
+    "ele": "766",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "942863",
+    "gnis:state_id": "36",
+    "name": "Bald Mountain",
+    "natural": "peak",
+    "wikidata": "Q34803417"
+  }
+},
+{
+  "type": "node",
+  "id": 357546546,
+  "lat": 41.9770369,
+  "lon": -74.3573722,
+  "tags": {
+    "ele": "1104",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "942944",
+    "gnis:state_id": "36",
+    "name": "Balsam Cap",
+    "natural": "peak",
+    "wikidata": "Q4852530"
+  }
+},
+{
+  "type": "node",
+  "id": 357546555,
+  "lat": 42.0459236,
+  "lon": -74.5940438,
+  "tags": {
+    "ele": "1136",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "942952",
+    "gnis:state_id": "36",
+    "name": "Balsam Lake Mountain",
+    "natural": "peak",
+    "wikidata": "Q4852536",
+    "wikipedia": "en:Balsam Lake Mountain"
+  }
+},
+{
+  "type": "node",
+  "id": 357546567,
+  "lat": 42.0909235,
+  "lon": -74.4882082,
+  "tags": {
+    "ele": "1098",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "942953",
+    "gnis:state_id": "36",
+    "name": "Balsam Mountain",
+    "natural": "peak",
+    "wikidata": "Q4852538"
+  }
+},
+{
+  "type": "node",
+  "id": 357546578,
+  "lat": 42.1836992,
+  "lon": -74.3873710,
+  "tags": {
+    "ele": "1022",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "942954",
+    "gnis:state_id": "36",
+    "name": "Balsam Mountain",
+    "natural": "peak",
+    "wikidata": "Q34804175"
+  }
+},
+{
+  "type": "node",
+  "id": 357546585,
+  "lat": 41.9064817,
+  "lon": -74.4329310,
+  "tags": {
+    "ele": "715",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "942961",
+    "gnis:state_id": "36",
+    "name": "Bangle Hill",
+    "natural": "peak",
+    "wikidata": "Q34804188"
+  }
+},
+{
+  "type": "node",
+  "id": 357547415,
+  "lat": 42.2734189,
+  "lon": -74.4840396,
+  "tags": {
+    "ele": "1076",
+    "gnis:county_id": "025",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "943334",
+    "gnis:state_id": "36",
+    "name": "North Bearpen Mountain",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 357547596,
+  "lat": 42.0389801,
+  "lon": -73.8881888,
+  "tags": {
+    "ele": "115",
+    "gnis:county_id": "027",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "943479",
+    "gnis:state_id": "36",
+    "name": "Beckwith Hill",
+    "natural": "peak",
+    "wikidata": "Q34804808"
+  }
+},
+{
+  "type": "node",
+  "id": 357547864,
+  "lat": 42.0506109,
+  "lon": -74.1879688,
+  "tags": {
+    "ele": "554",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "943562",
+    "gnis:state_id": "36",
+    "name": "Beetree Hill",
+    "natural": "peak",
+    "wikidata": "Q34804927"
+  }
+},
+{
+  "type": "node",
+  "id": 357548267,
+  "lat": 41.9178703,
+  "lon": -73.8776341,
+  "tags": {
+    "ele": "170",
+    "gnis:county_id": "027",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "943726",
+    "gnis:state_id": "36",
+    "name": "Burger Hill",
+    "natural": "peak",
+    "wikidata": "Q34805069"
+  }
+},
+{
+  "type": "node",
+  "id": 357548762,
+  "lat": 42.0349959,
+  "lon": -74.4966494,
+  "tags": {
+    "ele": "1122",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "943907",
+    "gnis:state_id": "36",
+    "name": "Big Indian Mountain",
+    "natural": "peak",
+    "wikidata": "Q4905867"
+  }
+},
+{
+  "type": "node",
+  "id": 357548890,
+  "lat": 41.8984261,
+  "lon": -74.3448728,
+  "tags": {
+    "ele": "677",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "943947",
+    "gnis:state_id": "36",
+    "name": "Big Rosy Bone Knob",
+    "natural": "peak",
+    "wikidata": "Q34805335"
+  }
+},
+{
+  "type": "node",
+  "id": 357549532,
+  "lat": 41.9117578,
+  "lon": -74.6190460,
+  "tags": {
+    "ele": "838",
+    "gnis:county_id": "105",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "944305",
+    "gnis:state_id": "36",
+    "name": "Blue Hill",
+    "natural": "peak",
+    "wikidata": "Q34805740"
+  }
+},
+{
+  "type": "node",
+  "id": 357550371,
+  "lat": 41.9364815,
+  "lon": -74.3551505,
+  "tags": {
+    "ele": "769",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "944675",
+    "gnis:state_id": "36",
+    "name": "Breath Hill",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 357551470,
+  "lat": 42.3467495,
+  "lon": -74.2670873,
+  "tags": {
+    "ele": "750",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "945174",
+    "gnis:state_id": "36",
+    "name": "Bump Mountain",
+    "natural": "peak",
+    "wikidata": "Q34806891"
+  }
+},
+{
+  "type": "node",
+  "id": 357551650,
+  "lat": 42.3020297,
+  "lon": -74.1190264,
+  "tags": {
+    "ele": "972",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "945255",
+    "gnis:state_id": "36",
+    "name": "Burnt Knob",
+    "natural": "peak",
+    "wikidata": "Q34807137"
+  }
+},
+{
+  "type": "node",
+  "id": 357552396,
+  "lat": 42.0959235,
+  "lon": -74.2482011,
+  "tags": {
+    "ele": "879",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "945834",
+    "gnis:state_id": "36",
+    "name": "Carl Mountain",
+    "natural": "peak",
+    "wikidata": "Q34807626"
+  }
+},
+{
+  "type": "node",
+  "id": 357552715,
+  "lat": 42.2536973,
+  "lon": -74.5718199,
+  "tags": {
+    "ele": "874",
+    "gnis:county_id": "025",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "946059",
+    "gnis:state_id": "36",
+    "name": "Cator Roundtop",
+    "natural": "peak",
+    "wikidata": "Q34808066"
+  }
+},
+{
+  "type": "node",
+  "id": 357552738,
+  "lat": 42.2859185,
+  "lon": -74.2462543,
+  "tags": {
+    "ele": "947",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "946079",
+    "gnis:state_id": "36",
+    "name": "Cave Mountain",
+    "natural": "peak",
+    "wikidata": "Q34808196"
+  }
+},
+{
+  "type": "node",
+  "id": 357554095,
+  "lat": 42.3298055,
+  "lon": -74.4470929,
+  "tags": {
+    "ele": "393",
+    "gnis:county_id": "025",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "946804",
+    "gnis:state_id": "36",
+    "name": "Clay Hill",
+    "natural": "peak",
+    "wikidata": "Q34808850"
+  }
+},
+{
+  "type": "node",
+  "id": 357554326,
+  "lat": 42.1839774,
+  "lon": -74.1315286,
+  "tags": {
+    "ele": "727",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "946937",
+    "gnis:state_id": "36",
+    "name": "Clum Hill",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 357554767,
+  "lat": 42.2006434,
+  "lon": -74.2306991,
+  "tags": {
+    "ele": "975",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:edited": "10/22/2007",
+    "gnis:feature_id": "947168",
+    "gnis:state_id": "36",
+    "name": "Colonels Chair",
+    "natural": "peak",
+    "wikidata": "Q34809269"
+  }
+},
+{
+  "type": "node",
+  "id": 357555113,
+  "lat": 41.8637040,
+  "lon": -73.8704118,
+  "tags": {
+    "ele": "173",
+    "gnis:county_id": "027",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "947354",
+    "gnis:state_id": "36",
+    "name": "Cookingham Hill",
+    "natural": "peak",
+    "wikidata": "Q34809486"
+  }
+},
+{
+  "type": "node",
+  "id": 357555514,
+  "lat": 42.3450825,
+  "lon": -74.6498756,
+  "tags": {
+    "ele": "935",
+    "gnis:county_id": "025",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "947596",
+    "gnis:state_id": "36",
+    "name": "Cowan Mountain",
+    "natural": "peak",
+    "wikidata": "Q34809737"
+  }
+},
+{
+  "type": "node",
+  "id": 357555756,
+  "lat": 42.0870347,
+  "lon": -73.8931881,
+  "tags": {
+    "ele": "93",
+    "gnis:county_id": "021",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "947803",
+    "gnis:state_id": "36",
+    "name": "Cross Hill",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 357555759,
+  "lat": 42.0195363,
+  "lon": -74.3165372,
+  "tags": {
+    "ele": "763",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "947805",
+    "gnis:state_id": "36",
+    "name": "Cross Mountain",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 357556463,
+  "lat": 41.9028700,
+  "lon": -74.5396005,
+  "tags": {
+    "ele": "929",
+    "gnis:county_id": "105",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "948300",
+    "gnis:state_id": "36",
+    "name": "Denman Mountain",
+    "natural": "peak",
+    "wikidata": "Q49024264"
+  }
+},
+{
+  "type": "node",
+  "id": 357556828,
+  "lat": 42.3492493,
+  "lon": -74.4220918,
+  "tags": {
+    "ele": "617",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "948534",
+    "gnis:state_id": "36",
+    "name": "Dog Hill",
+    "natural": "peak",
+    "wikidata": "Q49025210"
+  }
+},
+{
+  "type": "node",
+  "id": 357557378,
+  "lat": 42.0620352,
+  "lon": -74.5093200,
+  "tags": {
+    "ele": "1098",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "948930",
+    "gnis:state_id": "36",
+    "name": "Eagle Mountain",
+    "natural": "peak",
+    "wikidata": "Q5325167"
+  }
+},
+{
+  "type": "node",
+  "id": 357557596,
+  "lat": 42.2353649,
+  "lon": -74.2043087,
+  "tags": {
+    "ele": "897",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "949142",
+    "gnis:state_id": "36",
+    "name": "East Jewett Range",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 357557639,
+  "lat": 41.8542597,
+  "lon": -74.4445989,
+  "tags": {
+    "ele": "699",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "949179",
+    "gnis:state_id": "36",
+    "name": "East Mountain",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 357558846,
+  "lat": 42.2117542,
+  "lon": -74.3079238,
+  "tags": {
+    "ele": "1027",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "949776",
+    "gnis:state_id": "36",
+    "name": "Evergreen Mountain",
+    "natural": "peak",
+    "wikidata": "Q34822182"
+  }
+},
+{
+  "type": "node",
+  "id": 357559622,
+  "lat": 42.0275916,
+  "lon": -74.4690414,
+  "tags": {
+    "ele": "1106",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "950082",
+    "gnis:state_id": "36",
+    "name": "Fir Mountain",
+    "natural": "peak",
+    "wikidata": "Q5451209"
+  }
+},
+{
+  "type": "node",
+  "id": 357559900,
+  "lat": 41.8770373,
+  "lon": -74.3576513,
+  "tags": {
+    "ele": "598",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "950241",
+    "gnis:state_id": "36",
+    "name": "Flat Hill",
+    "natural": "peak",
+    "wikidata": "Q34868953"
+  }
+},
+{
+  "type": "node",
+  "id": 357559938,
+  "lat": 42.1434219,
+  "lon": -74.5637649,
+  "tags": {
+    "ele": "887",
+    "gnis:county_id": "025",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "950270",
+    "gnis:state_id": "36",
+    "name": "Fleischmann Mountain",
+    "natural": "peak",
+    "wikidata": "Q34869107"
+  }
+},
+{
+  "type": "node",
+  "id": 357560041,
+  "lat": 41.8917593,
+  "lon": -74.0381957,
+  "tags": {
+    "ele": "99",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "950340",
+    "gnis:state_id": "36",
+    "name": "Fly Mountain",
+    "natural": "peak",
+    "wikidata": "Q34869285"
+  }
+},
+{
+  "type": "node",
+  "id": 357560681,
+  "lat": 41.9875924,
+  "lon": -74.3620944,
+  "tags": {
+    "ele": "1125",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "950728",
+    "gnis:state_id": "36",
+    "name": "Friday Mountain",
+    "natural": "peak",
+    "wikidata": "Q5503503"
+  }
+},
+{
+  "type": "node",
+  "id": 357560860,
+  "lat": 41.9559256,
+  "lon": -74.0687520,
+  "tags": {
+    "ele": "240",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "950853",
+    "gnis:state_id": "36",
+    "name": "Gallis Hill",
+    "natural": "peak",
+    "wikidata": "Q34915494"
+  }
+},
+{
+  "type": "node",
+  "id": 357560953,
+  "lat": 42.0912014,
+  "lon": -74.3665379,
+  "tags": {
+    "ele": "787",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "950906",
+    "gnis:state_id": "36",
+    "name": "Garfield Mountain",
+    "natural": "peak",
+    "wikidata": "Q34915666"
+  }
+},
+{
+  "type": "node",
+  "id": 357561527,
+  "lat": 42.3414723,
+  "lon": -74.1956958,
+  "tags": {
+    "ele": "855",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "951143",
+    "gnis:state_id": "36",
+    "name": "Ginseng Mountain",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 357561830,
+  "lat": 41.9164813,
+  "lon": -74.0193060,
+  "tags": {
+    "ele": "110",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "951288",
+    "gnis:state_id": "36",
+    "name": "Golden Hill",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 357563196,
+  "lat": 42.1800882,
+  "lon": -74.4379281,
+  "tags": {
+    "ele": "1074",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "952008",
+    "gnis:state_id": "36",
+    "name": "Halcott Mountain",
+    "natural": "peak",
+    "wikidata": "Q5641168"
+  }
+},
+{
+  "type": "node",
+  "id": 357563251,
+  "lat": 41.9898142,
+  "lon": -74.0190277,
+  "tags": {
+    "ele": "159",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "952042",
+    "gnis:state_id": "36",
+    "name": "Halihan Hill",
+    "natural": "peak",
+    "wikidata": "Q34823025"
+  }
+},
+{
+  "type": "node",
+  "id": 357563446,
+  "lat": 41.9612037,
+  "lon": -74.3295938,
+  "tags": {
+    "ele": "777",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "952176",
+    "gnis:state_id": "36",
+    "name": "Hanover Mountain",
+    "natural": "peak",
+    "wikidata": "Q34823241"
+  }
+},
+{
+  "type": "node",
+  "id": 357563944,
+  "lat": 42.0792571,
+  "lon": -74.5079309,
+  "tags": {
+    "ele": "1044",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "952457",
+    "gnis:state_id": "36",
+    "name": "Haynes Mountain",
+    "natural": "peak",
+    "wikidata": "Q34823790"
+  }
+},
+{
+  "type": "node",
+  "id": 357564127,
+  "lat": 42.0128698,
+  "lon": -74.4390407,
+  "tags": {
+    "ele": "990",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "952565",
+    "gnis:state_id": "36",
+    "name": "Hemlock Mountain",
+    "natural": "peak",
+    "wikidata": "Q34921769"
+  }
+},
+{
+  "type": "node",
+  "id": 357564405,
+  "lat": 42.1622697,
+  "lon": -74.0802607,
+  "tags": {
+    "ele": "1111",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "952749",
+    "gnis:state_id": "36",
+    "name": "Kaaterskill High Peak",
+    "natural": "peak",
+    "note": "High Peak is official name. Locals call it Kaaterskill High Peak to distinguish it from other High Peaks in the area, notably Windham High Peak to the north.",
+    "official_name": "High Peak",
+    "summit:register": "yes",
+    "wikidata": "Q6343625"
+  }
+},
+{
+  "type": "node",
+  "id": 357564414,
+  "lat": 41.9248149,
+  "lon": -74.2879263,
+  "tags": {
+    "ele": "939",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "952753",
+    "gnis:state_id": "36",
+    "name": "Ashokan High Point",
+    "natural": "peak",
+    "wikidata": "Q4805812"
+  }
+},
+{
+  "type": "node",
+  "id": 357564716,
+  "lat": 42.0981453,
+  "lon": -74.5418203,
+  "tags": {
+    "ele": "879",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "952894",
+    "gnis:state_id": "36",
+    "name": "Hirams Knob",
+    "natural": "peak",
+    "wikidata": "Q34922499"
+  }
+},
+{
+  "type": "node",
+  "id": 357564819,
+  "lat": 42.1823099,
+  "lon": -74.5718204,
+  "tags": {
+    "ele": "795",
+    "gnis:county_id": "025",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "952946",
+    "gnis:state_id": "36",
+    "name": "Hog Mountain",
+    "natural": "peak",
+    "wikidata": "Q34823905"
+  }
+},
+{
+  "type": "node",
+  "id": 357564840,
+  "lat": 41.8159264,
+  "lon": -73.9190250,
+  "tags": {
+    "ele": "110",
+    "gnis:county_id": "027",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "952954",
+    "gnis:state_id": "36",
+    "name": "Hogback Hill",
+    "natural": "peak",
+    "wikidata": "Q34823975"
+  }
+},
+{
+  "type": "node",
+  "id": 357565925,
+  "lat": 41.8856481,
+  "lon": -73.9940275,
+  "tags": {
+    "ele": "276",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:edited": "06/13/2007",
+    "gnis:feature_id": "953535",
+    "gnis:state_id": "36",
+    "name": "Hussey Hill",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 357566120,
+  "lat": 42.1162010,
+  "lon": -74.1145846,
+  "tags": {
+    "ele": "1083",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "953655",
+    "gnis:state_id": "36",
+    "name": "Indian Head Mountain",
+    "natural": "peak",
+    "wikidata": "Q6020411"
+  }
+},
+{
+  "type": "node",
+  "id": 357566276,
+  "lat": 42.3356386,
+  "lon": -74.5262617,
+  "tags": {
+    "ele": "934",
+    "gnis:county_id": "025",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "953767",
+    "gnis:state_id": "36",
+    "name": "Irish Mountain",
+    "natural": "peak",
+    "wikidata": "Q34824992"
+  }
+},
+{
+  "type": "node",
+  "id": 357566771,
+  "lat": 41.9881477,
+  "lon": -74.0531956,
+  "tags": {
+    "ele": "177",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "954045",
+    "gnis:state_id": "36",
+    "name": "Jockey Hill",
+    "natural": "peak",
+    "wikidata": "Q34876668"
+  }
+},
+{
+  "type": "node",
+  "id": 357566931,
+  "lat": 42.0519772,
+  "lon": -74.1810211,
+  "tags": {
+    "ele": "466",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "954097",
+    "gnis:state_id": "36",
+    "name": "Johns Mountain",
+    "natural": "peak",
+    "wikidata": "Q34876823"
+  }
+},
+{
+  "type": "node",
+  "id": 357567673,
+  "lat": 42.3320284,
+  "lon": -74.1545831,
+  "tags": {
+    "ele": "726",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "954394",
+    "gnis:state_id": "36",
+    "name": "Kate Hill",
+    "natural": "peak",
+    "wikidata": "Q34825308"
+  }
+},
+{
+  "type": "node",
+  "id": 357567912,
+  "lat": 42.1628655,
+  "lon": -74.6418219,
+  "tags": {
+    "ele": "669",
+    "gnis:county_id": "025",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "954564",
+    "gnis:state_id": "36",
+    "name": "Kettle Hill",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 357568138,
+  "lat": 42.2756411,
+  "lon": -74.4245933,
+  "tags": {
+    "ele": "610",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "954699",
+    "gnis:state_id": "36",
+    "name": "Kipp Hill",
+    "natural": "peak",
+    "wikidata": "Q49041853"
+  }
+},
+{
+  "type": "node",
+  "id": 357568945,
+  "lat": 41.8498151,
+  "lon": -73.8804123,
+  "tags": {
+    "ele": "169",
+    "gnis:county_id": "027",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "955221",
+    "gnis:state_id": "36",
+    "name": "Leroy Mountain",
+    "natural": "peak",
+    "wikidata": "Q34923839"
+  }
+},
+{
+  "type": "node",
+  "id": 357569397,
+  "lat": 41.9187038,
+  "lon": -74.3320944,
+  "tags": {
+    "ele": "917",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "955665",
+    "gnis:state_id": "36",
+    "name": "Little Rocky",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 357569399,
+  "lat": 42.1150898,
+  "lon": -74.2040325,
+  "tags": {
+    "ele": "930",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "955666",
+    "gnis:state_id": "36",
+    "name": "Little Rocky Mountain",
+    "natural": "peak",
+    "wikidata": "Q34924614"
+  }
+},
+{
+  "type": "node",
+  "id": 357569403,
+  "lat": 42.0870347,
+  "lon": -73.8729095,
+  "tags": {
+    "ele": "92",
+    "gnis:county_id": "021",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "955670",
+    "gnis:state_id": "36",
+    "name": "Little Roundtop",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 357569432,
+  "lat": 41.9995367,
+  "lon": -74.2009784,
+  "tags": {
+    "ele": "553",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "955712",
+    "gnis:state_id": "36",
+    "name": "Little Tonshi Mountain",
+    "natural": "peak",
+    "wikidata": "Q34924793"
+  }
+},
+{
+  "type": "node",
+  "id": 357569469,
+  "lat": 41.8214820,
+  "lon": -73.8868016,
+  "tags": {
+    "ele": "183",
+    "gnis:county_id": "027",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "955764",
+    "gnis:state_id": "36",
+    "name": "Lloyd Hill",
+    "natural": "peak",
+    "wikidata": "Q34924908"
+  }
+},
+{
+  "type": "node",
+  "id": 357569520,
+  "lat": 41.9691794,
+  "lon": -74.3900258,
+  "tags": {
+    "ele": "1134",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "955819",
+    "gnis:state_id": "36",
+    "name": "Lone Mountain",
+    "natural": "peak",
+    "wikidata": "Q6671314"
+  }
+},
+{
+  "type": "node",
+  "id": 357570009,
+  "lat": 42.2723079,
+  "lon": -74.3957036,
+  "tags": {
+    "ele": "557",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "956215",
+    "gnis:state_id": "36",
+    "name": "Maben Hill",
+    "natural": "peak",
+    "wikidata": "Q34926506"
+  }
+},
+{
+  "type": "node",
+  "id": 357570569,
+  "lat": 42.0614798,
+  "lon": -73.9937478,
+  "tags": {
+    "ele": "223",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "956529",
+    "gnis:state_id": "36",
+    "name": "Mount Marion",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 357571036,
+  "lat": 42.1459216,
+  "lon": -74.5904320,
+  "tags": {
+    "ele": "692",
+    "gnis:county_id": "025",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "956868",
+    "gnis:state_id": "36",
+    "name": "Meade Hill",
+    "natural": "peak",
+    "wikidata": "Q34827261"
+  }
+},
+{
+  "type": "node",
+  "id": 357571824,
+  "lat": 41.9098150,
+  "lon": -74.3112605,
+  "tags": {
+    "ele": "865",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "957499",
+    "gnis:state_id": "36",
+    "name": "Mombaccus Mountain",
+    "natural": "peak",
+    "wikidata": "Q34927139"
+  }
+},
+{
+  "type": "node",
+  "id": 357571875,
+  "lat": 42.1570331,
+  "lon": -74.4865409,
+  "tags": {
+    "ele": "757",
+    "gnis:county_id": "025",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "957524",
+    "gnis:state_id": "36",
+    "name": "Monka Hill",
+    "natural": "peak",
+    "wikidata": "Q34927203"
+  }
+},
+{
+  "type": "node",
+  "id": 357572056,
+  "lat": 41.9620367,
+  "lon": -74.1045865,
+  "tags": {
+    "ele": "195",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "957663",
+    "gnis:state_id": "36",
+    "name": "Morgan Hill",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 357572103,
+  "lat": 42.1734211,
+  "lon": -74.5968209,
+  "tags": {
+    "ele": "704",
+    "gnis:county_id": "025",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "957691",
+    "gnis:state_id": "36",
+    "name": "Morris Hill",
+    "natural": "peak",
+    "wikidata": "Q34880020"
+  }
+},
+{
+  "type": "node",
+  "id": 357572980,
+  "lat": 42.3281390,
+  "lon": -74.4693158,
+  "tags": {
+    "ele": "591",
+    "gnis:county_id": "025",
+    "gnis:created": "01/23/1980",
+    "gnis:edited": "08/15/2007",
+    "gnis:feature_id": "958336",
+    "gnis:state_id": "36",
+    "name": "Negro Hill",
+    "natural": "peak",
+    "wikidata": "Q34884985"
+  }
+},
+{
+  "type": "node",
+  "id": 357574030,
+  "lat": 42.1737318,
+  "lon": -74.3490098,
+  "tags": {
+    "ele": "1096",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "958771",
+    "gnis:state_id": "36",
+    "name": "North Dome",
+    "natural": "peak",
+    "wikidata": "Q8526324"
+  }
+},
+{
+  "type": "node",
+  "id": 357574253,
+  "lat": 42.2175881,
+  "lon": -74.0487469,
+  "tags": {
+    "ele": "971",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "958859",
+    "gnis:state_id": "36",
+    "name": "North Mountain",
+    "natural": "peak",
+    "wikidata": "Q8520739"
+  }
+},
+{
+  "type": "node",
+  "id": 357575047,
+  "lat": 42.0120364,
+  "lon": -74.1501432,
+  "tags": {
+    "ele": "423",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "959229",
+    "gnis:state_id": "36",
+    "name": "Ohayo Mountain",
+    "natural": "peak",
+    "wikidata": "Q34887341"
+  }
+},
+{
+  "type": "node",
+  "id": 357575132,
+  "lat": 42.3109171,
+  "lon": -74.6351536,
+  "tags": {
+    "ele": "892",
+    "gnis:county_id": "025",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "959266",
+    "gnis:state_id": "36",
+    "name": "Old Clump",
+    "natural": "peak",
+    "wikidata": "Q7083707"
+  }
+},
+{
+  "type": "node",
+  "id": 357575326,
+  "lat": 42.1142565,
+  "lon": -74.1909765,
+  "tags": {
+    "ele": "1048",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "959335",
+    "gnis:state_id": "36",
+    "name": "Olderbark Mountain",
+    "natural": "peak",
+    "wikidata": "Q34887598"
+  }
+},
+{
+  "type": "node",
+  "id": 357575441,
+  "lat": 42.2223098,
+  "lon": -74.1679184,
+  "tags": {
+    "ele": "985",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "959412",
+    "gnis:state_id": "36",
+    "name": "Onteora Mountain",
+    "natural": "peak",
+    "wikidata": "Q34828236"
+  }
+},
+{
+  "type": "node",
+  "id": 357575859,
+  "lat": 42.0850792,
+  "lon": -74.0932336,
+  "tags": {
+    "ele": "956",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "959659",
+    "gnis:state_id": "36",
+    "name": "Overlook Mountain",
+    "natural": "peak",
+    "wikidata": "Q7113811"
+  }
+},
+{
+  "type": "node",
+  "id": 357575995,
+  "lat": 42.1381438,
+  "lon": -74.6409887,
+  "tags": {
+    "ele": "743",
+    "gnis:county_id": "025",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "959767",
+    "gnis:state_id": "36",
+    "name": "Pakatakan Mountain",
+    "natural": "peak",
+    "wikidata": "Q34828634"
+  }
+},
+{
+  "type": "node",
+  "id": 357576055,
+  "lat": 42.0564799,
+  "lon": -74.3945946,
+  "tags": {
+    "ele": "1135",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "959820",
+    "gnis:state_id": "36",
+    "name": "Panther Mountain",
+    "natural": "peak",
+    "wikidata": "Q7131803"
+  }
+},
+{
+  "type": "node",
+  "id": 357576206,
+  "lat": 42.2228655,
+  "lon": -74.1395839,
+  "tags": {
+    "ele": "863",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "959909",
+    "gnis:state_id": "36",
+    "name": "Parker Mountain",
+    "natural": "peak",
+    "wikidata": "Q34889110"
+  }
+},
+{
+  "type": "node",
+  "id": 357577257,
+  "lat": 41.9012036,
+  "lon": -74.0456959,
+  "tags": {
+    "ele": "144",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "960592",
+    "gnis:state_id": "36",
+    "name": "Pink Hill",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 357577471,
+  "lat": 42.1073123,
+  "lon": -74.0865281,
+  "tags": {
+    "ele": "942",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "960694",
+    "gnis:state_id": "36",
+    "name": "Plattekill Mountain",
+    "natural": "peak",
+    "wikidata": "Q34896016"
+  }
+},
+{
+  "type": "node",
+  "id": 357577474,
+  "lat": 42.2667522,
+  "lon": -74.6482102,
+  "tags": {
+    "ele": "996",
+    "gnis:county_id": "025",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "960695",
+    "gnis:state_id": "36",
+    "name": "Plattekill Mountain",
+    "natural": "peak",
+    "wikidata": "Q34929323"
+  }
+},
+{
+  "type": "node",
+  "id": 357577531,
+  "lat": 42.0342583,
+  "lon": -74.3082035,
+  "tags": {
+    "ele": "857",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "960741",
+    "gnis:state_id": "36",
+    "name": "Mount Pleasant",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 357577776,
+  "lat": 41.8862040,
+  "lon": -74.3662626,
+  "tags": {
+    "ele": "600",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "960948",
+    "gnis:state_id": "36",
+    "name": "Pople Hill",
+    "natural": "peak",
+    "wikidata": "Q34897640"
+  }
+},
+{
+  "type": "node",
+  "id": 357578160,
+  "lat": 42.3217504,
+  "lon": -74.4457041,
+  "tags": {
+    "ele": "470",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "961170",
+    "gnis:state_id": "36",
+    "name": "Prospect Hill",
+    "natural": "peak",
+    "wikidata": "Q34899491"
+  }
+},
+{
+  "type": "node",
+  "id": 357578183,
+  "lat": 41.8748148,
+  "lon": -73.9637487,
+  "tags": {
+    "ele": "103",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "961177",
+    "gnis:state_id": "36",
+    "name": "Prospect Hill",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 357581428,
+  "lat": 42.2111993,
+  "lon": -73.9017970,
+  "tags": {
+    "ele": "95",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "962069",
+    "gnis:state_id": "36",
+    "name": "Quarry Hill",
+    "natural": "peak",
+    "wikidata": "Q49066012"
+  }
+},
+{
+  "type": "node",
+  "id": 357581759,
+  "lat": 41.9242591,
+  "lon": -74.5176554,
+  "tags": {
+    "ele": "910",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "962287",
+    "gnis:state_id": "36",
+    "name": "Red Hill",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 357582635,
+  "lat": 41.9728703,
+  "lon": -74.3726505,
+  "tags": {
+    "ele": "1065",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "962784",
+    "gnis:state_id": "36",
+    "name": "Rocky Mountain",
+    "natural": "peak",
+    "wikidata": "Q7355865"
+  }
+},
+{
+  "type": "node",
+  "id": 357582751,
+  "lat": 42.0581466,
+  "lon": -74.3187592,
+  "tags": {
+    "ele": "603",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "962845",
+    "gnis:state_id": "36",
+    "name": "Romer Mountain",
+    "natural": "peak",
+    "wikidata": "Q34830710"
+  }
+},
+{
+  "type": "node",
+  "id": 357582864,
+  "lat": 42.1506445,
+  "lon": -74.4379284,
+  "tags": {
+    "ele": "942",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "962909",
+    "gnis:state_id": "36",
+    "name": "Rose Mountain",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 357582956,
+  "lat": 42.2709193,
+  "lon": -74.2137531,
+  "tags": {
+    "ele": "789",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "962965",
+    "gnis:state_id": "36",
+    "name": "Round Hill",
+    "natural": "peak",
+    "wikidata": "Q34830945"
+  }
+},
+{
+  "type": "node",
+  "id": 357583075,
+  "lat": 42.0884236,
+  "lon": -73.8823544,
+  "tags": {
+    "ele": "102",
+    "gnis:county_id": "021",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "963037",
+    "gnis:state_id": "36",
+    "name": "Roundtop",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 357583079,
+  "lat": 42.2939737,
+  "lon": -74.4904283,
+  "tags": {
+    "ele": "1052",
+    "gnis:county_id": "025",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "963038",
+    "gnis:state_id": "36",
+    "name": "Roundtop",
+    "natural": "peak",
+    "wikidata": "Q34831469"
+  }
+},
+{
+  "type": "node",
+  "id": 357583098,
+  "lat": 42.0462024,
+  "lon": -74.2079224,
+  "tags": {
+    "ele": "605",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "963043",
+    "gnis:state_id": "36",
+    "name": "Roundtop Mountain",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 357583100,
+  "lat": 42.1684222,
+  "lon": -74.0945830,
+  "tags": {
+    "ele": "1052",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "963044",
+    "gnis:state_id": "36",
+    "name": "Roundtop Mountain",
+    "natural": "peak",
+    "wikidata": "Q34831581"
+  }
+},
+{
+  "type": "node",
+  "id": 357583239,
+  "lat": 42.2006434,
+  "lon": -74.2770897,
+  "tags": {
+    "ele": "1121",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "963108",
+    "gnis:state_id": "36",
+    "name": "Rusk Mountain",
+    "natural": "peak",
+    "wikidata": "Q7380934"
+  }
+},
+{
+  "type": "node",
+  "id": 357583264,
+  "lat": 41.9568718,
+  "lon": -73.9271697,
+  "tags": {
+    "ele": "102",
+    "gnis:county_id": "027",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "963130",
+    "gnis:state_id": "36",
+    "name": "Mount Rutsen",
+    "natural": "peak",
+    "wikidata": "Q34883423"
+  }
+},
+{
+  "type": "node",
+  "id": 357587829,
+  "lat": 41.9103705,
+  "lon": -74.4023745,
+  "tags": {
+    "ele": "856",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "964354",
+    "gnis:state_id": "36",
+    "name": "Samson Mountain",
+    "natural": "peak",
+    "wikidata": "Q34903046"
+  }
+},
+{
+  "type": "node",
+  "id": 357588327,
+  "lat": 42.3186948,
+  "lon": -74.5157062,
+  "tags": {
+    "ele": "1001",
+    "gnis:county_id": "025",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "964624",
+    "gnis:state_id": "36",
+    "name": "Schultice Mountain",
+    "natural": "peak",
+    "wikidata": "Q34904374"
+  }
+},
+{
+  "type": "node",
+  "id": 357589191,
+  "lat": 41.8409261,
+  "lon": -73.9906943,
+  "tags": {
+    "ele": "272",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "964957",
+    "gnis:state_id": "36",
+    "name": "Shaupeneak Mountain",
+    "natural": "peak",
+    "wikidata": "Q34832057"
+  }
+},
+{
+  "type": "node",
+  "id": 357589367,
+  "lat": 42.1039789,
+  "lon": -74.3279255,
+  "tags": {
+    "ele": "677",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "965067",
+    "gnis:state_id": "36",
+    "name": "Sheridan Mountain",
+    "natural": "peak",
+    "wikidata": "Q34905812"
+  }
+},
+{
+  "type": "node",
+  "id": 357589994,
+  "lat": 42.0257855,
+  "lon": -74.1577596,
+  "tags": {
+    "ele": "368",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "965567",
+    "gnis:state_id": "36",
+    "name": "Snake Rocks",
+    "natural": "peak",
+    "wikidata": "Q34908694"
+  }
+},
+{
+  "type": "node",
+  "id": 357590184,
+  "lat": 41.8262040,
+  "lon": -74.5143237,
+  "tags": {
+    "ele": "601",
+    "gnis:county_id": "105",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "965772",
+    "gnis:state_id": "36",
+    "name": "South Hill",
+    "natural": "peak",
+    "wikidata": "Q34834053"
+  }
+},
+{
+  "type": "node",
+  "id": 357590262,
+  "lat": 41.9492593,
+  "lon": -74.2932040,
+  "tags": {
+    "ele": "666",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "965816",
+    "gnis:state_id": "36",
+    "name": "South Mountain",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 357590268,
+  "lat": 42.1892764,
+  "lon": -74.0497281,
+  "tags": {
+    "ele": "752",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "965818",
+    "gnis:state_id": "36",
+    "name": "South Mountain",
+    "natural": "peak",
+    "wikidata": "Q34834174"
+  }
+},
+{
+  "type": "node",
+  "id": 357590272,
+  "lat": 42.1823103,
+  "lon": -74.4776516,
+  "tags": {
+    "ele": "865",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "965819",
+    "gnis:state_id": "36",
+    "name": "South Mountain",
+    "natural": "peak",
+    "wikidata": "Q34834145"
+  }
+},
+{
+  "type": "node",
+  "id": 357590768,
+  "lat": 42.0175919,
+  "lon": -74.4498744,
+  "tags": {
+    "ele": "1032",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "966132",
+    "gnis:state_id": "36",
+    "name": "Spruce Mountain",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 357590805,
+  "lat": 42.1506447,
+  "lon": -74.1679195,
+  "tags": {
+    "ele": "1030",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "966148",
+    "gnis:state_id": "36",
+    "name": "Spruce Top",
+    "natural": "peak",
+    "wikidata": "Q34910231"
+  }
+},
+{
+  "type": "node",
+  "id": 357591170,
+  "lat": 41.8773151,
+  "lon": -74.3387618,
+  "tags": {
+    "ele": "440",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "966343",
+    "gnis:state_id": "36",
+    "name": "Steiny Hill",
+    "natural": "peak",
+    "wikidata": "Q34930253"
+  }
+},
+{
+  "type": "node",
+  "id": 357591500,
+  "lat": 42.2250879,
+  "lon": -74.0651364,
+  "tags": {
+    "ele": "1043",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "966600",
+    "gnis:state_id": "36",
+    "name": "Stoppel Point",
+    "natural": "peak",
+    "wikidata": "Q34837146"
+  }
+},
+{
+  "type": "node",
+  "id": 357591717,
+  "lat": 41.8875928,
+  "lon": -74.4976557,
+  "tags": {
+    "ele": "661",
+    "gnis:county_id": "105",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "966727",
+    "gnis:state_id": "36",
+    "name": "Sugarloaf Mountain",
+    "natural": "peak",
+    "wikidata": "Q34843109"
+  }
+},
+{
+  "type": "node",
+  "id": 357591726,
+  "lat": 42.1312006,
+  "lon": -74.1501414,
+  "tags": {
+    "ele": "1160",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "966729",
+    "gnis:state_id": "36",
+    "name": "Sugarloaf Mountain",
+    "natural": "peak",
+    "wikidata": "Q7635011"
+  }
+},
+{
+  "type": "node",
+  "id": 357592460,
+  "lat": 42.0275917,
+  "lon": -74.3362600,
+  "tags": {
+    "ele": "721",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "967168",
+    "gnis:state_id": "36",
+    "name": "Terrace Mountain",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 357592601,
+  "lat": 42.3467495,
+  "lon": -74.3129220,
+  "tags": {
+    "ele": "804",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "967274",
+    "gnis:state_id": "36",
+    "name": "The Knob",
+    "natural": "peak",
+    "wikidata": "Q34812353"
+  }
+},
+{
+  "type": "node",
+  "id": 357592867,
+  "lat": 41.8348141,
+  "lon": -74.5759912,
+  "tags": {
+    "ele": "685",
+    "gnis:county_id": "105",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "967481",
+    "gnis:state_id": "36",
+    "name": "Thunder Hill",
+    "natural": "peak",
+    "wikidata": "Q34812890"
+  }
+},
+{
+  "type": "node",
+  "id": 357592948,
+  "lat": 42.1823110,
+  "lon": -73.9473548,
+  "tags": {
+    "ele": "181",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "967539",
+    "gnis:state_id": "36",
+    "name": "Timmerman Hill",
+    "natural": "peak",
+    "wikidata": "Q34813014"
+  }
+},
+{
+  "type": "node",
+  "id": 357593015,
+  "lat": 42.0584244,
+  "lon": -74.2157003,
+  "tags": {
+    "ele": "775",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "967590",
+    "gnis:state_id": "36",
+    "name": "Mount Tobias",
+    "natural": "peak",
+    "wikidata": "Q34883952"
+  }
+},
+{
+  "type": "node",
+  "id": 357593160,
+  "lat": 42.0005703,
+  "lon": -74.1927923,
+  "tags": {
+    "ele": "607",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "967662",
+    "gnis:state_id": "36",
+    "name": "Tonshi Mountain",
+    "natural": "peak",
+    "wikidata": "Q34813444"
+  }
+},
+{
+  "type": "node",
+  "id": 357593241,
+  "lat": 42.2853630,
+  "lon": -74.3329236,
+  "tags": {
+    "ele": "904",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "967693",
+    "gnis:state_id": "36",
+    "name": "Tower Mountain",
+    "natural": "peak",
+    "wikidata": "Q34813850"
+  }
+},
+{
+  "type": "node",
+  "id": 357593337,
+  "lat": 42.0744973,
+  "lon": -74.2778884,
+  "tags": {
+    "ele": "829",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "967788",
+    "gnis:state_id": "36",
+    "name": "Tremper Mountain",
+    "natural": "peak",
+    "wikidata": "Q6924189"
+  }
+},
+{
+  "type": "node",
+  "id": 357593720,
+  "lat": 42.1256453,
+  "lon": -74.1290294,
+  "tags": {
+    "ele": "1107",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "968056",
+    "gnis:state_id": "36",
+    "name": "Twin Mountain",
+    "natural": "peak",
+    "wikidata": "Q7858235"
+  }
+},
+{
+  "type": "node",
+  "id": 357594369,
+  "lat": 42.2689750,
+  "lon": -74.2001415,
+  "tags": {
+    "ele": "770",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "968422",
+    "gnis:state_id": "36",
+    "name": "Van Loan Hill",
+    "natural": "peak",
+    "wikidata": "Q34816828"
+  }
+},
+{
+  "type": "node",
+  "id": 357594389,
+  "lat": 41.9523147,
+  "lon": -74.4354304,
+  "tags": {
+    "ele": "976",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "968438",
+    "gnis:state_id": "36",
+    "name": "Van Wyck Mountain",
+    "natural": "peak",
+    "wikidata": "Q34816840"
+  }
+},
+{
+  "type": "node",
+  "id": 357594449,
+  "lat": 42.2417544,
+  "lon": -73.9187415,
+  "tags": {
+    "ele": "192",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "968475",
+    "gnis:state_id": "36",
+    "name": "Vedder Mountain",
+    "natural": "peak",
+    "wikidata": "Q34817218"
+  }
+},
+{
+  "type": "node",
+  "id": 357594579,
+  "lat": 42.2450867,
+  "lon": -74.3937596,
+  "tags": {
+    "ele": "625",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "968562",
+    "gnis:state_id": "36",
+    "name": "Vinegar Hill",
+    "natural": "peak",
+    "wikidata": "Q34817722"
+  }
+},
+{
+  "type": "node",
+  "id": 357594613,
+  "lat": 42.2453645,
+  "lon": -74.4459834,
+  "tags": {
+    "ele": "1076",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "968592",
+    "gnis:state_id": "36",
+    "name": "Vly Mountain",
+    "natural": "peak",
+    "wikidata": "Q7939097"
+  }
+},
+{
+  "type": "node",
+  "id": 357595956,
+  "lat": 42.2589763,
+  "lon": -73.9973552,
+  "tags": {
+    "ele": "437",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "969947",
+    "gnis:state_id": "36",
+    "name": "Cairo Round Top",
+    "natural": "peak",
+    "wikidata": "Q34807350"
+  }
+},
+{
+  "type": "node",
+  "id": 357596210,
+  "lat": 42.2036993,
+  "lon": -73.8748518,
+  "tags": {
+    "ele": "60",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "970272",
+    "gnis:state_id": "36",
+    "name": "Kykuit",
+    "natural": "peak",
+    "wikidata": "Q49042739"
+  }
+},
+{
+  "type": "node",
+  "id": 357596975,
+  "lat": 42.0225915,
+  "lon": -73.8987452,
+  "tags": {
+    "ele": "93",
+    "gnis:county_id": "027",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "970968",
+    "gnis:state_id": "36",
+    "name": "Whaleback",
+    "natural": "peak",
+    "wikidata": "Q34819850"
+  }
+},
+{
+  "type": "node",
+  "id": 357597157,
+  "lat": 42.2845295,
+  "lon": -74.5340406,
+  "tags": {
+    "ele": "959",
+    "gnis:county_id": "025",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "971120",
+    "gnis:state_id": "36",
+    "name": "White Man Mountain",
+    "natural": "peak",
+    "wikidata": "Q34820325"
+  }
+},
+{
+  "type": "node",
+  "id": 357597313,
+  "lat": 41.9775924,
+  "lon": -74.4759867,
+  "tags": {
+    "ele": "964",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "971253",
+    "gnis:state_id": "36",
+    "name": "Wildcat Mountain",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 357597553,
+  "lat": 42.3147961,
+  "lon": -74.1432647,
+  "tags": {
+    "ele": "1077",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "971464",
+    "gnis:state_id": "36",
+    "name": "Windham High Peak",
+    "natural": "peak",
+    "wikidata": "Q8024191"
+  }
+},
+{
+  "type": "node",
+  "id": 357597623,
+  "lat": 42.0081538,
+  "lon": -74.3473743,
+  "tags": {
+    "ele": "1153",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "971528",
+    "gnis:state_id": "36",
+    "name": "Wittenberg Mountain",
+    "natural": "peak",
+    "wikidata": "Q8028568"
+  }
+},
+{
+  "type": "node",
+  "id": 357597766,
+  "lat": 41.9459259,
+  "lon": -74.4637647,
+  "tags": {
+    "ele": "931",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "971639",
+    "gnis:state_id": "36",
+    "name": "Woodhull Mountain",
+    "natural": "peak",
+    "wikidata": "Q34821874"
+  }
+},
+{
+  "type": "node",
+  "id": 357598180,
+  "lat": 42.3364726,
+  "lon": -74.1737506,
+  "tags": {
+    "ele": "832",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "971889",
+    "gnis:state_id": "36",
+    "name": "Mount Zoar",
+    "natural": "peak",
+    "wikidata": "Q34928436"
+  }
+},
+{
+  "type": "node",
+  "id": 357598511,
+  "lat": 42.0013038,
+  "lon": -74.3561833,
+  "tags": {
+    "ele": "1174",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "973346",
+    "gnis:state_id": "36",
+    "name": "Cornell Mountain",
+    "natural": "peak",
+    "wikidata": "Q5171544"
+  }
+},
+{
+  "type": "node",
+  "id": 357598517,
+  "lat": 42.0275913,
+  "lon": -74.5282095,
+  "tags": {
+    "ele": "1180",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "973348",
+    "gnis:state_id": "36",
+    "name": "Doubletop Mountain",
+    "natural": "peak",
+    "wikidata": "Q5300164"
+  }
+},
+{
+  "type": "node",
+  "id": 357598523,
+  "lat": 42.0391700,
+  "lon": -74.5488369,
+  "tags": {
+    "ele": "1174",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "973350",
+    "gnis:state_id": "36",
+    "name": "Graham Mountain",
+    "natural": "peak",
+    "wikidata": "Q5593091"
+  }
+},
+{
+  "type": "node",
+  "id": 357598537,
+  "lat": 42.1778662,
+  "lon": -74.2304216,
+  "tags": {
+    "ele": "1233",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:edited": "10/23/2007",
+    "gnis:feature_id": "973354",
+    "gnis:state_id": "36",
+    "name": "Hunter Mountain",
+    "natural": "peak",
+    "wikidata": "Q5944482"
+  }
+},
+{
+  "type": "node",
+  "id": 357598550,
+  "lat": 41.9531481,
+  "lon": -74.3982070,
+  "tags": {
+    "ele": "1172",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "973358",
+    "gnis:state_id": "36",
+    "name": "Peekamoose Mountain",
+    "natural": "peak",
+    "wikidata": "Q7160173"
+  }
+},
+{
+  "type": "node",
+  "id": 357598553,
+  "lat": 42.1378671,
+  "lon": -74.1743088,
+  "tags": {
+    "ele": "1172",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "973359",
+    "gnis:state_id": "36",
+    "name": "Plateau Mountain",
+    "natural": "peak",
+    "wikidata": "Q7202220"
+  }
+},
+{
+  "type": "node",
+  "id": 357598560,
+  "lat": 41.9586420,
+  "lon": -74.4048687,
+  "tags": {
+    "ele": "1173",
+    "gnis:county_id": "111",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "973361",
+    "gnis:state_id": "36",
+    "name": "Table Mountain",
+    "natural": "peak",
+    "wikidata": "Q7673141"
+  }
+},
+{
+  "type": "node",
+  "id": 357598566,
+  "lat": 42.1678663,
+  "lon": -74.2895904,
+  "tags": {
+    "ele": "1186",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "973363",
+    "gnis:state_id": "36",
+    "name": "West Kill Mountain",
+    "natural": "peak",
+    "wikidata": "Q7985627"
+  }
+},
+{
+  "type": "node",
+  "id": 357602650,
+  "lat": 41.9992026,
+  "lon": -74.3859419,
+  "tags": {
+    "ele": "1266",
+    "gnis:county_id": "111",
+    "gnis:created": "01/01/2000",
+    "gnis:feature_id": "975759",
+    "gnis:state_id": "36",
+    "name": "Slide Mountain",
+    "natural": "peak",
+    "wikidata": "Q7540328"
+  }
+},
+{
+  "type": "node",
+  "id": 357607470,
+  "lat": 42.1756439,
+  "lon": -74.3729262,
+  "tags": {
+    "ele": "1082",
+    "gnis:county_id": "039",
+    "gnis:created": "04/14/1999",
+    "gnis:feature_id": "1829070",
+    "gnis:state_id": "36",
+    "name": "Mount Sherrill",
+    "natural": "peak",
+    "wikidata": "Q8526328"
+  }
+},
+{
+  "type": "node",
+  "id": 1938234845,
+  "lat": 42.1623721,
+  "lon": -74.2436771,
+  "tags": {
+    "alt_name": "Leavitt's Peak",
+    "ele": "1140",
+    "name": "Southwest Hunter Mountain",
+    "natural": "peak",
+    "wikidata": "Q8526291",
+    "wikipedia": "en:Southwest Hunter Mountain"
+  }
+},
+{
+  "type": "node",
+  "id": 2473476746,
+  "lat": 42.2701836,
+  "lon": -74.1225510,
+  "tags": {
+    "ele": "1221.3",
+    "name": "Black Dome",
+    "natural": "peak",
+    "source": "GPS",
+    "wikidata": "Q4920677",
+    "wikipedia": "en:Black Dome (New York)"
+  }
+},
+{
+  "type": "node",
+  "id": 2473476747,
+  "lat": 42.2677434,
+  "lon": -74.1046360,
+  "tags": {
+    "ele": "1208.1",
+    "name": "Blackhead",
+    "natural": "peak",
+    "source": "GPS",
+    "wikidata": "Q4922981",
+    "wikipedia": "en:Blackhead (New York)"
+  }
+},
+{
+  "type": "node",
+  "id": 2473476749,
+  "lat": 42.2713509,
+  "lon": -74.1497955,
+  "tags": {
+    "ele": "1095.4",
+    "name": "Camel's Hump",
+    "natural": "peak",
+    "source": "GPS"
+  }
+},
+{
+  "type": "node",
+  "id": 2473476751,
+  "lat": 42.2705460,
+  "lon": -74.1355667,
+  "tags": {
+    "ele": "1212.6",
+    "name": "Thomas Cole Mountain",
+    "natural": "peak",
+    "source": "GPS",
+    "wikidata": "Q7788531",
+    "wikipedia": "en:Thomas Cole Mountain"
+  }
+},
+{
+  "type": "node",
+  "id": 2878468500,
+  "lat": 41.8531809,
+  "lon": -74.3899852,
+  "tags": {
+    "ele": "567",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2878468727,
+  "lat": 41.8567194,
+  "lon": -74.3779936,
+  "tags": {
+    "ele": "591",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2878468904,
+  "lat": 41.8637591,
+  "lon": -74.3784271,
+  "tags": {
+    "ele": "594",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2878469192,
+  "lat": 41.8274785,
+  "lon": -74.3862688,
+  "tags": {
+    "ele": "515",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2884528005,
+  "lat": 42.0181188,
+  "lon": -74.4269859,
+  "tags": {
+    "name": "Winnisook Lake Mountain (Western Summit)",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2884528025,
+  "lat": 42.0134047,
+  "lon": -74.3971104,
+  "tags": {
+    "ele": "1109",
+    "name": "Little Slide",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2884528042,
+  "lat": 42.0100949,
+  "lon": -74.4705858,
+  "tags": {
+    "ele": "978",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2884528074,
+  "lat": 41.9877507,
+  "lon": -74.4406309,
+  "tags": {
+    "ele": "1018",
+    "name": "East Wildcat",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2884566933,
+  "lat": 42.0171511,
+  "lon": -74.4968178,
+  "tags": {
+    "ele": "1027",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2884599773,
+  "lat": 41.9689055,
+  "lon": -74.3556714,
+  "tags": {
+    "ele": "1050",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2884619884,
+  "lat": 42.0043230,
+  "lon": -74.5252835,
+  "tags": {
+    "ele": "1005",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2884620574,
+  "lat": 41.9919309,
+  "lon": -74.5454022,
+  "tags": {
+    "ele": "975",
+    "name": "High Falls Ridge",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2895890160,
+  "lat": 42.1206399,
+  "lon": -74.2305807,
+  "tags": {
+    "ele": "914",
+    "name": "Edgewood Mountain",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2895962996,
+  "lat": 42.1714402,
+  "lon": -74.3207927,
+  "tags": {
+    "name": "Saint Anne's Peak",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2896482739,
+  "lat": 41.9544141,
+  "lon": -74.5265058,
+  "tags": {
+    "ele": "863",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2897869334,
+  "lat": 42.0523606,
+  "lon": -74.6329273,
+  "tags": {
+    "ele": "1080",
+    "name": "Millbrook Ridge",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2898343665,
+  "lat": 42.0393575,
+  "lon": -74.6173480,
+  "tags": {
+    "ele": "1057",
+    "name": "Woodpecker Ridge",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2898360284,
+  "lat": 41.9851406,
+  "lon": -74.6483978,
+  "tags": {
+    "ele": "933",
+    "name": "Sand Pond Mountain",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2898360536,
+  "lat": 41.9902739,
+  "lon": -74.6285258,
+  "tags": {
+    "ele": "983",
+    "name": "Willowemoc Mountain",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2898364910,
+  "lat": 41.9683169,
+  "lon": -74.6448015,
+  "tags": {
+    "ele": "840",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2898364917,
+  "lat": 41.9362227,
+  "lon": -74.6390926,
+  "tags": {
+    "ele": "679",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2898368451,
+  "lat": 41.9659811,
+  "lon": -74.6257213,
+  "tags": {
+    "ele": "676",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2898368456,
+  "lat": 41.9677074,
+  "lon": -74.6112706,
+  "tags": {
+    "ele": "691",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2898368478,
+  "lat": 41.9631866,
+  "lon": -74.5913118,
+  "tags": {
+    "ele": "856",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2898368490,
+  "lat": 41.9710083,
+  "lon": -74.5595555,
+  "tags": {
+    "ele": "778",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2898368499,
+  "lat": 41.9788505,
+  "lon": -74.5846009,
+  "tags": {
+    "ele": "873",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2898368527,
+  "lat": 41.9937721,
+  "lon": -74.5912442,
+  "tags": {
+    "ele": "979",
+    "name": "Beaver Kill Range",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2898368537,
+  "lat": 41.9903736,
+  "lon": -74.5999302,
+  "tags": {
+    "ele": "1009",
+    "name": "Beaver Kill Range",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2901364084,
+  "lat": 41.8419350,
+  "lon": -74.0215547,
+  "tags": {
+    "ele": "176.5",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2901365101,
+  "lat": 41.8185456,
+  "lon": -74.0055473,
+  "tags": {
+    "ele": "157",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2901377615,
+  "lat": 41.8572215,
+  "lon": -74.0188833,
+  "tags": {
+    "ele": "164",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2901436960,
+  "lat": 41.8260316,
+  "lon": -74.0191965,
+  "tags": {
+    "ele": "171.2",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2901506785,
+  "lat": 41.8718025,
+  "lon": -74.0075955,
+  "tags": {
+    "ele": "108.2",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2903180573,
+  "lat": 41.8690853,
+  "lon": -74.5631309,
+  "tags": {
+    "ele": "574.5",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2903197475,
+  "lat": 41.8707032,
+  "lon": -74.5980586,
+  "tags": {
+    "ele": "575.7",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2907630127,
+  "lat": 41.9416636,
+  "lon": -74.5615829,
+  "tags": {
+    "ele": "773.5",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2907630130,
+  "lat": 41.9602624,
+  "lon": -74.5112207,
+  "tags": {
+    "ele": "887",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2907645540,
+  "lat": 41.9366557,
+  "lon": -74.3493054,
+  "tags": {
+    "ele": "783",
+    "name": "Breath Hill",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2907645541,
+  "lat": 41.9624268,
+  "lon": -74.3454966,
+  "tags": {
+    "ele": "941",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2907645544,
+  "lat": 41.8663251,
+  "lon": -74.3401215,
+  "tags": {
+    "ele": "444",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2907645546,
+  "lat": 41.8766902,
+  "lon": -74.4508173,
+  "tags": {
+    "ele": "747",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2907645547,
+  "lat": 41.9453545,
+  "lon": -74.3403039,
+  "tags": {
+    "ele": "876",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2907645553,
+  "lat": 41.8136154,
+  "lon": -74.3860752,
+  "tags": {
+    "ele": "457",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2908401086,
+  "lat": 42.1029236,
+  "lon": -74.1373223,
+  "tags": {
+    "ele": "880.8",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2910221759,
+  "lat": 42.1338082,
+  "lon": -74.0630825,
+  "tags": {
+    "ele": "774",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2910242579,
+  "lat": 42.2201847,
+  "lon": -74.3330426,
+  "tags": {
+    "ele": "957",
+    "name": "Pine Island Mountain",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2910244615,
+  "lat": 42.2006614,
+  "lon": -74.2601981,
+  "tags": {
+    "ele": "1009.5",
+    "name": "East Rusk",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2923748217,
+  "lat": 41.8460262,
+  "lon": -74.0966563,
+  "tags": {
+    "ele": "100",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2937937809,
+  "lat": 42.0539223,
+  "lon": -74.3536646,
+  "tags": {
+    "ele": "780",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2937938360,
+  "lat": 42.0578201,
+  "lon": -74.3757381,
+  "tags": {
+    "ele": "866",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2937954331,
+  "lat": 42.0712077,
+  "lon": -74.3969640,
+  "tags": {
+    "ele": "1048",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2938006264,
+  "lat": 42.0646385,
+  "lon": -74.4489903,
+  "tags": {
+    "ele": "725",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2938006293,
+  "lat": 42.1006889,
+  "lon": -74.4121968,
+  "tags": {
+    "ele": "900",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2938006906,
+  "lat": 42.0942486,
+  "lon": -74.4384674,
+  "tags": {
+    "ele": "718",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2939280263,
+  "lat": 42.0983684,
+  "lon": -74.6261338,
+  "tags": {
+    "ele": "863",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2940610318,
+  "lat": 42.1157723,
+  "lon": -74.4975655,
+  "tags": {
+    "ele": "1029",
+    "name": "Belle Ayr Mountain",
+    "natural": "peak",
+    "wikidata": "Q34804978",
+    "wikipedia": "en:Belle Ayr Mountain"
+  }
+},
+{
+  "type": "node",
+  "id": 2940639467,
+  "lat": 42.1378009,
+  "lon": -74.4295925,
+  "tags": {
+    "ele": "884",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2940639470,
+  "lat": 42.1287084,
+  "lon": -74.5187223,
+  "tags": {
+    "ele": "1046",
+    "name": "Belleayre Mountain",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2940654619,
+  "lat": 42.1674349,
+  "lon": -74.5079989,
+  "tags": {
+    "ele": "707",
+    "name": "Brush Ridge",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2942720930,
+  "lat": 41.9363590,
+  "lon": -74.4690781,
+  "tags": {
+    "ele": "839",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2948008311,
+  "lat": 42.1976194,
+  "lon": -74.4168462,
+  "tags": {
+    "ele": "1039",
+    "name": "Sleeping Lion",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2948009841,
+  "lat": 42.1515598,
+  "lon": -74.3900499,
+  "tags": {
+    "ele": "879",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2948019430,
+  "lat": 42.2466030,
+  "lon": -74.4925017,
+  "tags": {
+    "ele": "1040",
+    "name": "South Bearpen",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2948019432,
+  "lat": 42.2368271,
+  "lon": -74.4986128,
+  "tags": {
+    "ele": "1036",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2948020837,
+  "lat": 42.2294489,
+  "lon": -74.4383897,
+  "tags": {
+    "ele": "1024",
+    "name": "South Vly",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2948777248,
+  "lat": 42.2652179,
+  "lon": -74.4737802,
+  "tags": {
+    "ele": "1098",
+    "name": "Bearpen Mountain",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2953598985,
+  "lat": 42.1246724,
+  "lon": -74.3256104,
+  "tags": {
+    "ele": "854",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2953603462,
+  "lat": 42.1378167,
+  "lon": -74.4295943,
+  "tags": {
+    "ele": "884",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2955339679,
+  "lat": 42.0681926,
+  "lon": -74.1326578,
+  "tags": {
+    "alt_name": "Guardian Mountain",
+    "ele": "640",
+    "gnis:feature_id": "951887",
+    "name": "Mount Guardian",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2964256441,
+  "lat": 41.9039444,
+  "lon": -74.2678023,
+  "tags": {
+    "ele": "327",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2964336742,
+  "lat": 41.9908030,
+  "lon": -74.2432915,
+  "tags": {
+    "ele": "517",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 2964336766,
+  "lat": 42.0029749,
+  "lon": -74.2173846,
+  "tags": {
+    "alt_name": "Ticeteneyck",
+    "ele": "765",
+    "gnis:feature_id": "967505",
+    "name": "Ticetonyk Mountain",
+    "natural": "peak",
+    "note": "The alternate spelling is on the DEC sign at the trailhead",
+    "wikidata": "Q34812928"
+  }
+},
+{
+  "type": "node",
+  "id": 2965199828,
+  "lat": 41.9413993,
+  "lon": -74.1495688,
+  "tags": {
+    "ele": "212",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 4953781669,
+  "lat": 42.1228609,
+  "lon": -74.2271869,
+  "tags": {
+    "ele": "917",
+    "name": "Silver Hollow Notch Mountain",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 4953783418,
+  "lat": 42.3342486,
+  "lon": -74.6163382,
+  "tags": {
+    "ele": "985",
+    "name": "Narrow Notch Mountain",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 4953784377,
+  "lat": 42.3115883,
+  "lon": -74.6184636,
+  "tags": {
+    "ele": "911",
+    "name": "East Gray Hill",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 4953786835,
+  "lat": 42.3058930,
+  "lon": -74.5915287,
+  "tags": {
+    "description": "unofficial name for this ranked 3000 foot peak, not to be confused with a lower unranked peak of the same name  just over two miles west",
+    "ele": "917",
+    "name": "Old Clump",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 4953793008,
+  "lat": 42.2929368,
+  "lon": -74.5201948,
+  "tags": {
+    "description": "also known as Montgomery Hollow Mountain",
+    "ele": "927",
+    "name": "Walts Knob",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 4953796936,
+  "lat": 42.2291463,
+  "lon": -74.5380062,
+  "tags": {
+    "ele": "948",
+    "name": "Red Kill Ridge",
+    "natural": "peak",
+    "wikidata": "Q34865101"
+  }
+},
+{
+  "type": "node",
+  "id": 4953799897,
+  "lat": 42.2938395,
+  "lon": -74.6382349,
+  "tags": {
+    "description": "also known as Meeker Hollow Mountain",
+    "ele": "911",
+    "name": "Kenyon Mountain",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 4953804945,
+  "lat": 42.2160419,
+  "lon": -74.6485866,
+  "tags": {
+    "ele": "917",
+    "name": "Hubbell Hill",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 4953805629,
+  "lat": 42.1130364,
+  "lon": -74.6041347,
+  "tags": {
+    "ele": "1058",
+    "name": "Dry Brook Ridge",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 5146493499,
+  "lat": 41.9970242,
+  "lon": -74.3629146,
+  "tags": {
+    "ele": "1110",
+    "name": "Dink",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 5146493500,
+  "lat": 42.1185867,
+  "lon": -74.1254157,
+  "tags": {
+    "ele": "1085",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 5146493501,
+  "lat": 42.2690287,
+  "lon": -74.1608906,
+  "tags": {
+    "ele": "1012",
+    "name": "Caudal",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 5146497950,
+  "lat": 42.2589767,
+  "lon": -74.0899676,
+  "tags": {
+    "ele": "1038",
+    "name": "Arizona Mountain",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 5605550237,
+  "lat": 41.8464925,
+  "lon": -74.0863040,
+  "tags": {
+    "ele": "147",
+    "name": "Joppenbergh Mountain",
+    "natural": "peak",
+    "wikidata": "Q6276216"
+  }
+},
+{
+  "type": "node",
+  "id": 7554364534,
+  "lat": 42.1922009,
+  "lon": -74.0372413,
+  "tags": {
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 7624362318,
+  "lat": 41.9990356,
+  "lon": -74.3090470,
+  "tags": {
+    "ele": "879",
+    "name": "Samuels Point",
+    "natural": "peak",
+    "wikidata": "Q55632463"
+  }
+},
+{
+  "type": "node",
+  "id": 7627892845,
+  "lat": 42.2979111,
+  "lon": -74.1879665,
+  "tags": {
+    "ele": "756",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 7924633994,
+  "lat": 42.0175919,
+  "lon": -74.4498744,
+  "tags": {
+    "name": "Spruce Mountain",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 8459931928,
+  "lat": 41.9293495,
+  "lon": -74.2303169,
+  "tags": {
+    "ele": "266",
+    "name": "Acorn Hill",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 10126858006,
+  "lat": 42.0233910,
+  "lon": -74.5255714,
+  "tags": {
+    "ele": "1175",
+    "name": "Doubletop Mountain - South Peak",
+    "natural": "peak",
+    "website": "https://peakbagger.com/peak.aspx?pid=96873"
+  }
+}
+
+  ]
+}
