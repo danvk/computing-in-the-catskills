@@ -1,0 +1,14 @@
+[out:json][timeout:25];
+// gather results
+(
+  // These are herd paths
+  relation["highway"="path"](41.813,-74.652,42.352,-73.862);
+  // These are the blazed trails
+  relation["route"="hiking"](41.813,-74.652,42.352,-73.862);
+  // maybe these are all covered by route=hiking?
+  way["highway"="path"](41.813,-74.652,42.352,-73.862);
+);
+// print results
+out body;
+>;
+out skel qt;
