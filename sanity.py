@@ -73,15 +73,23 @@ def closest_point_on_trail(node: OsmNode):
                 best_node = node
     return best_d * 1000, best_node
 
+# Vly: lon=-74.448885, lat=42.245836
+# The End of the herd path is node 10010051278
 
 # Trails to summits; summits without trails
 for peak in peak_nodes:
     name = peak['tags']['name']
     peak_id = peak['id']
+    if name == 'Vly Mountain':
+        peak['lat'] = 42.245836
+        peak['lon'] = -74.448885
     trails = node_to_trails.get(peak_id)
     if trails:
         print(f'{len(trails)} for {name} ({peak_id})')
     else:
-        print(f'No trails for {name} ({peak_id})')
+        print(f'{name} ({peak_id})')
         pt_m, pt_node = closest_point_on_trail(peak)
-        print(f'  Closest point: {pt_m} / {pt_node}')
+        if pt_m < 30:
+            print(f'  Closest point: {pt_m} / {pt_node}')
+        else:
+            print(f'  No nearby trails for {name} ({peak_id}); closest {pt_m} {pt_node}')

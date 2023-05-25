@@ -1,12 +1,11 @@
 [out:json][timeout:25];
 // gather results
 (
-  // These are herd paths
-  relation["highway"="path"](41.813,-74.652,42.352,-73.862);
   // These are the blazed trails
   relation["route"="hiking"](41.813,-74.652,42.352,-73.862);
-  // More paths; some overlap w/ route=hiking but there are many others, too.
-  way["highway"="^(path|track)"](41.813,-74.652,42.352,-73.862);
+  // More paths; some overlap w/ route=hiking but there are many others, too, including herd paths.
+  relation["highway"~"^(path|track|footway)$"](41.813,-74.652,42.352,-73.862);
+  way["highway"~"^(path|track|footway)$"](41.813,-74.652,42.352,-73.862);
 );
 // print results
 out body;
