@@ -76,6 +76,8 @@ def closest_point_on_trail(node: OsmNode):
 # Vly: lon=-74.448885, lat=42.245836
 # The End of the herd path is node 10010051278
 
+
+'''
 # Trails to summits; summits without trails
 for peak in peak_nodes:
     name = peak['tags']['name']
@@ -93,3 +95,30 @@ for peak in peak_nodes:
             print(f'  Closest point: {pt_m} / {pt_node}')
         else:
             print(f'  No nearby trails for {name} ({peak_id}); closest {pt_m} {pt_node}')
+'''
+
+print()
+
+# Are the start/end nodes of each trail connected to a road or another trail?
+road_elements: List[OsmElement] = json.load(open('data/roads.json'))['elements']
+node_to_roads = defaultdict(list)
+road_ways = [el for el in road_elements if el['type'] == 'way']
+for el in road_ways:
+    for node in el['nodes']:
+        node_to_roads[node].append(el['id'])
+
+
+for el in trail_ways:
+    way_id = el['id']
+    start_node, end_node = el['nodes'][0], el['nodes'][-1]
+    name = el.get('tags', {}).get('name')
+    if not name:
+        continue
+    name = name or '(anonymous)'
+    print(f'{name} ({way_id})')
+    for label, node in [('start', start_node), ('end', end_node)]:
+        ways_t = [n for n in node_to_trails[node] if n != way_id]
+        ways_r = node_to_roads[node]
+        print(f'  {label}: {len(ways_t)} t / {len(ways_r)} r')
+        if len(ways_t) + len(ways_r) == 0:
+            print('  ^^ disconnected!')
