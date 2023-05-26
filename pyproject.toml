@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "computing-in-the-catskills"
+version = "0.1.0"
+description = "Who doesn't like a little math in the woods?"
+authors = ["Dan Vanderkam <danvdk@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+requests = "^2.31.0"
+
+[tool.poetry.group.dev.dependencies]
+ipython = "^8.13.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
