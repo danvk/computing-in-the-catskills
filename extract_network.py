@@ -71,9 +71,6 @@ for node_id, trails in node_to_trails.items():
 print(f'Notable nodes: {len(notable_nodes)}')
 print(f'Trailhead nodes: {len(trailhead_nodes)}')
 
-print(f'5862473625 in notable_nodes? {5862473625 in notable_nodes}')
-print(f'5862473625 in trailhead_nodes? {5862473625 in trailhead_nodes}')
-
 # Notable nodes: 15406
 # Trailhead nodes: 2077
 
@@ -101,6 +98,7 @@ for (a, b), ways in connections.items():
 # This should prune out most nodes and paths.
 g = nx.Graph(connections.keys())
 print(f'nodes: {g.number_of_nodes()}, edges: {g.number_of_edges()}')
+
 peaks_component: Set[int] = set()  # set of nodes connected to high peaks
 for node in peak_nodes:
     id = node['id']
@@ -161,9 +159,33 @@ for a, b in peak_g.edges():
     assert best
     paths[key] = best
 
+# Repeat until convergence:
+# - Remove all nodes with degree 1 that aren't peaks or trailheads
+# - "Inline" all nodes with degree 2 that aren't peaks or trailheads
+while True:
+    any_changed = False
+
+    nodes = [*peak_g.nodes()]
+    for node_id in nodes:
+        if id_to_peak_node.get(node_id) or node_to_roads.get(node_id):
+            continue
+
+        d = peak_g.degree[node_id]
+        if d == 1:
+            peak_g.remove_node(node_id)
+            any_changed = True
+        elif d == 2:
+            # "inline" this node
+            pass
+
+    if not any_changed:
+        break
+
+print('After pruning:')
+print(f'nodes: {peak_g.number_of_nodes()}, edges: {peak_g.number_of_edges()}')
 
 features = []
-for node_id in peaks_component:
+for node_id in peak_g.nodes():
     peak_node = id_to_peak_node.get(node_id)
     if peak_node:
         features.append({
@@ -200,6 +222,9 @@ for node_id in peaks_component:
     })
 
 for path in paths.values():
+    a, b = path.nodes[0], path.nodes[-1]
+    if not peak_g.has_edge(a, b):
+        continue  # must have been pruned
     features.append({
         'type': 'Feature',
         'geometry': {
