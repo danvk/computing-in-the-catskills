@@ -14,8 +14,10 @@ files = [
 ]
 
 
+trails_elements = json.load(open('data/trails.json'))['elements']
+
 osm_elements: List[OsmElement] = (
-    json.load(open('data/trails.json'))['elements'] +
+    trails_elements +
     json.load(open('data/roads.json'))['elements']
 )
 osm_ways = [el for el in osm_elements if el['type'] == 'way']
@@ -81,4 +83,4 @@ with open('data/additional-trails.json', 'w') as out:
     json.dump({'elements': elements}, out, indent=2)
 
 with open('data/combined-trails.json', 'w') as out:
-    json.dump({'elements': osm_elements + elements}, out, indent=2)
+    json.dump({'elements': trails_elements + elements}, out, indent=2)

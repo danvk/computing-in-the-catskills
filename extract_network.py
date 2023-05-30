@@ -71,6 +71,9 @@ for node_id, trails in node_to_trails.items():
 print(f'Notable nodes: {len(notable_nodes)}')
 print(f'Trailhead nodes: {len(trailhead_nodes)}')
 
+print(f'5862473625 in notable_nodes? {5862473625 in notable_nodes}')
+print(f'5862473625 in trailhead_nodes? {5862473625 in trailhead_nodes}')
+
 # Notable nodes: 15406
 # Trailhead nodes: 2077
 
