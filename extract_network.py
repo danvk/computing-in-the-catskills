@@ -257,9 +257,16 @@ for node_id in nodes:
     if node_to_roads.get(node_id):
         peak_g.add_edge(0, node_id, d_km=0)
 
-nodes: List[int] = nx.approximation.traveling_salesman_problem(
-    peak_g, nodes=id_to_peak_node.keys(), weight='d_km', cycle=True
+
+init_nodes: List[int] = nx.approximation.traveling_salesman_problem(
+   peak_g, nodes=id_to_peak_node.keys(), weight='d_km', cycle=True
 )
+SA_tsp = nx.approximation.simulated_annealing_tsp
+method = lambda G, wt: SA_tsp(peak_g, init_nodes, weight='d_km', temp=500)
+nodes: List[int] = nx.approximation.traveling_salesman_problem(
+   peak_g, nodes=id_to_peak_node.keys(), weight='d_km', cycle=True, method=method
+)
+
 
 while nodes[0] != 0:
     x = nodes.pop()
