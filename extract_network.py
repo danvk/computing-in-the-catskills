@@ -123,6 +123,9 @@ class Trail:
     latlons: List[Tuple[float, float]]
 
 
+def pairkey(a: int, b: int) -> Tuple[int, int]:
+    return (a, b) if a <= b else (b, a)
+
 # Fill out the edges a bit:
 # - extract the sequence of coordinates
 # - pick the shorter one (where relevant)
@@ -130,7 +133,7 @@ class Trail:
 paths: Dict[Tuple[int, int], Trail] = {}
 ab: Tuple[int, int]
 for a, b in peak_g.edges():
-    key = (a, b) if a < b else (b, a)
+    key = pairkey(a, b)
     way_ids = connections[key]
     best: Union[Trail, None] = None
     for way_id in way_ids:
@@ -221,6 +224,7 @@ for node_id in peak_g.nodes():
             'degree': peak_g.degree[node_id]
         }
     })
+id_to_point = {f['properties']['id']: f for f in features}
 
 for path in paths.values():
     a, b = path.nodes[0], path.nodes[-1]
@@ -245,3 +249,67 @@ for path in paths.values():
 
 with open('data/network.geojson', 'w') as out:
     json.dump({'type': 'FeatureCollection', 'features': features}, out)
+
+
+assert not peak_g.has_node(0)
+nodes = [*peak_g.nodes()]
+for node_id in nodes:
+    if node_to_roads.get(node_id):
+        peak_g.add_edge(0, node_id, d_km=0)
+
+nodes: List[int] = nx.approximation.traveling_salesman_problem(
+    peak_g, nodes=id_to_peak_node.keys(), weight='d_km', cycle=True
+)
+
+while nodes[0] != 0:
+    x = nodes.pop()
+    nodes = [x] + nodes
+assert nodes.pop(0) == 0
+
+chunks = []
+last = 0
+for node in nodes:
+    if node == 0:
+        last = 0
+        continue
+
+    if last == 0:
+        chunks.append([node])
+    elif node == last:
+        continue  # not sure why this happens?
+    else:
+        chunks[-1].append(node)
+    last = node
+
+print(chunks)
+
+tsp_fs = []
+total_d_km = 0
+for node_seq in chunks:
+    tsp_fs.append(id_to_point[node_seq[0]])
+    tsp_fs.append(id_to_point[node_seq[-1]])
+    d_km = sum(
+        paths[pairkey(a, b)].d_km
+        for a, b in zip(node_seq[:-1], node_seq[1:])
+    )
+    total_d_km += d_km
+    tsp_fs.append({
+        'type': 'Feature',
+        'properties': {
+            'nodes': node_seq,
+            'd_km': d_km
+        },
+        'geometry': {
+            'type': 'MultiLineString',
+            'coordinates': [
+                paths[pairkey(a, b)].latlons
+                for a, b in zip(node_seq[:-1], node_seq[1:])
+            ]
+        }
+    })
+
+
+with open('data/tsp.geojson', 'w') as out:
+    json.dump({'type': 'FeatureCollection', 'features': tsp_fs}, out)
+
+print(f'Total hiking distance: {total_d_km:.1f} km')
