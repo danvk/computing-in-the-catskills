@@ -171,9 +171,11 @@ for node_id in peaks_component:
             'geometry': { 'type': 'Point', 'coordinates': (peak_node['lon'], peak_node['lat'])},
             'properties': {
                 'id': node_id,
+                'type': 'high-peak',
                 **peak_node['tags'],
                 'marker-color': '#0000ff',
                 'marker-size': 'large',
+                'degree': peak_g.degree[node_id]
             }
         })
         continue
@@ -183,11 +185,17 @@ for node_id in peaks_component:
         'geometry': { 'type': 'Point', 'coordinates': (trail_node['lon'], trail_node['lat'])},
         'properties': {
             'id': node_id,
+            'type': 'trailhead' if node_to_roads.get(node_id) else 'junction',
             **trail_node.get('tags', {}),
             'marker-size': 'small',
-            'marker-color': '#555555' if not node_to_roads.get(node_id) else '#ff0000',
+            'marker-color':
+                '#00ff00' if peak_g.degree[node_id] == 1 and not node_to_roads.get(node_id) else
+                '#ff00ff' if peak_g.degree[node_id] == 2 and not node_to_roads.get(node_id) else
+                '#555555' if not node_to_roads.get(node_id) else
+                '#ff0000',
             'trail-ways': node_to_trails[node_id],
-            'road-ways': node_to_roads.get(node_id, None)
+            'road-ways': node_to_roads.get(node_id, None),
+            'degree': peak_g.degree[node_id]
         }
     })
 
