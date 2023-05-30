@@ -111,9 +111,9 @@
     },
     {
       "type": "node",
-      "id": 357560681,
-      "lat": 41.9875924,
-      "lon": -74.3620944,
+      "id": 9953707705,
+      "lat": 41.9880991,
+      "lon": -74.36093,
       "tags": {
         "ele": "1125",
         "gnis:county_id": "111",
@@ -123,7 +123,7 @@
         "name": "Friday Mountain",
         "natural": "peak",
         "wikidata": "Q5503503",
-        "connected": false
+        "connected": true
       }
     },
     {
