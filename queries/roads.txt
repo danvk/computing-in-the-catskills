@@ -6,11 +6,9 @@
   ["highway"~"^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|motorway_link|trunk_link|primary_link|secondary_link|tertiary_link)$"]
   (41.813,-74.652,42.352,-73.862);
 
-  // Driveways are irrelevant and there are lots of them so handle them specially.
   // These are critical for connectivity, see https://www.openstreetmap.org/way/287424836
   way
   ["highway"="service"]
-  ["service"!="driveway"]
   (41.813,-74.652,42.352,-73.862);
 );
 // print results
