@@ -51,4 +51,6 @@ def find_path(way: OsmWay, a: int, b: int) -> List[int]:
     j = nodes.index(b)
     if i < j:
         return nodes[i:j+1]
-    return nodes[j:i+1:-1]
+    if j == 0:
+        return nodes[i::-1]
+    return nodes[i:j-1:-1]

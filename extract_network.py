@@ -11,8 +11,9 @@ This outputs a list of notable nodes and the paths between them.
 """
 
 from collections import defaultdict
+from dataclasses import dataclass
 import json
-from typing import Dict, List, Set, Tuple
+from typing import Dict, List, Set, Tuple, Union
 
 import networkx as nx
 
@@ -20,6 +21,10 @@ from osm import OsmElement, OsmNode, dedupe_ways, find_path
 from util import haversine
 
 peak_nodes: List[OsmNode] = json.load(open('data/peaks-connected.json'))['elements']
+id_to_peak_node = {
+    el['id']: el
+    for el in peak_nodes
+}
 
 trail_elements: List[OsmElement] = json.load(open('data/trails.json'))['elements']
 node_to_trails = defaultdict(list)
@@ -101,20 +106,30 @@ print(f'Nodes connected to a high peak: {len(peaks_component)}')
 peak_g: nx.Graph = g.subgraph(peaks_component).copy()
 print(f'nodes: {peak_g.number_of_nodes()}, edges: {peak_g.number_of_edges()}')
 
+
+@dataclass
+class Trail:
+    d_km: float
+    way: int
+    nodes: List[int]
+    latlons: List[Tuple[float, float]]
+
+
 # Fill out the edges a bit:
 # - extract the sequence of coordinates
 # - pick the shorter one (where relevant)
 # - record whether it's trail/trail or road/trail
-paths = {}
+paths: Dict[Tuple[int, int], Trail] = {}
 ab: Tuple[int, int]
 for a, b in peak_g.edges():
     key = (a, b) if a < b else (b, a)
     way_ids = connections[key]
-    best = None
+    best: Union[Trail, None] = None
     for way_id in way_ids:
         # Find the subsequence of nodes and calculate a distance
         way = id_to_trail_way[way_id]
         nodes = find_path(way, a, b)
+        assert nodes, f'{way}: [{a}, {b}]'
         latlons = []
         for node_id in nodes:
             n = trail_nodes[node_id]
@@ -125,13 +140,63 @@ for a, b in peak_g.edges():
             )
             for (alon, alat), (blon, blat) in zip(latlons[:-1], latlons[1:])
         )
-        if not best or d_km < best['d_km']:
-            best = {
-                'd_km': d_km,
-                'way': way_id,
-                'nodes': nodes,
-                'latlons': latlons,
-            }
+        if not best or d_km < best.d_km:
+            best = Trail(
+                d_km=d_km,
+                way=way_id,
+                nodes=nodes,
+                latlons=latlons,
+            )
     assert key not in paths
+    assert best
     paths[key] = best
 
+
+features = []
+for node_id in peaks_component:
+    peak_node = id_to_peak_node.get(node_id)
+    if peak_node:
+        features.append({
+            'type': 'Feature',
+            'geometry': { 'type': 'Point', 'coordinates': (peak_node['lon'], peak_node['lat'])},
+            'properties': {
+                'id': node_id,
+                **peak_node['tags'],
+                'marker-color': '#0000ff',
+                'marker-size': 'large',
+            }
+        })
+        continue
+    trail_node = trail_nodes[node_id]
+    features.append({
+        'type': 'Feature',
+        'geometry': { 'type': 'Point', 'coordinates': (trail_node['lon'], trail_node['lat'])},
+        'properties': {
+            'id': node_id,
+            **trail_node.get('tags', {}),
+            'marker-size': 'small',
+            'trail-ways': node_to_trails[node_id],
+            'road-ways': node_to_roads.get(node_id, None)
+        }
+    })
+
+for path in paths.values():
+    features.append({
+        'type': 'Feature',
+        'geometry': {
+            'type': 'LineString',
+            'coordinates': path.latlons
+        },
+        'properties': {
+            'id': path.way,
+            'd_km': path.d_km,
+            **id_to_trail_way[path.way].get('tags', {}),
+            'nodes': path.nodes,
+            'stroke': '#555555',
+            'stroke-width': 2,
+            'stroke-opacity': 1
+        }
+    })
+
+with open('data/network.geojson', 'w') as out:
+    json.dump({'type': 'FeatureCollection', 'features': features}, out)
