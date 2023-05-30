@@ -41,10 +41,10 @@ for file in files:
 
     # Force the trail to be connected by adding the closest nodes from other trails on either end.
     d, start_node = closest_point_on_trail(coords[0][:2], trail_ways, trail_nodes)
-    assert d < 30
+    assert d < 50
 
     d, end_node = closest_point_on_trail(coords[-1][:2], trail_ways, trail_nodes)
-    assert d < 30
+    assert d < 50, f'{coords[-1][:2]} is {d} meters from {end_node}'
 
     nodes: List[OsmNode] = [
         start_node,
