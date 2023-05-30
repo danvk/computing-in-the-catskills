@@ -158,6 +158,7 @@ for a, b in peak_g.edges():
     assert key not in paths
     assert best
     paths[key] = best
+    peak_g.edges[a, b]['d_km'] = best.d_km
 
 # Repeat until convergence:
 # - Remove all nodes with degree 1 that aren't peaks or trailheads
