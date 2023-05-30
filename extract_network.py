@@ -12,7 +12,9 @@ This outputs a list of notable nodes and the paths between them.
 
 from collections import defaultdict
 import json
-from typing import Dict, List, Tuple
+from typing import Dict, List, Set, Tuple
+
+import networkx as nx
 
 from osm import OsmElement, OsmNode, dedupe_ways
 
@@ -58,7 +60,6 @@ print(f'Trailhead nodes: {len(trailhead_nodes)}')
 # Notable nodes: 15406
 # Trailhead nodes: 2077
 
-# Run BFS starting from the high peaks to find the relevant trail network.
 # A path can be relevant because it connects a peak/trail, trail/trail or trail/road
 # but not because it connects two roads.
 connections: Dict[Tuple[int, int], List[int]] = defaultdict(list)  # (node, node) -> way[]; nodes are sorted
@@ -78,3 +79,22 @@ print(f'Connections: {len(connections)}')
 for (a, b), ways in connections.items():
     if len(ways) > 1:
         print(f'Many paths from {a} -> {b}: {ways}')
+
+# Run BFS starting from the high peaks to find the relevant trail network.
+# This should prune out most nodes and paths.
+g = nx.Graph(connections.keys())
+print(f'nodes: {g.number_of_nodes()}, edges: {g.number_of_edges()}')
+peaks_component: Set[int] = set()  # set of nodes connected to high peaks
+for node in peak_nodes:
+    id = node['id']
+    if id in peaks_component:
+        continue
+    if id not in g:
+        name = node['tags']['name']
+        print(f'Node {id} / {name} is not connected')
+        continue
+    peaks_component.update(nx.node_connected_component(g, id))
+
+print(f'Nodes connected to a high peak: {len(peaks_component)}')
+peak_g = g.subgraph(peaks_component)
+print(f'nodes: {peak_g.number_of_nodes()}, edges: {peak_g.number_of_edges()}')
