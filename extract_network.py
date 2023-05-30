@@ -12,7 +12,7 @@ This outputs a list of notable nodes and the paths between them.
 
 from collections import defaultdict
 import json
-from typing import Dict, List
+from typing import Dict, List, Tuple
 
 from osm import OsmElement, OsmNode
 
@@ -57,5 +57,27 @@ print(f'Trailhead nodes: {len(trailhead_nodes)}')
 # Notable nodes: 15406
 # Trailhead nodes: 2077
 
-# Run BFS starting from the high peaks to find the relevant
-# trail network.
+# Run BFS starting from the high peaks to find the relevant trail network.
+# A path can be relevant because it connects a peak/trail, trail/trail or trail/road
+# but not because it connects two roads.
+connections: List[Tuple[int, int, int]] = []  # (node, node, way); nodes are sorted
+seen: Dict[Tuple[int, int], int] = {}
+for way in trail_ways:
+    id = way['id']
+    nodes = [node for node in way['nodes'] if node in notable_nodes or node in trailhead_nodes]
+    if not nodes:
+        continue
+
+    for a, b in zip(nodes[:-1], nodes[1:]):
+        # At least one node must be notable; they can't both be trailheads.
+        if a in notable_nodes or b in notable_nodes:
+            lo, hi = (a, b) if a < b else (b, a)
+            connections.append((lo, hi, id))
+            if (lo, hi) in seen:
+                print(f'Many paths between {lo}, {hi}: {id} and {seen[(lo, hi)]}')
+            else:
+                seen[(lo, hi)] = id
+
+print(f'Connections: {len(connections)}')
+con_map = {(a, b): way for a, b, way in connections}
+print(f'Unique conns: {len(con_map)}')
