@@ -14,13 +14,14 @@ from collections import defaultdict
 import json
 from typing import Dict, List, Tuple
 
-from osm import OsmElement, OsmNode
+from osm import OsmElement, OsmNode, dedupe_ways
 
 peak_nodes: List[OsmNode] = json.load(open('data/peaks-connected.json'))['elements']
 
 trail_elements: List[OsmElement] = json.load(open('data/trails.json'))['elements']
 node_to_trails = defaultdict(list)
-trail_ways = [el for el in trail_elements if el['type'] == 'way']
+trail_ways_dupes = [el for el in trail_elements if el['type'] == 'way']
+trail_ways = [*dedupe_ways(trail_ways_dupes)]
 for el in trail_ways:
     for node in el['nodes']:
         node_to_trails[node].append(el['id'])
@@ -60,8 +61,7 @@ print(f'Trailhead nodes: {len(trailhead_nodes)}')
 # Run BFS starting from the high peaks to find the relevant trail network.
 # A path can be relevant because it connects a peak/trail, trail/trail or trail/road
 # but not because it connects two roads.
-connections: List[Tuple[int, int, int]] = []  # (node, node, way); nodes are sorted
-seen: Dict[Tuple[int, int], int] = {}
+connections: Dict[Tuple[int, int], List[int]] = defaultdict(list)  # (node, node) -> way[]; nodes are sorted
 for way in trail_ways:
     id = way['id']
     nodes = [node for node in way['nodes'] if node in notable_nodes or node in trailhead_nodes]
@@ -71,13 +71,10 @@ for way in trail_ways:
     for a, b in zip(nodes[:-1], nodes[1:]):
         # At least one node must be notable; they can't both be trailheads.
         if a in notable_nodes or b in notable_nodes:
-            lo, hi = (a, b) if a < b else (b, a)
-            connections.append((lo, hi, id))
-            if (lo, hi) in seen:
-                print(f'Many paths between {lo}, {hi}: {id} and {seen[(lo, hi)]}')
-            else:
-                seen[(lo, hi)] = id
+            key = (a, b) if a < b else (b, a)
+            connections[key].append(id)
 
 print(f'Connections: {len(connections)}')
-con_map = {(a, b): way for a, b, way in connections}
-print(f'Unique conns: {len(con_map)}')
+for (a, b), ways in connections.items():
+    if len(ways) > 1:
+        print(f'Many paths from {a} -> {b}: {ways}')

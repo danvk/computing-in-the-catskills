@@ -1,4 +1,5 @@
-from typing import Dict, List, Literal, TypedDict, Union
+import itertools
+from typing import Dict, Iterable, List, Literal, TypedDict, Union
 
 
 class OsmElementBase(TypedDict):
@@ -29,3 +30,15 @@ class OsmRelation(OsmElementBase):
 
 
 OsmElement = Union[OsmNode, OsmWay, OsmRelation]
+
+
+def dedupe_ways(ways_with_dupes: Iterable[OsmWay]):
+    """De-dupe a list of ways, preferring the version with more tags."""
+    for _id, ways in itertools.groupby(
+        sorted(
+            ways_with_dupes,
+            key=lambda way: (way['id'], -len(way.get('tags', [])))
+        ),
+        lambda way: way['id']
+    ):
+        yield next(ways)
