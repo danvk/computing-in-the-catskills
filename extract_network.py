@@ -26,7 +26,7 @@ id_to_peak_node = {
     for el in peak_nodes
 }
 
-trail_elements: List[OsmElement] = json.load(open('data/trails.json'))['elements']
+trail_elements: List[OsmElement] = json.load(open('data/combined-trails.json'))['elements']
 node_to_trails = defaultdict(list)
 trail_ways_dupes = [el for el in trail_elements if el['type'] == 'way']
 trail_ways = [*dedupe_ways(trail_ways_dupes)]
@@ -34,6 +34,7 @@ trail_nodes = {
     el['id']: el
     for el in trail_elements
     if el['type'] == 'node'
+    # TODO: this filter could probably be applied in the trails.txt query instead.
     and is_in_catskills(el['lon'], el['lat'])
 }
 trail_ways = [

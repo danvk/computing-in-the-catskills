@@ -1,5 +1,7 @@
 import itertools
-from typing import Dict, Iterable, List, Literal, TypedDict, Union
+from typing import Dict, Iterable, List, Literal, Tuple, TypedDict, Union
+
+from util import haversine
 
 
 class OsmElementBase(TypedDict):
@@ -54,6 +56,28 @@ def find_path(way: OsmWay, a: int, b: int) -> List[int]:
     if j == 0:
         return nodes[i::-1]
     return nodes[i:j-1:-1]
+
+
+def closest_point_on_trail(
+    lon_lat: Tuple[float, float],
+    trail_ways: List[OsmWay],
+    trail_nodes: Dict[int, OsmNode]
+):
+    best_node = None
+    best_d = 1000
+    lon1, lat1 = lon_lat
+
+    for way in trail_ways:
+        for node_id in way['nodes']:
+            node = trail_nodes[node_id]
+            lon2 = node['lon']
+            lat2 = node['lat']
+            d = haversine(lon1, lat1, lon2, lat2)
+            if d < best_d:
+                best_d = d
+                best_node = node
+    return best_d * 1000, best_node
+
 
 
 CATSKILLS_BBOX = (41.813,-74.652,42.352,-73.862)
