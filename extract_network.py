@@ -17,7 +17,7 @@ from typing import Dict, List, Set, Tuple, Union
 
 import networkx as nx
 
-from osm import OsmElement, OsmNode, dedupe_ways, find_path
+from osm import OsmElement, OsmNode, dedupe_ways, find_path, is_in_catskills
 from util import haversine
 
 peak_nodes: List[OsmNode] = json.load(open('data/peaks-connected.json'))['elements']
@@ -30,14 +30,20 @@ trail_elements: List[OsmElement] = json.load(open('data/trails.json'))['elements
 node_to_trails = defaultdict(list)
 trail_ways_dupes = [el for el in trail_elements if el['type'] == 'way']
 trail_ways = [*dedupe_ways(trail_ways_dupes)]
-for el in trail_ways:
-    for node in el['nodes']:
-        node_to_trails[node].append(el['id'])
 trail_nodes = {
     el['id']: el
     for el in trail_elements
     if el['type'] == 'node'
+    and is_in_catskills(el['lon'], el['lat'])
 }
+trail_ways = [
+    way
+    for way in trail_ways
+    if all(node in trail_nodes for node in way['nodes'])
+]
+for el in trail_ways:
+    for node in el['nodes']:
+        node_to_trails[node].append(el['id'])
 id_to_trail_way = {way['id']: way for way in trail_ways}
 
 road_elements: List[OsmElement] = json.load(open('data/roads.json'))['elements']
@@ -175,6 +181,7 @@ for node_id in peaks_component:
             'id': node_id,
             **trail_node.get('tags', {}),
             'marker-size': 'small',
+            'marker-color': '#555555' if not node_to_roads.get(node_id) else '#ff0000',
             'trail-ways': node_to_trails[node_id],
             'road-ways': node_to_roads.get(node_id, None)
         }

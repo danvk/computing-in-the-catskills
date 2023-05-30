@@ -54,3 +54,11 @@ def find_path(way: OsmWay, a: int, b: int) -> List[int]:
     if j == 0:
         return nodes[i::-1]
     return nodes[i:j-1:-1]
+
+
+CATSKILLS_BBOX = (41.813,-74.652,42.352,-73.862)
+
+
+def is_in_catskills(lon: float, lat: float) -> bool:
+    lat1, lon1, lat2, lon2 = CATSKILLS_BBOX
+    return lat1 <= lat <= lat2 and lon1 <= lon <= lon2
