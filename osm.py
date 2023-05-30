@@ -42,3 +42,13 @@ def dedupe_ways(ways_with_dupes: Iterable[OsmWay]):
         lambda way: way['id']
     ):
         yield next(ways)
+
+
+def find_path(way: OsmWay, a: int, b: int) -> List[int]:
+    """Find the subsequence of nodes between a and b, raising if there is none."""
+    nodes = way['nodes']
+    i = nodes.index(a)
+    j = nodes.index(b)
+    if i < j:
+        return nodes[i:j+1]
+    return nodes[j:i+1:-1]

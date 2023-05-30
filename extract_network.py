@@ -16,7 +16,8 @@ from typing import Dict, List, Set, Tuple
 
 import networkx as nx
 
-from osm import OsmElement, OsmNode, dedupe_ways
+from osm import OsmElement, OsmNode, dedupe_ways, find_path
+from util import haversine
 
 peak_nodes: List[OsmNode] = json.load(open('data/peaks-connected.json'))['elements']
 
@@ -32,6 +33,7 @@ trail_nodes = {
     for el in trail_elements
     if el['type'] == 'node'
 }
+id_to_trail_way = {way['id']: way for way in trail_ways}
 
 road_elements: List[OsmElement] = json.load(open('data/roads.json'))['elements']
 node_to_roads = defaultdict(list)
@@ -96,5 +98,40 @@ for node in peak_nodes:
     peaks_component.update(nx.node_connected_component(g, id))
 
 print(f'Nodes connected to a high peak: {len(peaks_component)}')
-peak_g = g.subgraph(peaks_component)
+peak_g: nx.Graph = g.subgraph(peaks_component).copy()
 print(f'nodes: {peak_g.number_of_nodes()}, edges: {peak_g.number_of_edges()}')
+
+# Fill out the edges a bit:
+# - extract the sequence of coordinates
+# - pick the shorter one (where relevant)
+# - record whether it's trail/trail or road/trail
+paths = {}
+ab: Tuple[int, int]
+for a, b in peak_g.edges():
+    key = (a, b) if a < b else (b, a)
+    way_ids = connections[key]
+    best = None
+    for way_id in way_ids:
+        # Find the subsequence of nodes and calculate a distance
+        way = id_to_trail_way[way_id]
+        nodes = find_path(way, a, b)
+        latlons = []
+        for node_id in nodes:
+            n = trail_nodes[node_id]
+            latlons.append((n['lon'], n['lat']))
+        d_km = sum(
+            haversine(
+                alon, alat, blon, blat
+            )
+            for (alon, alat), (blon, blat) in zip(latlons[:-1], latlons[1:])
+        )
+        if not best or d_km < best['d_km']:
+            best = {
+                'd_km': d_km,
+                'way': way_id,
+                'nodes': nodes,
+                'latlons': latlons,
+            }
+    assert key not in paths
+    paths[key] = best
+
