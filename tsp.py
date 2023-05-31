@@ -43,6 +43,11 @@ GG = make_complete_graph(G, nodes=[*id_to_peak.keys()])
 print(f'Complete graph: {GG.number_of_nodes()} nodes / {GG.number_of_edges()} edges')
 
 peak_nodes: List[int] = nx.approximation.traveling_salesman_problem(GG)
+
+# This could yield a better result but does not:
+# init_nodes: List[int] = nx.approximation.traveling_salesman_problem(GG)
+# peak_nodes: List[int] = nx.approximation.simulated_annealing_tsp(GG, init_nodes)
+
 print(peak_nodes)
 for i, node in enumerate(peak_nodes):
     name = id_to_peak[node]['properties']['name']
