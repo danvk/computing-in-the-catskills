@@ -161,7 +161,7 @@ for a, b in peak_g.edges():
     assert key not in paths
     assert best
     paths[key] = best
-    peak_g.edges[a, b]['d_km'] = best.d_km
+    peak_g.edges[a, b]['weight'] = best.d_km
 
 # Repeat until convergence:
 # - Remove all nodes with degree 1 that aren't peaks or trailheads
@@ -255,16 +255,33 @@ assert not peak_g.has_node(0)
 nodes = [*peak_g.nodes()]
 for node_id in nodes:
     if node_to_roads.get(node_id):
-        peak_g.add_edge(0, node_id, d_km=0)
+        peak_g.add_edge(0, node_id, weight=0)
 
 
-init_nodes: List[int] = nx.approximation.traveling_salesman_problem(
-   peak_g, nodes=id_to_peak_node.keys(), weight='d_km', cycle=True
-)
+def make_complete_graph(G, nodes, weight='weight'):
+    dist = {}
+    path = {}
+    for n, (d, p) in nx.all_pairs_dijkstra(G, weight=weight):
+        dist[n] = d
+        path[n] = p
+
+    GG = nx.Graph()
+    for u in nodes:
+        for v in nodes:
+            if u == v:
+                continue
+            GG.add_edge(u, v, weight=dist[u][v])
+    return GG
+
+
+G = make_complete_graph(peak_g, nodes=[*id_to_peak_node.keys()])
+print(f'Complete graph: {G.number_of_nodes()} nodes / {G.number_of_edges()} edges')
+
+init_nodes: List[int] = nx.approximation.traveling_salesman_problem(G)
 SA_tsp = nx.approximation.simulated_annealing_tsp
-method = lambda G, wt: SA_tsp(peak_g, init_nodes, weight='d_km', temp=500)
+method = lambda G, wt: SA_tsp(G, init_nodes, temp=500)
 nodes: List[int] = nx.approximation.traveling_salesman_problem(
-   peak_g, nodes=id_to_peak_node.keys(), weight='d_km', cycle=True, method=method
+   G, cycle=True, method=method
 )
 
 
