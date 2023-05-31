@@ -76,7 +76,10 @@ chunks = splitlist(nodes, 0)
 for i, chunk in enumerate(chunks):
     print(f'  {i}: {chunk}')
 
-tsp_fs = []
+tsp_fs = [*peak_features]
+for f in tsp_fs:
+    f['properties']['marker-size'] = 'small'
+
 total_d_km = 0
 for node_seq in chunks:
     tsp_fs.append(id_to_trailhead[node_seq[0]])
@@ -90,7 +93,12 @@ for node_seq in chunks:
         'type': 'Feature',
         'properties': {
             'nodes': node_seq,
-            'd_km': d_km
+            'd_km': d_km,
+            'peaks': [
+                id_to_peak[node]['properties']['name']
+                for node in node_seq
+                if node in id_to_peak
+            ]
         },
         'geometry': {
             'type': 'MultiLineString',
