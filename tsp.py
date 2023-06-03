@@ -6,7 +6,8 @@ from typing import List
 
 import networkx as nx
 
-from graph import cycle_weight, make_complete_graph
+from graph import cycle_weight, make_complete_graph, scale_graph
+from ort_wrapper import solve_tsp_with_or_tools
 from util import splitlist
 
 features = json.load(open('data/network.geojson'))['features']
@@ -42,7 +43,9 @@ for node_id in nodes:
 GG = make_complete_graph(G, nodes=[*id_to_peak.keys()])
 print(f'Complete graph: {GG.number_of_nodes()} nodes / {GG.number_of_edges()} edges')
 
-peak_nodes: List[int] = nx.approximation.traveling_salesman_problem(GG)
+# peak_nodes: List[int] = nx.approximation.traveling_salesman_problem(GG)
+peak_nodes: List[int]
+peak_nodes, cost = solve_tsp_with_or_tools(scale_graph(GG, 100))
 
 # This could yield a better result but does not:
 # init_nodes: List[int] = nx.approximation.traveling_salesman_problem(GG)
@@ -93,7 +96,8 @@ for node_seq in chunks:
         'type': 'Feature',
         'properties': {
             'nodes': node_seq,
-            'd_km': d_km,
+            'd_km': round(d_km, 2),
+            'd_mi': round(d_km * 0.621371, 2),
             'peaks': [
                 id_to_peak[node]['properties']['name']
                 for node in node_seq

@@ -21,3 +21,11 @@ def cycle_weight(G, nodes, weight='weight'):
     for a, b in zip(nodes[:-1], nodes[1:]):
         total_weight += G.edges[a, b][weight]
     return total_weight
+
+
+def scale_graph(g, factor):
+    """Scale up edge weights by the factor and round them to integers."""
+    scaled_g = g.copy()
+    for a, b, w in g.edges.data('weight'):
+        scaled_g.edges[a, b]['weight'] = int(round(w * factor))
+    return scaled_g

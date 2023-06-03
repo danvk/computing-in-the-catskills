@@ -1,18 +1,18 @@
 """Pythonic wrapper around Google's OR Tools TSP."""
 
-import math
-
 import networkx as nx
 
 from ortools.constraint_solver import routing_enums_pb2
 from ortools.constraint_solver import pywrapcp
 
 
-def solve_tsp_with_or_tools(g: nx.Graph) -> list:
+def solve_tsp_with_or_tools(g: nx.Graph, time_limit_secs=30) -> list:
     nodes = [*g.nodes()]
     manager = pywrapcp.RoutingIndexManager(len(nodes), 1, 0)
     routing = pywrapcp.RoutingModel(manager)
     penalty = len(nodes) * max(w for _a, _b, w in g.edges.data('weight'))
+    for a, b, d in g.edges.data('weight'):
+        assert d == int(d), f'edges must have integer weights ({a}->{b}={d})'
 
     def distance_callback(from_index, to_index):
         from_node = nodes[manager.IndexToNode(from_index)]
@@ -31,8 +31,8 @@ def solve_tsp_with_or_tools(g: nx.Graph) -> list:
     search_parameters.local_search_metaheuristic = (
         routing_enums_pb2.LocalSearchMetaheuristic.GUIDED_LOCAL_SEARCH
     )
-    search_parameters.time_limit.seconds = 10
-    search_parameters.log_search = True
+    search_parameters.time_limit.seconds = time_limit_secs
+    # search_parameters.log_search = True
     solution = routing.SolveWithParameters(search_parameters)
     print('status', routing.status(), not not solution)
 
