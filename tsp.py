@@ -6,26 +6,13 @@ from typing import List
 
 import networkx as nx
 
-from graph import cycle_weight, make_complete_graph, scale_graph
+from graph import cycle_weight, make_complete_graph, read_hiking_graph, scale_graph
 from ort_wrapper import solve_tsp_with_or_tools
 from util import splitlist
 
 features = json.load(open('data/network.geojson'))['features']
+G, id_to_peak, id_to_trailhead = read_hiking_graph(features)
 peak_features = [f for f in features if f['properties'].get('type') == 'high-peak']
-id_to_peak = {f['properties']['id']: f for f in peak_features}
-id_to_trailhead = {f['properties']['id']: f for f in features if f['properties'].get('type') == 'trailhead'}
-
-G = nx.Graph()
-for f in features:
-    if f['geometry']['type'] != 'LineString':
-        continue
-    nodes = f['properties']['nodes']
-    for node in nodes[1:-1]:
-        assert node not in id_to_peak and node not in id_to_trailhead
-    a, b = nodes[0], nodes[-1]
-    d_km = f['properties']['d_km']
-    G.add_edge(a, b, weight=d_km, feature=f)
-
 
 print(f'Input graph: {G.number_of_nodes()} nodes / {G.number_of_edges()} edges')
 print(f'  Peaks: {len(id_to_peak)}')
