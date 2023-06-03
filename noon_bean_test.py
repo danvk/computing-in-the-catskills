@@ -1,6 +1,8 @@
 import networkx as nx
+from graph import cycle_weight
 
 from noon_bean import gtsp_to_tsp, tsp_solution_to_gtsp
+from ort_wrapper import solve_tsp_with_or_tools
 from util import rotate_to_start
 
 # This is the graph from the Noon-Bean paper
@@ -47,9 +49,20 @@ def test_gtsp_to_tsp():
 
 def test_tsp_on_transformed_gtsp():
     gp = gtsp_to_tsp(NB, NB_NODE_SETS)
-    cycle = nx.approximation.traveling_salesman_problem(gp)
-    # cycle = ['b3', 'b1', 'b2', 'c2', 'c3', 'c1', 'a1', 'a2', 'a1', 'a2', 'b3', 'b1', 'b2', 'b3']
+    # cycle = nx.approximation.traveling_salesman_problem(gp)
+    cycle = ['b3', 'b1', 'b2', 'c2', 'c3', 'c1', 'a1', 'a2', 'a1', 'a2', 'b3', 'b1', 'b2', 'b3']
     gtsp_cycle = tsp_solution_to_gtsp(cycle, NB_NODE_SETS)
     print(cycle)
     print(gtsp_cycle)
+    assert cycle_weight(NB, gtsp_cycle + [gtsp_cycle[0]]) == 17 + 18 + 24
+    assert rotate_to_start(gtsp_cycle, 'a1') == ['a1', 'b3', 'c2']
+
+
+def test_tsp_with_ortools():
+    gp = gtsp_to_tsp(NB, NB_NODE_SETS)
+    cycle, cost = solve_tsp_with_or_tools(gp)
+    gtsp_cycle = tsp_solution_to_gtsp(cycle, NB_NODE_SETS)
+    print(cycle, cost)
+    print(gtsp_cycle)
+    assert cycle_weight(NB, gtsp_cycle + [gtsp_cycle[0]]) == 17 + 18 + 24
     assert rotate_to_start(gtsp_cycle, 'a1') == ['a1', 'b3', 'c2']
