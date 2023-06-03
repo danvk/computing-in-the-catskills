@@ -3,7 +3,8 @@ import networkx as nx
 def make_complete_graph(G, nodes, weight='weight'):
     dist = {}
     path = {}
-    for n, (d, p) in nx.all_pairs_dijkstra(G, weight=weight):
+    for n in nodes:
+        d, p = nx.single_source_dijkstra(G, n, weight=weight)
         dist[n] = d
         path[n] = p
 
