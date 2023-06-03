@@ -18,7 +18,8 @@ class TransformedGraph:
 
 def gtsp_to_tsp(
     g: nx.DiGraph,
-    node_sets: list[list]
+    node_sets: list[list],
+    big_val=None,
 ) -> nx.DiGraph:
     """Construct a graph on which to run asymmetric TSP using the Noon-Bean algorithm"""
     # Verify preconditions:
@@ -42,7 +43,8 @@ def gtsp_to_tsp(
 
     sum_weight = sum(w for _a, _b, w in g.edges.data('weight'))
     print('sum_weight=', sum_weight)
-    B = 1 + sum_weight
+    if big_val is None:
+        big_val = 1 + sum_weight
 
     gt = nx.DiGraph()
     gt.add_nodes_from(all_nodes)
@@ -62,7 +64,7 @@ def gtsp_to_tsp(
         ai = node_set.index(a)
         n = len(node_set)
         preva = node_set[(ai - 1 + n) % n]
-        gt.add_edge(preva, b, weight=weight+B)
+        gt.add_edge(preva, b, weight=weight+big_val)
 
     return gt
 
@@ -71,6 +73,7 @@ def tsp_solution_to_gtsp(
     cycle: list,
     node_sets: list[list],
 ) -> list:
+    """Map a solution to TSP back onto a solution to the GTSP."""
     node_to_idx = {
         node: i
         for i, node_set in enumerate(node_sets)
