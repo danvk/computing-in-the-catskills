@@ -38,6 +38,7 @@ def gtsp_to_tsp(
     for a, b, d in g.edges(data=True):
         assert node_to_idx[a] != node_to_idx[b]
         assert 'weight' in d
+        print(a, b, d['weight'])
 
     sum_weight = sum(w for _a, _b, w in g.edges.data('weight'))
     print('sum_weight=', sum_weight)
