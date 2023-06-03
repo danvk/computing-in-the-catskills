@@ -13,16 +13,15 @@ def solve_tsp_with_or_tools(g: nx.Graph) -> list:
     manager = pywrapcp.RoutingIndexManager(len(nodes), 1, 0)
     routing = pywrapcp.RoutingModel(manager)
     penalty = len(nodes) * max(w for _a, _b, w in g.edges.data('weight'))
-    print('penalty=', penalty)
 
     def distance_callback(from_index, to_index):
         from_node = nodes[manager.IndexToNode(from_index)]
         to_node = nodes[manager.IndexToNode(to_index)]
+        # OR Tools silently reinterprets exceptions as "return 0!"
+        # https://github.com/google/or-tools/issues/3224
         if g.has_edge(from_node, to_node):
             d = g.edges[from_node, to_node]['weight']
-            print(from_node, to_node, d)
             return d
-        print(from_node, to_node, 'infinity')
         return penalty
 
     transit_callback_index = routing.RegisterTransitCallback(distance_callback)
