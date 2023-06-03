@@ -67,9 +67,21 @@ def gtsp_to_tsp(
     return gt
 
 
-"""
-def tsp_to_gtsp(
+def tsp_solution_to_gtsp(
     cycle: list,
-    transformed_graph: nx.Digraph
-) -> list
-"""
+    node_sets: list[list],
+) -> list:
+    node_to_idx = {
+        node: i
+        for i, node_set in enumerate(node_sets)
+        for node in node_set
+    }
+    gtsp_cycle = []
+    for a, b in zip(cycle[:-1], cycle[1:]):
+        i = node_to_idx[a]
+        j = node_to_idx[b]
+        if i == j:
+            continue  # ignore intra-cluster edges
+        gtsp_cycle.append(b)
+
+    return gtsp_cycle

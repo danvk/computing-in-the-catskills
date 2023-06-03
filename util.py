@@ -39,3 +39,9 @@ def splitlist(xs: List[T], delim: T) -> List[List[T]]:
             chunks[-1].append(x)
         last = x
     return chunks
+
+
+def rotate_to_start(xs: List[T], desired_first: T) -> List[T]:
+    """Rotate a list so that it starts with a particular element."""
+    i = xs.index(desired_first)
+    return xs[i:] + xs[:i]
