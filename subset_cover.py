@@ -38,6 +38,41 @@ costs = costs / median_cost
 solver = setcover.SetCover(covers, costs)
 solution, time_used = solver.SolveSCP()
 print('d_km: ', solver.total_cost * median_cost)
+chosen_loops = []
 for j, (d, loop) in enumerate(all_loops):
     if solver.s[j]:
-        print(d, loop)
+        chosen_loops.append((d, loop))
+
+tsp_fs = [*peak_features]
+for f in tsp_fs:
+    f['properties']['marker-size'] = 'small'
+for d_km, loop in chosen_loops:
+    tsp_fs.append(id_to_trailhead[loop[0]])
+    # tsp_fs.append(id_to_trailhead[loop[-1]])
+    coordinates = []
+    for a, b in zip(loop[:-1], loop[1:]):
+        path = nx.shortest_path(G, a, b, weight='weight')
+        coordinates.append([
+            coord
+            for node_a, node_b in zip(path[:-1], path[1:])
+            for coord in G.edges[node_a, node_b]['feature']['geometry']['coordinates']
+        ])
+    tsp_fs.append({
+        'type': 'Feature',
+        'properties': {
+            'nodes': loop,
+            'd_km': round(d_km, 2),
+            'd_mi': round(d_km * 0.621371, 2),
+            'peaks': [
+                id_to_peak[node]['properties']['name']
+                for node in loop[1:-1]
+            ]
+        },
+        'geometry': {
+            'type': 'MultiLineString',
+            'coordinates': coordinates
+        }
+    })
+
+with open('data/loop-tsp.geojson', 'w') as out:
+    json.dump({'type': 'FeatureCollection', 'features': tsp_fs}, out)
