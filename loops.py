@@ -15,6 +15,7 @@
 # - Map this back to a sequence of hikes
 # - Visualize
 
+import itertools
 import json
 import math
 from typing import List
@@ -64,6 +65,42 @@ for trailhead, peaks in sorted(trailhead_to_peaks.items(), key=lambda x: len(x[1
     print(trailhead, len(peaks), peaks)
 
 print(len(trailhead_to_peaks), 'trailheads')
+
+# 2955316486 6 [2955311547, 1938215682, 1938201532, 357574030, 10033501291, 10010091368]
+
+def powerset(xs):
+    return (combo for r in range(len(xs) + 1) for combo in itertools.combinations(xs, r))
+
+
+def loops_for_trailhead(g, th_node, peaks):
+    loops = []
+    gp = make_complete_graph(g, peaks + [th_node])
+    for peak_subset in powerset(peaks):
+        if not peak_subset:
+            continue
+
+        best_d = math.inf
+        best_cycle = None
+        for cycle in itertools.permutations(peak_subset):
+            cycle = [th_node, *cycle, th_node]
+            d = cycle_weight(gp, cycle)
+            if d < best_d:
+                best_d = d
+                best_cycle = cycle
+        # TODO: only add loops that don't include extra peaks
+        all_peaks = {
+            node
+            for a, b in zip(best_cycle[:-1], best_cycle[1:])
+            for node in gp.edges[a, b]['path']
+            if g.nodes[node]['type'] == 'high-peak'
+        }
+        if len(all_peaks) == len(peak_subset):
+            loops.append((best_d, best_cycle))
+    return loops
+
+sample = loops_for_trailhead(G, 2955316486, [2955311547, 1938215682, 1938201532, 357574030, 10033501291, 10010091368])
+print(len(sample), sample)
+
 # 93 trailheads
 #  1: 16
 #  2:  6
