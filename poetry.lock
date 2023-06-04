@@ -588,6 +588,16 @@ doc = ["matplotlib (>2)", "numpydoc", "pydata-sphinx-theme (==0.9.0)", "sphinx (
 test = ["asv", "gmpy2", "mpmath", "pooch", "pytest", "pytest-cov", "pytest-timeout", "pytest-xdist", "scikit-umfpack", "threadpoolctl"]
 
 [[package]]
+name = "setcoverpy"
+version = "0.9.1"
+description = "A heuristic solver for the set cover problem"
+optional = false
+python-versions = "*"
+files = [
+    {file = "SetCoverPy-0.9.1.tar.gz", hash = "sha256:9a94cef1c49426e6e19c8bf8f09e4a34866127c9a1bdc5b9a75378bda0e89300"},
+]
+
+[[package]]
 name = "six"
 version = "1.16.0"
 description = "Python 2 and 3 compatibility utilities"
@@ -663,4 +673,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.11,<3.12"
-content-hash = "544e9d00a2e9c330e1a41a1e8e755bfde089026f395ad8a06b616d5baec5d767"
+content-hash = "2e3d8e2cc635ec732fc1efd49874d8c76c744cfe003ea81ceddfdc2aab13c046"

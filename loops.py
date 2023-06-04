@@ -95,11 +95,40 @@ def loops_for_trailhead(g, th_node, peaks):
             if g.nodes[node]['type'] == 'high-peak'
         }
         if len(all_peaks) == len(peak_subset):
-            loops.append((best_d, best_cycle))
+            # Exclude paths that go over unexpected peaks.
+            # A more stringent check would also allow paths that go within ~100m of unexpected peaks.
+            loops.append((best_d, best_cycle[1:-1]))
+        # if best_cycle == [7609349952, 2884119551, 7609349952]:
+        #     for a, b in zip(best_cycle[:-1], best_cycle[1:]):
+        #         print(f'{a} -> {b} {gp.edges[a, b]["weight"]:.2f}')
+        #         path = gp.edges[a, b]['path']
+        #         if path[0] != a:
+        #             path = path[::-1]
+        #         for node in path:
+        #             print(f'  https://www.openstreetmap.org/node/{node}')
     return loops
 
-sample = loops_for_trailhead(G, 2955316486, [2955311547, 1938215682, 1938201532, 357574030, 10033501291, 10010091368])
-print(len(sample), sample)
+all_cycles = []
+for trailhead, peaks in trailhead_to_peaks.items():
+    all_cycles.append({
+        'trailhead': trailhead,
+        'cycles': loops_for_trailhead(G, trailhead, peaks)
+    })
+
+with open('data/loops.json', 'w') as out:
+    json.dump(all_cycles, out)
+
+# 960 total cycles
+# print(len(all_cycles), 'total cycles')
+
+# sample = loops_for_trailhead(G, 2955316486, [2955311547, 1938215682, 1938201532, 357574030, 10033501291, 10010091368])
+# print(len(sample), sample)
+# sample = loops_for_trailhead(G, 7609349952, [9953707705, 9953729846, 2884119551, -538, 2884119672, 2426171552, -1136, 7292479776, 2398015279])
+# sample = loops_for_trailhead(G, 212271460, [1938215682, 2882649917, 1938201532, 2882649730, 7982977638, 2955311547, 10033501291, 7978185605, 357574030, 10010091368])
+# print(len(sample))
+# print(sample[0][1][0])
+# for d, cycle in sample:
+#     print(f'{d:.2f}km:', '->'.join(id_to_peak[node]['properties']['name'] + f' ({node})' for node in cycle[1:-1]))
 
 # 93 trailheads
 #  1: 16
