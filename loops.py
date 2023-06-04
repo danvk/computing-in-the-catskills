@@ -144,6 +144,27 @@ for a, b in zip(true_soln[:-1], true_soln[1:]):
 nodes = rotate_to_start(nodes, 0)
 print(nodes)
 
+# this is a hack that doesn't make sense
+filtered_nodes = [nodes[0]]
+for i in range(1, len(nodes)):
+    prev = nodes[i - 1]
+    n = nodes[i]
+    next_node = nodes[i + 1] if i < len(nodes) - 1 else None
+
+    if isinstance(n, tuple):
+        filtered_nodes.append(n)
+    elif isinstance(prev, tuple) and isinstance(next_node, tuple) and prev[0] == n and n == next_node[0]:
+        pass  # never makes sense to needlessly go back to the trailhead
+    else:
+        filtered_nodes.append(n)
+nodes = filtered_nodes
+
+def second_or_scalar(x):
+    if isinstance(x, tuple):
+        return x[1]
+    return x
+
+
 chunks = splitlist(nodes, 0)
 for i, chunk in enumerate(chunks):
     print(f'  {i}: {chunk}')
@@ -152,17 +173,15 @@ tsp_fs = [*peak_features]
 for f in tsp_fs:
     f['properties']['marker-size'] = 'small'
 
-def second_or_scalar(x):
-    if isinstance(x, tuple):
-        return x[1]
-    return x
-
 total_d_km = 0
 for node_seq in chunks:
     tsp_fs.append(id_to_trailhead[node_seq[0]])
     tsp_fs.append(id_to_trailhead[node_seq[-1]])
+    for a, b in zip(node_seq[:-1], node_seq[1:]):
+        if not G.has_edge(second_or_scalar(a), second_or_scalar(b)):
+            raise KeyError(a, b)
     d_km = sum(
-        trail_g.edges[a, b]['weight']
+        G.edges[second_or_scalar(a), second_or_scalar(b)]['weight']
         for a, b in zip(node_seq[:-1], node_seq[1:])
     )
     total_d_km += d_km
