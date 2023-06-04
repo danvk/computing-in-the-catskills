@@ -32,9 +32,12 @@ for j, (d, loop) in enumerate(all_loops):
         i = peak_id_to_idx[peak]
         covers[i, j] = True
 
+median_cost = np.median(costs)
+costs = costs / median_cost
+
 solver = setcover.SetCover(covers, costs)
 solution, time_used = solver.SolveSCP()
-print('d_km: ', solver.total_cost)
+print('d_km: ', solver.total_cost * median_cost)
 for j, (d, loop) in enumerate(all_loops):
     if solver.s[j]:
         print(d, loop)
