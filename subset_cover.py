@@ -52,11 +52,10 @@ for d_km, loop in chosen_loops:
     coordinates = []
     for a, b in zip(loop[:-1], loop[1:]):
         path = nx.shortest_path(G, a, b, weight='weight')
-        coordinates.append([
-            coord
+        coordinates += [
+            G.edges[node_a, node_b]['feature']['geometry']['coordinates']
             for node_a, node_b in zip(path[:-1], path[1:])
-            for coord in G.edges[node_a, node_b]['feature']['geometry']['coordinates']
-        ])
+        ]
     tsp_fs.append({
         'type': 'Feature',
         'properties': {
