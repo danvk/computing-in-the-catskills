@@ -23,6 +23,7 @@ import networkx as nx
 from graph import cycle_weight, make_complete_graph, read_hiking_graph, scale_graph
 from noon_bean import gtsp_to_tsp, tsp_solution_to_gtsp
 from ort_wrapper import solve_tsp_with_or_tools
+from util import rotate_to_start, splitlist
 
 features = json.load(open('data/network.geojson'))['features']
 G, id_to_peak, id_to_trailhead = read_hiking_graph(features)
@@ -80,6 +81,7 @@ peak_sets = [
 ]
 print(peak_sets)
 
+"""
 gtsp = gtsp_to_tsp(GG, peak_sets)
 max_edge = max(w for _a, _b, w in gtsp.edges.data('weight'))
 
@@ -88,4 +90,105 @@ solution, solution_dist = solve_tsp_with_or_tools(scale_graph(gtsp, 100), 60)
 print(solution)
 true_soln = tsp_solution_to_gtsp(solution, peak_sets)
 print(true_soln)
-print(cycle_weight(GG, true_soln))
+d_km = cycle_weight(GG, true_soln)
+print(f'Total distance: {d_km:.2f} km')
+"""
+true_soln = [
+    (213669242, 2897919022),
+    (1272964775, 7978185605),
+    (7609349952, 9953707705),
+    (7609349952, 9953729846),
+    (7988852640, 1938215682),
+    (7988852640, 2882649917),
+    (7988852640, 1938201532),
+    (7988852640, 2882649730),
+    (7988852640, 2955311547),
+    (212334582, 357574030),
+    (213756344, 7292479776),
+    (1453293499, 2398015279),
+    (212357867, 9785950126),
+    (213838962, 357557378),
+    (116518006, 10010051278),
+    (213839051, 357548762),
+    (2884566694, 357559622),
+    (7609349952, 2884119551),
+    (7609349952, -538),
+    (7609349952, 2884119672),
+    (212320092, 2473476747),
+    (7988852640, 10033501291),
+    (1329053809, 2473476912),
+    (1329053809, 2473476927),
+    (7944990851, 2426236522),
+    (7685464670, 2845338212),
+    (10010074986, 357563196),
+    (116518006, 212348771),
+    (9147145531, 9147145385),
+    (7609349952, 2426171552),
+    (7609349952, -1136),
+    (212334582, 10010091368),
+    (212296078, 7982977638)
+]
+
+nodes = []
+for a, b in zip(true_soln[:-1], true_soln[1:]):
+    if not GG.has_edge(a, b):
+        print('Going to fail on:', a, b)
+    path = GG.edges[a, b]['path']
+    if path[0] != a:
+        path = [*path[::-1]]
+    print(a, b, path)
+    assert path[0] == a
+    assert path[-1] == b
+    nodes += path[:-1]
+
+nodes = rotate_to_start(nodes, 0)
+print(nodes)
+
+chunks = splitlist(nodes, 0)
+for i, chunk in enumerate(chunks):
+    print(f'  {i}: {chunk}')
+
+tsp_fs = [*peak_features]
+for f in tsp_fs:
+    f['properties']['marker-size'] = 'small'
+
+def second_or_scalar(x):
+    if isinstance(x, tuple):
+        return x[1]
+    return x
+
+total_d_km = 0
+for node_seq in chunks:
+    tsp_fs.append(id_to_trailhead[node_seq[0]])
+    tsp_fs.append(id_to_trailhead[node_seq[-1]])
+    d_km = sum(
+        trail_g.edges[a, b]['weight']
+        for a, b in zip(node_seq[:-1], node_seq[1:])
+    )
+    total_d_km += d_km
+    tsp_fs.append({
+        'type': 'Feature',
+        'properties': {
+            'nodes': node_seq,
+            'd_km': round(d_km, 2),
+            'd_mi': round(d_km * 0.621371, 2),
+            'peaks': [
+                id_to_peak[node]['properties']['name']
+                for node in node_seq
+                if node in id_to_peak
+            ]
+        },
+        'geometry': {
+            'type': 'MultiLineString',
+            'coordinates': [
+                G.edges[second_or_scalar(a), second_or_scalar(b)]['feature']['geometry']['coordinates']
+                for a, b in zip(node_seq[:-1], node_seq[1:])
+            ]
+        }
+    })
+
+
+with open('data/loop-tsp.geojson', 'w') as out:
+    json.dump({'type': 'FeatureCollection', 'features': tsp_fs}, out)
+
+print(f'Total hiking distance: {total_d_km:.1f} km')
