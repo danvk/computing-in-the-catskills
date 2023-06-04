@@ -132,18 +132,39 @@ peak_sets = [
     ]
     for peak_id in sorted(id_to_peak.keys())
 ]
-print(peak_sets)
+# print(peak_sets)
 
 gtsp = gtsp_to_tsp(GG, peak_sets)
 max_edge = max(w for _a, _b, w in gtsp.edges.data('weight'))
 
 print(f'Transformed complete graph: {gtsp.number_of_nodes()} nodes / {gtsp.number_of_edges()} edges / max edge={max_edge}')
+"""
 solution, solution_dist = solve_tsp_with_or_tools(scale_graph(gtsp, 100), 60)
 print(solution)
 true_soln = tsp_solution_to_gtsp(solution, peak_sets)
+"""
+print('True Solution:')
+true_soln = [(7988852640, 10033501291), (212271460, 10010091368), (7894979775, 2897919022), (213757228, 9147145385), (10010074986, 357563196), (212334242, 2955311547), (7609349952, 2884119672), (7609349952, 2426171552), (212320092, 2473476747), (212320092, 2473476912), (212320092, 2473476927), (6289621586, 7292479776), (6289621586, 2398015279), (212397952, 2882649917), (212334582, 357574030), (4168457690, 9953707705), (10005350826, 2426236522), (212329873, 10010051278), (212329873, 212348771), (212357867, 9785950126), (2884119781, 2884119551), (213609657, 2845338212), (213609657, 357557378), (213609657, 357548762), (213609657, 357559622), (7609349952, 9953729846), (7609349952, -538), (7609349952, -1136), (7988852640, 1938215682), (7988852640, 1938201532), (7988852640, 2882649730), (7988852640, 7982977638), (212334242, 7978185605), (2936274595, 2884119551), (212334242, 7982977638)]
 print(true_soln)
 d_km = cycle_weight(GG, true_soln)
 print(f'Total distance: {d_km:.2f} km')
+peak_set_counts = {
+    peak_set[0][1]: sum(
+        1
+        for n in true_soln
+        for peak in peak_set
+        if n == peak
+    )
+    for peak_set in peak_sets
+}
+print('Trips to each peak (should be 1 for each):')
+print(peak_set_counts)
+all_ok = True
+for peak_id, count in peak_set_counts.items():
+    if count != 1:
+        print(f'Incorrect number of visits to {peak_id}: {count} (want 1)')
+        all_ok = False
+assert all_ok
 
 nodes = []
 for a, b in zip(true_soln[:-1], true_soln[1:]):
@@ -160,26 +181,23 @@ for a, b in zip(true_soln[:-1], true_soln[1:]):
 nodes = rotate_to_start(nodes, 0)
 print(nodes)
 
-# this is a hack that doesn't make sense
-filtered_nodes = [nodes[0]]
-for i in range(1, len(nodes)):
-    prev = nodes[i - 1]
-    n = nodes[i]
-    next_node = nodes[i + 1] if i < len(nodes) - 1 else None
-
-    if isinstance(n, tuple):
-        filtered_nodes.append(n)
-    elif isinstance(prev, tuple) and isinstance(next_node, tuple) and prev[0] == n and n == next_node[0]:
-        pass  # never makes sense to needlessly go back to the trailhead
-    else:
-        filtered_nodes.append(n)
-nodes = filtered_nodes
-
 def second_or_scalar(x):
     if isinstance(x, tuple):
         return x[1]
     return x
 
+# This is Cortina Ln out and back to Kaaterskill High Peak. Perfect!
+# [
+#   212357867,
+#   (212357867, 2908399218),
+#   (212357867, 1278701329),
+#   (212357867, 1278702498),
+#   (212357867, 9785950126),
+#   (212357867, 1278702498),
+#   (212357867, 1278701329),
+#   (212357867, 2908399218),
+#   212357867
+# ]
 
 chunks = splitlist(nodes, 0)
 for i, chunk in enumerate(chunks):
@@ -191,13 +209,21 @@ for f in tsp_fs:
 
 total_d_km = 0
 for node_seq in chunks:
+    assert isinstance(node_seq[0], int)
+    assert node_seq[0] == node_seq[-1]
+    for node in node_seq[1:-1]:
+        assert isinstance(node, tuple)
+        assert node[0] == node_seq[0]
+
+    node_seq = [second_or_scalar(n) for n in node_seq]
+
     tsp_fs.append(id_to_trailhead[node_seq[0]])
     tsp_fs.append(id_to_trailhead[node_seq[-1]])
     for a, b in zip(node_seq[:-1], node_seq[1:]):
-        if not G.has_edge(second_or_scalar(a), second_or_scalar(b)):
+        if not G.has_edge(a, b):
             raise KeyError(a, b)
     d_km = sum(
-        G.edges[second_or_scalar(a), second_or_scalar(b)]['weight']
+        G.edges[a, b]['weight']
         for a, b in zip(node_seq[:-1], node_seq[1:])
     )
     total_d_km += d_km
@@ -216,7 +242,7 @@ for node_seq in chunks:
         'geometry': {
             'type': 'MultiLineString',
             'coordinates': [
-                G.edges[second_or_scalar(a), second_or_scalar(b)]['feature']['geometry']['coordinates']
+                G.edges[a, b]['feature']['geometry']['coordinates']
                 for a, b in zip(node_seq[:-1], node_seq[1:])
             ]
         }
@@ -227,3 +253,47 @@ with open('data/loop-tsp.geojson', 'w') as out:
     json.dump({'type': 'FeatureCollection', 'features': tsp_fs}, out)
 
 print(f'Total hiking distance: {total_d_km:.1f} km')
+
+"""
+[
+    212334242,  # spruceton rd / devil's path
+    (212334242, 2953604183),
+    (212334242, 2955311547),
+    (212334242, 2955311754),
+    (212334242, 10091139169),
+    (212334242, 10091139170),
+    (212334242, 1938245944),
+    (212334242, 1938215691),
+    (212334242, 212344919),
+    (212334242, 212344950),
+    (212334242, 7644271840),
+    (212334242, 7644271839),
+    (212334242, 7988852669),
+    (212334242, 212271460),
+    (212334242, 2895935508),
+    (212334242, 7644223407),
+    (212334242, 2895889197),
+    (212334242, 2882649917),
+    (212334242, 2882649793),
+    (212334242, 2882649784),
+    (212334242, 2882649729),
+    (212334242, 2882649730),
+    (212334242, 2463484008), # devil's path pecoy notch (bt Sugarloaf and Twin)
+    # this jump makes no sense and isn't really valid?
+    (7988852640, 10033501291), # SR 214 / Rusk Mountain
+    (7988852640, 10033501292),
+    (7988852640, 10033564844),
+    (7988852640, 1938157148),
+    (7988852640, 1938157056),
+    (7988852640, 1938156968),
+    (7988852640, 5857246059),
+    (7988852640, 1938201532),
+    (7988852640, 1938201509),
+    (7988852640, 212344919),
+    (7988852640, 212344950),
+    (7988852640, 7644271840),
+    (7988852640, 7644271839),
+    (7988852640, 7988852669),
+    7988852640
+]
+"""
