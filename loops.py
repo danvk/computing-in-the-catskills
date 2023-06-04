@@ -113,6 +113,19 @@ for n1, n2 in GG.edges():
 print(f'Deleting {len(to_delete)} peak->same peak edges.')
 GG.remove_edges_from(to_delete)
 
+def second_or_scalar(x):
+    if isinstance(x, tuple):
+        return x[1]
+    return x
+
+# Penalize paths between peaks that go over another peak.
+for n1, n2, path in GG.edges.data('path'):
+    assert path[0] in (n1, n2)
+    assert path[-1] in (n1, n2)
+    if any(second_or_scalar(p) in id_to_peak for p in path[1:-1]):
+        GG.edges[n1, n2]['weight'] += 100
+        print(f'Penalized {n1} -> {n2}: {path}')
+
 # Complete graph: 479 nodes / 109917 edges
 print(f'Complete graph: {GG.number_of_nodes()} nodes / {GG.number_of_edges()} edges')
 
@@ -139,12 +152,13 @@ max_edge = max(w for _a, _b, w in gtsp.edges.data('weight'))
 
 print(f'Transformed complete graph: {gtsp.number_of_nodes()} nodes / {gtsp.number_of_edges()} edges / max edge={max_edge}')
 
-solution, solution_dist = solve_tsp_with_or_tools(scale_graph(gtsp, 100), time_limit_secs=600)
+solution, solution_dist = solve_tsp_with_or_tools(scale_graph(gtsp, 100), time_limit_secs=900)
 print(solution)
 true_soln = tsp_solution_to_gtsp(solution, peak_sets)
 
 print('True Solution:')
 # true_soln = [(7988852640, 10033501291), (212271460, 10010091368), (7894979775, 2897919022), (213757228, 9147145385), (10010074986, 357563196), (212334242, 2955311547), (7609349952, 2884119672), (7609349952, 2426171552), (212320092, 2473476747), (212320092, 2473476912), (212320092, 2473476927), (6289621586, 7292479776), (6289621586, 2398015279), (212397952, 2882649917), (212334582, 357574030), (4168457690, 9953707705), (10005350826, 2426236522), (212329873, 10010051278), (212329873, 212348771), (212357867, 9785950126), (2884119781, 2884119551), (213609657, 2845338212), (213609657, 357557378), (213609657, 357548762), (213609657, 357559622), (7609349952, 9953729846), (7609349952, -538), (7609349952, -1136), (7988852640, 1938215682), (7988852640, 1938201532), (7988852640, 2882649730), (7988852640, 7982977638), (212334242, 7978185605), (2936274595, 2884119551), (212334242, 7982977638)]
+# true_soln = [(212397952, 2882649730), (213866743, 357559622), (212334582, 1938215682), (4168457690, 2426171552), (4168457690, 2884119551), (212296078, 7978185605), (212296078, 2882649917), (212374024, 2473476912), (212374024, 2473476927), (212329873, 10010051278), (212294303, 2426236522), (212357867, 9785950126), (213757228, 9147145385), (10010074986, 357563196), (212397026, 1938201532), (2884119781, 2884119672), (2910242574, 10033501291), (212334242, 2955311547), (212334242, 357574030), (212334242, 10010091368), (213838962, 357557378), (213838962, 357548762), (116518006, 212348771), (213609657, 2845338212), (213669242, 2897919022), (7609349952, 9953729846), (7609349952, 9953707705), (7609349952, -538), (7609349952, -1136), (7609349952, 7292479776), (7609349952, 2398015279), (212320092, 2473476747), (2463484097, 7982977638)]
 print(true_soln)
 d_km = cycle_weight(GG, true_soln)
 print(f'Total distance: {d_km:.2f} km')
@@ -180,11 +194,6 @@ for a, b in zip(true_soln[:-1], true_soln[1:]):
 
 nodes = rotate_to_start(nodes, 0)
 print(nodes)
-
-def second_or_scalar(x):
-    if isinstance(x, tuple):
-        return x[1]
-    return x
 
 # This is Cortina Ln out and back to Kaaterskill High Peak. Perfect!
 # [
