@@ -144,6 +144,15 @@ for a, b in zip(true_soln[:-1], true_soln[1:]):
 nodes = rotate_to_start(nodes, 0)
 print(nodes)
 
+friday_moon_haw = (7609349952, 9953707705)  # Friday via Moon Haw
+# 7609349952 -- Moon Haw Road
+balsam_cap_moon_haw = (7609349952, 9953729846)  # Balsam Cap via Moon Haw
+
+assert GG.has_edge(friday_moon_haw, balsam_cap_moon_haw)
+print(f'Moon Haw d=', GG.edges[friday_moon_haw, balsam_cap_moon_haw]['weight'])
+print(f'Moon Haw path=', GG.edges[friday_moon_haw, balsam_cap_moon_haw]['path'])
+
+"""
 # this is a hack that doesn't make sense
 filtered_nodes = [nodes[0]]
 for i in range(1, len(nodes)):
@@ -158,6 +167,7 @@ for i in range(1, len(nodes)):
     else:
         filtered_nodes.append(n)
 nodes = filtered_nodes
+"""
 
 def second_or_scalar(x):
     if isinstance(x, tuple):
