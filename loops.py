@@ -20,7 +20,9 @@ from typing import List
 
 import networkx as nx
 
-from graph import make_complete_graph, read_hiking_graph
+from graph import cycle_weight, make_complete_graph, read_hiking_graph, scale_graph
+from noon_bean import gtsp_to_tsp, tsp_solution_to_gtsp
+from ort_wrapper import solve_tsp_with_or_tools
 
 features = json.load(open('data/network.geojson'))['features']
 G, id_to_peak, id_to_trailhead = read_hiking_graph(features)
@@ -54,5 +56,36 @@ for node_id in nodes:
         trail_g.add_edge(0, node_id, weight=0)
 
 GG = make_complete_graph(trail_g, nodes=peak_nodes)
-# Complete graph: 624 nodes / 194376 edges
+# Remove paths from a peak back to itself via a different trailheads.
+# These aren't needed for the solution and violate the preconditions for Noon-Bean.
+to_delete = []
+for n1, n2 in GG.edges():
+    (_, peak_a) = n1
+    (_, peak_b) = n2
+    if peak_a == peak_b:
+        to_delete.append((n1, n2))
+print(f'Deleting {len(to_delete)} peak->same peak edges.')
+GG.remove_edges_from(to_delete)
+
+# Complete graph: 624 nodes / 186952 edges
 print(f'Complete graph: {GG.number_of_nodes()} nodes / {GG.number_of_edges()} edges')
+
+peak_sets = [
+    [
+        (th, node_id)
+        for (th, node_id) in peak_nodes
+        if node_id == peak_id
+    ]
+    for peak_id in sorted(id_to_peak.keys())
+]
+print(peak_sets)
+
+gtsp = gtsp_to_tsp(GG, peak_sets)
+max_edge = max(w for _a, _b, w in gtsp.edges.data('weight'))
+
+print(f'Transformed complete graph: {gtsp.number_of_nodes()} nodes / {gtsp.number_of_edges()} edges / max edge={max_edge}')
+solution, solution_dist = solve_tsp_with_or_tools(scale_graph(gtsp, 100), 60)
+print(solution)
+true_soln = tsp_solution_to_gtsp(solution, peak_sets)
+print(true_soln)
+print(cycle_weight(GG, true_soln))

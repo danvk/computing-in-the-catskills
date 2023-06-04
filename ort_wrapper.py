@@ -32,7 +32,7 @@ def solve_tsp_with_or_tools(g: nx.Graph, time_limit_secs=30) -> list:
         routing_enums_pb2.LocalSearchMetaheuristic.GUIDED_LOCAL_SEARCH
     )
     search_parameters.time_limit.seconds = time_limit_secs
-    # search_parameters.log_search = True
+    search_parameters.log_search = True
     solution = routing.SolveWithParameters(search_parameters)
     print('status', routing.status(), not not solution)
 

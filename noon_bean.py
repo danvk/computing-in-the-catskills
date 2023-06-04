@@ -3,17 +3,9 @@
 https://www.researchgate.net/publication/265366022
 """
 
-from dataclasses import dataclass
 import itertools
 
 import networkx as nx
-
-@dataclass
-class TransformedGraph:
-    g: nx.DiGraph
-    transformed_g: nx.DiGraph
-    node_map: dict
-    """Maps original node -> transformed node"""
 
 
 def gtsp_to_tsp(
@@ -37,9 +29,9 @@ def gtsp_to_tsp(
     }
 
     for a, b, d in g.edges(data=True):
-        assert node_to_idx[a] != node_to_idx[b]
+        assert node_to_idx[a] != node_to_idx[b], f'Intra-cluster edge from {a}->{b}'
         assert 'weight' in d
-        print(a, b, d['weight'])
+        # print(a, b, d['weight'])
 
     sum_weight = sum(w for _a, _b, w in g.edges.data('weight'))
     print('sum_weight=', sum_weight)
