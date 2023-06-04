@@ -13,7 +13,11 @@ def make_complete_graph(G, nodes, weight='weight'):
         for v in nodes:
             if u == v:
                 continue
-            GG.add_edge(u, v, weight=dist[u][v], path=path[u][v])
+            try:
+                GG.add_edge(u, v, weight=dist[u][v], path=path[u][v])
+            except KeyError as e:
+                print(f'Missing {u} {v}')
+                raise e
     return GG
 
 

@@ -26,8 +26,16 @@ from ort_wrapper import solve_tsp_with_or_tools
 from util import rotate_to_start, splitlist
 
 features = json.load(open('data/network.geojson'))['features']
+G: nx.Graph
 G, id_to_peak, id_to_trailhead = read_hiking_graph(features)
 peak_features = [f for f in features if f['properties'].get('type') == 'high-peak']
+
+# Remove trailhead<->trailhead edges
+to_remove = []
+for a, b in G.edges():
+    if a in id_to_trailhead and b in id_to_trailhead:
+        to_remove.append((a, b))
+G.remove_edges_from(to_remove)
 
 trail_g = nx.Graph()
 
@@ -35,15 +43,44 @@ for th_node in G.nodes():
     if G.nodes[th_node]['type'] != 'trailhead':
         continue
 
-    lengths, paths = nx.single_source_dijkstra(G, th_node)
-    for node, length in lengths.items():
-        if G.nodes[node]['type'] == 'trailhead':
-            continue  # we want to disallow trailhead->trailhead travel
-        trail_g.add_edge(th_node, (th_node, node), weight=length, path=paths[node])
+    # Get the reachable set of non-trailhead nodes from this trailhead
+    node_to_length = nx.single_source_dijkstra_path_length(G, th_node)
+    reachable_nodes = [
+        n
+        for n in node_to_length.keys()
+        if G.nodes[n]['type'] != 'trailhead'
+    ]
 
-peak_nodes = [n for n in trail_g.nodes() if isinstance(n, tuple) and G.nodes[n[1]]['type'] == 'high-peak']
-# 624 trailhead/peak tuples
+    if not reachable_nodes:
+        print(f'Filtered out trailhead {th_node}')
+        continue
+
+    trail_g.add_node(th_node, type='trailhead')
+
+    # Add a copy of this subgraph tagged with the trailhead.
+    for node in reachable_nodes:
+        tagged_node = (th_node, node)
+        trail_g.add_node(tagged_node, type=G.nodes[node]['type'])
+        for neighbor in G[node]:
+            if G.nodes[neighbor].get('type') == 'trailhead':
+                if neighbor != th_node:
+                    # If you walk to another trailhead, it's just another node.
+                    neighbor_node = (th_node, neighbor)
+                else:
+                    neighbor_node = neighbor
+            else:
+                neighbor_node = (th_node, neighbor)
+            trail_g.add_edge(tagged_node, neighbor_node, weight=G.edges[node, neighbor]['weight'])
+
+peak_nodes = [
+    n for n in trail_g.nodes()
+    if isinstance(n, tuple) and G.nodes[n[1]]['type'] == 'high-peak'
+]
+
+# 479 trailhead/peak tuples
+# Trailhead-tagged graph: 9,699 nodes / 11,171 edges.
 print(f'{len(peak_nodes)} trailhead/peak tuples')
+print(f'Trailhead-tagged graph: {trail_g.number_of_nodes():,} nodes / {trail_g.number_of_edges():,} edges.')
 
 # for trailhead_id, peak_id in tuples:
 #     th = id_to_trailhead[trailhead_id]
@@ -55,6 +92,14 @@ nodes = [*trail_g.nodes()]
 for node_id in nodes:
     if id_to_trailhead.get(node_id):
         trail_g.add_edge(0, node_id, weight=0)
+
+# The issue here is that you can only from Notch Inn Rd to SW Hunter by walking through the SR 214 trailhead
+# Missing (212271460, 2882649917) (212379716, 1938215682)
+#          SR 214     Plateau      Notch Inn, SW Hunter
+
+# The issue here was that there was a "trailhead" that was only connected to paths via another trailhead.
+# print(trail_g[212271460])
+# print(trail_g[2884528159])
 
 GG = make_complete_graph(trail_g, nodes=peak_nodes)
 # Remove paths from a peak back to itself via a different trailheads.
@@ -68,8 +113,16 @@ for n1, n2 in GG.edges():
 print(f'Deleting {len(to_delete)} peak->same peak edges.')
 GG.remove_edges_from(to_delete)
 
-# Complete graph: 624 nodes / 186952 edges
+# Complete graph: 479 nodes / 109917 edges
 print(f'Complete graph: {GG.number_of_nodes()} nodes / {GG.number_of_edges()} edges')
+
+# friday_moon_haw = (7609349952, 9953707705)  # Friday via Moon Haw
+# 7609349952 -- Moon Haw Road
+# balsam_cap_moon_haw = (7609349952, 9953729846)  # Balsam Cap via Moon Haw
+
+# assert GG.has_edge(friday_moon_haw, balsam_cap_moon_haw)
+# print(f'Moon Haw d=', GG.edges[friday_moon_haw, balsam_cap_moon_haw]['weight'])
+# print(f'Moon Haw path=', GG.edges[friday_moon_haw, balsam_cap_moon_haw]['path'])
 
 peak_sets = [
     [
@@ -81,7 +134,6 @@ peak_sets = [
 ]
 print(peak_sets)
 
-"""
 gtsp = gtsp_to_tsp(GG, peak_sets)
 max_edge = max(w for _a, _b, w in gtsp.edges.data('weight'))
 
@@ -92,42 +144,6 @@ true_soln = tsp_solution_to_gtsp(solution, peak_sets)
 print(true_soln)
 d_km = cycle_weight(GG, true_soln)
 print(f'Total distance: {d_km:.2f} km')
-"""
-true_soln = [
-    (213669242, 2897919022),
-    (1272964775, 7978185605),
-    (7609349952, 9953707705),
-    (7609349952, 9953729846),
-    (7988852640, 1938215682),
-    (7988852640, 2882649917),
-    (7988852640, 1938201532),
-    (7988852640, 2882649730),
-    (7988852640, 2955311547),
-    (212334582, 357574030),
-    (213756344, 7292479776),
-    (1453293499, 2398015279),
-    (212357867, 9785950126),
-    (213838962, 357557378),
-    (116518006, 10010051278),
-    (213839051, 357548762),
-    (2884566694, 357559622),
-    (7609349952, 2884119551),
-    (7609349952, -538),
-    (7609349952, 2884119672),
-    (212320092, 2473476747),
-    (7988852640, 10033501291),
-    (1329053809, 2473476912),
-    (1329053809, 2473476927),
-    (7944990851, 2426236522),
-    (7685464670, 2845338212),
-    (10010074986, 357563196),
-    (116518006, 212348771),
-    (9147145531, 9147145385),
-    (7609349952, 2426171552),
-    (7609349952, -1136),
-    (212334582, 10010091368),
-    (212296078, 7982977638)
-]
 
 nodes = []
 for a, b in zip(true_soln[:-1], true_soln[1:]):
@@ -144,15 +160,6 @@ for a, b in zip(true_soln[:-1], true_soln[1:]):
 nodes = rotate_to_start(nodes, 0)
 print(nodes)
 
-friday_moon_haw = (7609349952, 9953707705)  # Friday via Moon Haw
-# 7609349952 -- Moon Haw Road
-balsam_cap_moon_haw = (7609349952, 9953729846)  # Balsam Cap via Moon Haw
-
-assert GG.has_edge(friday_moon_haw, balsam_cap_moon_haw)
-print(f'Moon Haw d=', GG.edges[friday_moon_haw, balsam_cap_moon_haw]['weight'])
-print(f'Moon Haw path=', GG.edges[friday_moon_haw, balsam_cap_moon_haw]['path'])
-
-"""
 # this is a hack that doesn't make sense
 filtered_nodes = [nodes[0]]
 for i in range(1, len(nodes)):
@@ -167,7 +174,6 @@ for i in range(1, len(nodes)):
     else:
         filtered_nodes.append(n)
 nodes = filtered_nodes
-"""
 
 def second_or_scalar(x):
     if isinstance(x, tuple):
