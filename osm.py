@@ -1,5 +1,6 @@
 import itertools
 from typing import Dict, Iterable, List, Literal, Tuple, TypedDict, Union
+from util import catskills_haversine
 
 from rich.console import Console
 
@@ -74,7 +75,7 @@ def closest_point_on_trail(
             node = trail_nodes[node_id]
             lon2 = node['lon']
             lat2 = node['lat']
-            d = haversine(lon1, lat1, lon2, lat2)
+            d = catskills_haversine(lon1, lat1, lon2, lat2)
             if d < best_d:
                 best_d = d
                 best_node = node

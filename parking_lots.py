@@ -1,5 +1,6 @@
 """Analyze trailhead/parking lot proximity"""
 
+from collections import defaultdict
 import json
 
 from tqdm import tqdm
@@ -7,7 +8,6 @@ import networkx as nx
 
 from graph import read_hiking_graph
 from osm import OsmElement, closest_point_on_trail, distance, element_centroid, element_link, node_link, way_length
-from util import haversine
 
 features = json.load(open('data/network.geojson'))['features']
 raw_trailheads = [f for f in features if f['properties'].get('type') == 'trailhead']
@@ -58,25 +58,41 @@ print(f'Found {len(lots)} parking lots.')
 road_els: list[OsmElement] = json.load(open('data/roads.json'))['elements']
 road_ways = [el for el in road_els if el['type'] == 'way']
 id_to_road_node = {el['id']: el for el in road_els if el['type'] == 'node'}
+node_to_roads = defaultdict(list)
+for el in road_ways:
+    for node in el['nodes']:
+        node_to_roads[node].append(el['id'])
+
 
 # Forcibly add the closest nodes to each parking lot to the road graph,
 # even if they're in the middle of a way.
+# TODO: this takes ~30s but would be instant with any kind of spatial index
 nodes_to_add = set()
 for el in tqdm(lots):
     lot_loc = element_centroid(el, lot_nodes)
     d, node = closest_point_on_trail(lot_loc, road_ways, id_to_road_node)
     nodes_to_add.add(node['id'])
 
+nodes_to_add.update(id_to_trailhead.keys())
+
 road_graph = nx.Graph()
-for way in road_ways:
+for way in tqdm(road_ways):
     way_id=way['id']
     nodes = way['nodes']
     # TODO: add distances
     road_graph.add_edge(nodes[0], nodes[-1], way_id=way_id, weight=way_length(nodes, id_to_road_node))
+    indices = []
     for i, node in enumerate(nodes[1:-1], start=1):
-        if node in nodes_to_add:
+        if node in nodes_to_add or len(node_to_roads[node]) > 1:
+            indices.append(i)
             road_graph.add_edge(nodes[0], node, way_id=way_id, weight=way_length(nodes[:i+1], id_to_road_node))
             road_graph.add_edge(node, nodes[-1], way_id=way_id, weight=way_length(nodes[i:], id_to_road_node))
+    if len(indices) >= 2:
+        for i in indices:
+            for j in indices:
+                if i < j:
+                    road_graph.add_edge(nodes[i], nodes[j], way_id=way_id, weight=way_length(nodes[i:j+1], id_to_road_node))
+
 
 # Road network: 45529 nodes / 26514 edges
 # Road network: 45739 nodes / 27004 edges
@@ -96,15 +112,23 @@ for trailhead_id in trailheads:
         for _, lot in nearby_lots:
             matched_lots.add(lot['id'])
         print(th_txt)
-        for d, lot in nearby_lots:
-            print('  ' + element_link(lot) + f' {d:.0f}m')
         num_matched += 1
 
-        lot = nearby_lots[0][1]
-        lot_loc = element_centroid(el, lot_nodes)
-        d, node = closest_point_on_trail(lot_loc, road_ways, id_to_road_node)
-        print(f'  closest road node to lot: {element_link(node)} @ {d:.0f}m')
-        print(f'  in graph?', road_graph.has_node(node['id']))
+        while nearby_lots:
+            crow_d, lot = nearby_lots.pop(0)
+            print(f'  {element_link(lot)} @ {crow_d:.0f}m (crow)')
+            lot_loc = element_centroid(lot, lot_nodes)
+            lot_road_d, node = closest_point_on_trail(lot_loc, road_ways, id_to_road_node)
+            print(f'  closest road node to lot: {element_link(node)} @ {lot_road_d:.0f}m')
+            # print(f'  in graph?', node['id'], road_graph.has_node(node['id']))
+            # print(f'  in graph?', trailhead_id, road_graph.has_node(trailhead_id))
+            road_trailhead_d = nx.shortest_path_length(road_graph, node['id'], trailhead_id, weight='weight') * 1000
+            total_d = lot_road_d + road_trailhead_d
+
+            print(f'  lot/th distance on streets: {total_d:.2f}')
+            if nearby_lots and nearby_lots[0][0] > total_d:
+                break
+
     else:
         print(f'{th_txt}: no nearby lots')
         d, el = all_lots[0]
