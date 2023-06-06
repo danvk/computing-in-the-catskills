@@ -6,7 +6,7 @@ from tqdm import tqdm
 import networkx as nx
 
 from graph import read_hiking_graph
-from osm import OsmElement, closest_point_on_trail, distance, element_centroid, element_link, node_link
+from osm import OsmElement, closest_point_on_trail, distance, element_centroid, element_link, node_link, way_length
 from util import haversine
 
 features = json.load(open('data/network.geojson'))['features']
@@ -72,11 +72,11 @@ for way in road_ways:
     way_id=way['id']
     nodes = way['nodes']
     # TODO: add distances
-    road_graph.add_edge(nodes[0], nodes[-1], way_id=way_id)
+    road_graph.add_edge(nodes[0], nodes[-1], way_id=way_id, weight=way_length(nodes, id_to_road_node))
     for i, node in enumerate(nodes[1:-1], start=1):
         if node in nodes_to_add:
-            road_graph.add_edge(nodes[0], node, way_id=way_id)
-            road_graph.add_edge(node, nodes[-1], way_id=way_id)
+            road_graph.add_edge(nodes[0], node, way_id=way_id, weight=way_length(nodes[:i+1], id_to_road_node))
+            road_graph.add_edge(node, nodes[-1], way_id=way_id, weight=way_length(nodes[i:], id_to_road_node))
 
 # Road network: 45529 nodes / 26514 edges
 # Road network: 45739 nodes / 27004 edges

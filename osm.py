@@ -119,6 +119,14 @@ def element_centroid(
         )
 
 
+def way_length(nodes: list[int], id_to_node: Dict[int, OsmNode]) -> float:
+    node_els = [id_to_node[n] for n in nodes]
+    return sum(
+        haversine(a['lon'], a['lat'], b['lon'], b['lat'])
+        for a, b in zip(node_els[:-1], node_els[1:])
+    )
+
+
 CATSKILLS_BBOX = (41.813,-74.652,42.352,-73.862)
 
 
