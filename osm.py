@@ -105,6 +105,20 @@ def distance(
     return best_d * 1000
 
 
+def element_centroid(
+    el: OsmElement,
+    nodes: Dict[int, OsmNode]
+) -> tuple[float, float]:
+    if el['type'] == 'node':
+        return el['lon'], el['lat']
+    elif el['type'] == 'way':
+        ns = el['nodes']
+        return (
+            sum(nodes[n]['lon'] for n in ns) / len(ns),
+            sum(nodes[n]['lat'] for n in ns) / len(ns)
+        )
+
+
 CATSKILLS_BBOX = (41.813,-74.652,42.352,-73.862)
 
 

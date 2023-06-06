@@ -2,10 +2,11 @@
 
 import json
 
+from tqdm import tqdm
 import networkx as nx
 
 from graph import read_hiking_graph
-from osm import OsmElement, closest_point_on_trail, distance, element_link, node_link
+from osm import OsmElement, closest_point_on_trail, distance, element_centroid, element_link, node_link
 from util import haversine
 
 features = json.load(open('data/network.geojson'))['features']
@@ -54,6 +55,33 @@ lot_nodes = {el['id']: el for el in parking_elements if el['type'] == 'node'}
 # Found 315 parking lots.
 print(f'Found {len(lots)} parking lots.')
 
+road_els: list[OsmElement] = json.load(open('data/roads.json'))['elements']
+road_ways = [el for el in road_els if el['type'] == 'way']
+id_to_road_node = {el['id']: el for el in road_els if el['type'] == 'node'}
+
+# Forcibly add the closest nodes to each parking lot to the road graph,
+# even if they're in the middle of a way.
+nodes_to_add = set()
+for el in tqdm(lots):
+    lot_loc = element_centroid(el, lot_nodes)
+    d, node = closest_point_on_trail(lot_loc, road_ways, id_to_road_node)
+    nodes_to_add.add(node['id'])
+
+road_graph = nx.Graph()
+for way in road_ways:
+    way_id=way['id']
+    nodes = way['nodes']
+    # TODO: add distances
+    road_graph.add_edge(nodes[0], nodes[-1], way_id=way_id)
+    for i, node in enumerate(nodes[1:-1], start=1):
+        if node in nodes_to_add:
+            road_graph.add_edge(nodes[0], node, way_id=way_id)
+            road_graph.add_edge(node, nodes[-1], way_id=way_id)
+
+# Road network: 45529 nodes / 26514 edges
+# Road network: 45739 nodes / 27004 edges
+print(f'Road network: {road_graph.number_of_nodes()} nodes / {road_graph.number_of_edges()} edges')
+
 # How many trailheads have a nearby parking lot?
 num_matched, num_unmatched = 0, 0
 matched_lots = set()
@@ -71,6 +99,12 @@ for trailhead_id in trailheads:
         for d, lot in nearby_lots:
             print('  ' + element_link(lot) + f' {d:.0f}m')
         num_matched += 1
+
+        lot = nearby_lots[0][1]
+        lot_loc = element_centroid(el, lot_nodes)
+        d, node = closest_point_on_trail(lot_loc, road_ways, id_to_road_node)
+        print(f'  closest road node to lot: {element_link(node)} @ {d:.0f}m')
+        print(f'  in graph?', road_graph.has_node(node['id']))
     else:
         print(f'{th_txt}: no nearby lots')
         d, el = all_lots[0]
@@ -117,3 +151,4 @@ print(f'{num_matched} lots matched a trail, {num_unmatched} did not.')
 #   - route from the closest parking lot (as the crow flies) to the trailhead on the road network
 #   - repeat while this distance is > the as-the-crow-flies distance to the next closest lot
 #   - if this is <1km? then add the lot + route to trailhead to the network.
+
