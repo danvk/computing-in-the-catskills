@@ -82,3 +82,19 @@ for trailhead_id in trailheads:
         print(f'  closest trail point to that lot is {node_link(node["id"])} @ {d:.0f}m')
 
 print(f'{num_matched} trailheads matched, {num_unmatched} unmatched.')
+print('')
+
+num_matched, num_unmatched = 0, 0
+for el in lots:
+    if el['type'] == 'node':
+        lot_loc = (el['lon'], el['lat'])
+    elif el['type'] == 'way':
+        node = lot_nodes[el['nodes'][0]]
+        lot_loc = (node['lon'], node['lat'])
+    d, node = closest_point_on_trail(lot_loc, trail_ways, id_to_trail_node)
+    if d < 250:
+        num_matched += 1
+    else:
+        num_unmatched += 1
+
+print(f'{num_matched} lots matched a trail, {num_unmatched} did not.')
