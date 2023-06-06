@@ -1,8 +1,8 @@
 {
   "version": 0.6,
-  "generator": "Overpass API 0.7.60 f4c14d41",
+  "generator": "Overpass API 0.7.60.6 e2dc3e5b",
   "osm3s": {
-    "timestamp_osm_base": "2023-06-01T13:29:45Z",
+    "timestamp_osm_base": "2023-06-06T20:15:23Z",
     "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
   },
   "elements": [
@@ -1043,6 +1043,16 @@
     "operator": "NYSDEC",
     "parking": "surface",
     "surface": "unpaved"
+  }
+},
+{
+  "type": "node",
+  "id": 10960189335,
+  "lat": 42.2640735,
+  "lon": -74.1766835,
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
   }
 },
 {

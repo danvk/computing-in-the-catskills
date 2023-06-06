@@ -56,14 +56,17 @@ print(f'Found {len(lots)} parking lots.')
 
 # How many trailheads have a nearby parking lot?
 num_matched, num_unmatched = 0, 0
+matched_lots = set()
 for trailhead_id in trailheads:
     th = id_to_trailhead[trailhead_id]
     th_lonlat = th['geometry']['coordinates']
     all_lots = [(distance(th_lonlat, lot, lot_nodes), lot) for lot in lots]
     all_lots.sort(key=lambda x: x[0])
-    nearby_lots = [(d, lot) for (d, lot) in all_lots if d < 250]
+    nearby_lots = [(d, lot) for (d, lot) in all_lots if d < 400]
     th_txt = node_link(trailhead_id, th['properties'].get('name'))
     if nearby_lots:
+        for _, lot in nearby_lots:
+            matched_lots.add(lot['id'])
         print(th_txt)
         for d, lot in nearby_lots:
             print('  ' + element_link(lot) + f' {d:.0f}m')
@@ -84,6 +87,7 @@ for trailhead_id in trailheads:
 print(f'{num_matched} trailheads matched, {num_unmatched} unmatched.')
 print('')
 
+"""
 num_matched, num_unmatched = 0, 0
 for el in lots:
     if el['type'] == 'node':
@@ -94,7 +98,11 @@ for el in lots:
     d, node = closest_point_on_trail(lot_loc, trail_ways, id_to_trail_node)
     if d < 250:
         num_matched += 1
+        if el['id'] not in matched_lots:
+            print(f'Unmatched lot {element_link(el)} is {d:.0f}m from trail {element_link(node)}')
     else:
         num_unmatched += 1
 
+# 245 lots matched a trail, 70 did not.
 print(f'{num_matched} lots matched a trail, {num_unmatched} did not.')
+"""
