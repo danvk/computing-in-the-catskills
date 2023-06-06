@@ -25,6 +25,7 @@ import networkx as nx
 from graph import cycle_weight, make_complete_graph, read_hiking_graph, scale_graph
 from noon_bean import gtsp_to_tsp, tsp_solution_to_gtsp
 from ort_wrapper import solve_tsp_with_or_tools
+from osm import node_link
 from util import rotate_to_start, splitlist
 
 features = json.load(open('data/network.geojson'))['features']
@@ -62,7 +63,7 @@ for th_node in G.nodes():
     trailhead_to_peaks[th_node] = reachable_nodes
 
 for trailhead, peaks in sorted(trailhead_to_peaks.items(), key=lambda x: len(x[1])):
-    print(trailhead, len(peaks), peaks)
+    print(node_link(trailhead), len(peaks), peaks)
 
 print(len(trailhead_to_peaks), 'trailheads')
 
@@ -87,7 +88,6 @@ def loops_for_trailhead(g, th_node, peaks):
             if d < best_d:
                 best_d = d
                 best_cycle = cycle
-        # TODO: only add loops that don't include extra peaks
         all_peaks = {
             node
             for a, b in zip(best_cycle[:-1], best_cycle[1:])
@@ -96,16 +96,9 @@ def loops_for_trailhead(g, th_node, peaks):
         }
         if len(all_peaks) == len(peak_subset):
             # Exclude paths that go over unexpected peaks.
-            # A more stringent check would also allow paths that go within ~100m of unexpected peaks.
+            # A more stringent check would also exclude paths that go within ~100m of unexpected peaks.
             loops.append((best_d, best_cycle[1:-1]))
-        # if best_cycle == [7609349952, 2884119551, 7609349952]:
-        #     for a, b in zip(best_cycle[:-1], best_cycle[1:]):
-        #         print(f'{a} -> {b} {gp.edges[a, b]["weight"]:.2f}')
-        #         path = gp.edges[a, b]['path']
-        #         if path[0] != a:
-        #             path = path[::-1]
-        #         for node in path:
-        #             print(f'  https://www.openstreetmap.org/node/{node}')
+
     return loops
 
 all_cycles = []

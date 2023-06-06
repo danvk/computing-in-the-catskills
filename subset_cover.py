@@ -1,3 +1,4 @@
+"""Use a weighted set cover algorithm to find a minimal set of hiking loops."""
 import json
 
 import numpy as np

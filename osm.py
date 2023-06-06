@@ -1,6 +1,8 @@
 import itertools
 from typing import Dict, Iterable, List, Literal, Tuple, TypedDict, Union
 
+from rich.console import Console
+
 from util import haversine
 
 
@@ -86,3 +88,17 @@ CATSKILLS_BBOX = (41.813,-74.652,42.352,-73.862)
 def is_in_catskills(lon: float, lat: float) -> bool:
     lat1, lon1, lat2, lon2 = CATSKILLS_BBOX
     return lat1 <= lat <= lat2 and lon1 <= lon <= lon2
+
+
+def node_link(node: int):
+    console = Console()
+    with console.capture() as capture:
+        console.print(f'[link=https://www.openstreetmap.org/node/{node}]node/{node}[/link]', end='')
+    return capture.get()
+
+
+def way_link(way: int):
+    console = Console()
+    with console.capture() as capture:
+        console.print(f'[link=https://www.openstreetmap.org/way/{way}]way/{way}[/link]', end='')
+    return capture.get()
