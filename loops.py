@@ -22,11 +22,8 @@ from typing import List
 
 import networkx as nx
 
-from graph import cycle_weight, make_complete_graph, read_hiking_graph, scale_graph
-from noon_bean import gtsp_to_tsp, tsp_solution_to_gtsp
-from ort_wrapper import solve_tsp_with_or_tools
+from graph import cycle_weight, make_complete_graph, read_hiking_graph
 from osm import node_link
-from util import rotate_to_start, splitlist
 
 features = json.load(open('data/network.geojson'))['features']
 G: nx.Graph

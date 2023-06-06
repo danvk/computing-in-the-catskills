@@ -81,6 +81,29 @@ def closest_point_on_trail(
     return best_d * 1000, best_node
 
 
+def distance(
+    lon_lat: Tuple[float, float],
+    element: OsmElement,
+    nodes: Dict[int, OsmNode]
+) -> float:
+    lon1, lat1 = lon_lat
+
+    if element['type'] == 'node':
+        return 1000 * haversine(lon1, lat1, element['lon'], element['lat'])
+
+    elif element['type'] == 'relation':
+        raise NotImplementedError()
+
+    best_d = 1000 # km
+    for node_id in element['nodes']:
+        node = nodes[node_id]
+        lon2 = node['lon']
+        lat2 = node['lat']
+        d = haversine(lon1, lat1, lon2, lat2)
+        if d < best_d:
+            best_d = d
+    return best_d * 1000
+
 
 CATSKILLS_BBOX = (41.813,-74.652,42.352,-73.862)
 
@@ -90,15 +113,23 @@ def is_in_catskills(lon: float, lat: float) -> bool:
     return lat1 <= lat <= lat2 and lon1 <= lon <= lon2
 
 
-def node_link(node: int):
+def link(url: str, text: str):
     console = Console()
     with console.capture() as capture:
-        console.print(f'[link=https://www.openstreetmap.org/node/{node}]node/{node}[/link]', end='')
+        console.print(f'[link={url}]{text}[/link]', end='')
     return capture.get()
 
+def node_link(node: int, name: str | None = None):
+    return link(f'https://www.openstreetmap.org/node/{node}', f'node/{node}' + (f' ({name})' if name else ''))
 
-def way_link(way: int):
-    console = Console()
-    with console.capture() as capture:
-        console.print(f'[link=https://www.openstreetmap.org/way/{way}]way/{way}[/link]', end='')
-    return capture.get()
+
+def way_link(way: int, name: str | None = None):
+    return link(f'https://www.openstreetmap.org/way/{way}', f'way/{way}' + (f' ({name})' if name else ''))
+
+
+def element_link(el: OsmElement):
+    if el['type'] == 'node':
+        return node_link(el['id'], el.get('tags', {}).get('name'))
+    elif el['type'] == 'way':
+        return way_link(el['id'], el.get('tags', {}).get('name'))
+    raise NotImplementedError('Links to relations are not implemented.')
