@@ -129,6 +129,11 @@ for trailhead_id in trailheads:
             if nearby_lots and nearby_lots[0][0] > total_d:
                 break
 
+            # TODO: output a version of network.geojson with parking lots and paths from lots->trailheads
+            # TODO: add reasonable parking lot -> parking lot walks
+            # TODO: node/213609657 has an out-and-back path for parking
+            # TODO: node/2955316486 gets dropped incorrectly
+            # TODO: route to the closest parking lot w/o the 400m threshold and apply a walking distance threshold?
     else:
         print(f'{th_txt}: no nearby lots')
         d, el = all_lots[0]
@@ -144,6 +149,17 @@ for trailhead_id in trailheads:
 
 print(f'{num_matched} trailheads matched, {num_unmatched} unmatched.')
 print('')
+
+mckinley_lot = 2947971907
+burnham_lot = 10942786419
+
+lot1_loc = element_centroid(lot_nodes[mckinley_lot], lot_nodes)
+lot2_loc = element_centroid(lot_nodes[burnham_lot], lot_nodes)
+lot_road1_d, node1 = closest_point_on_trail(lot1_loc, road_ways, id_to_road_node)
+lot_road2_d, node2 = closest_point_on_trail(lot2_loc, road_ways, id_to_road_node)
+lot_lot_d = nx.shortest_path_length(road_graph, node1['id'], node2['id'], weight='weight') * 1000
+print(lot_road1_d, lot_road2_d, lot_lot_d)
+print(f'Total: {lot_road1_d + lot_road2_d + lot_lot_d:.1f}m')
 
 """
 num_matched, num_unmatched = 0, 0
