@@ -106,3 +106,14 @@ for el in lots:
 # 245 lots matched a trail, 70 did not.
 print(f'{num_matched} lots matched a trail, {num_unmatched} did not.')
 """
+
+# For each matched trailhead:
+# - if the parking lot is <20m away, add the lot and a link to the trailhead.
+# - if the parking lot is <20m away from a node on a trail in network.geojson:
+#   - add a link to that node
+#   - this might require splitting some paths to promote that node into a junction.
+#     (or am I generating network.geojson from OsmElements here?)
+# - otherwise:
+#   - route from the closest parking lot (as the crow flies) to the trailhead on the road network
+#   - repeat while this distance is > the as-the-crow-flies distance to the next closest lot
+#   - if this is <1km? then add the lot + route to trailhead to the network.
