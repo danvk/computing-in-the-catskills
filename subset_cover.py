@@ -16,10 +16,10 @@ all_loops = [
 ]
 
 num_loops = len(all_loops)
+print(f'Will consider {num_loops} total cycles')
 
-features = json.load(open('data/network.geojson'))['features']
-G: nx.Graph
-G, id_to_peak, id_to_trailhead = read_hiking_graph(features)
+features = json.load(open('data/network+parking.geojson'))['features']
+G, id_to_peak, id_to_trailhead, id_to_lot = read_hiking_graph(features)
 peak_features = [f for f in features if f['properties'].get('type') == 'high-peak']
 
 num_peaks = len(peak_features)
@@ -38,17 +38,19 @@ costs = costs / median_cost
 
 solver = setcover.SetCover(covers, costs)
 solution, time_used = solver.SolveSCP()
-print('d_km: ', solver.total_cost * median_cost)
+d_km = solver.total_cost * median_cost
 chosen_loops = []
 for j, (d, loop) in enumerate(all_loops):
     if solver.s[j]:
         chosen_loops.append((d, loop))
 
+print(f'{len(chosen_loops)} hikes, total distance: {d_km:.2f} km = {d_km * 0.621371:.2f} mi')
+
 tsp_fs = [*peak_features]
 for f in tsp_fs:
     f['properties']['marker-size'] = 'small'
 for d_km, loop in chosen_loops:
-    tsp_fs.append(id_to_trailhead[loop[0]])
+    tsp_fs.append(id_to_lot[loop[0]])
     # tsp_fs.append(id_to_trailhead[loop[-1]])
     coordinates = []
     for a, b in zip(loop[:-1], loop[1:]):

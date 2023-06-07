@@ -6,19 +6,34 @@ import json
 import math
 from typing import List
 
+from tqdm import tqdm
 import networkx as nx
 
 from graph import cycle_weight, make_complete_graph, read_hiking_graph
 from osm import node_link
 
-features = json.load(open('data/network+parking.geojson'))['features']
+raw_features = json.load(open('data/network+parking.geojson'))['features']
+
+# Nix these for now; they really expand the clusters which blows up the number of loops.
+features = [f for f in raw_features if f['properties'].get('type') != 'lot-to-lot']
+
+# Very carefully add in lot<->lot walks
+ok_lot_walks = [
+    {10942786419, 2947971907},  # Burnam / McKinley Hollow
+    {1075850833, 995422357},  # Spruceton / Diamond Notch
+]
+for f in raw_features:
+    p = f['properties']
+    if p.get('type') == 'lot-to-lot' and {p['from'], p['to']} in ok_lot_walks:
+        features.append(f)
+
 G: nx.Graph
 G, id_to_peak, id_to_trailhead, id_to_lot = read_hiking_graph(features)
 peak_features = [f for f in features if f['properties'].get('type') == 'high-peak']
 
 # This walk connects the Devil's Path to the Panther/Slide area, which is not desirable.
-G.remove_edge(385488241, 385488236)
-G.remove_edge(385488238, 385488236)
+# G.remove_edge(385488241, 385488236)
+# G.remove_edge(385488238, 385488236)
 
 # Now we have:
 # 8 10s
@@ -57,6 +72,8 @@ print(len(lot_to_peaks), 'lots')
 
 # 2955316486 6 [2955311547, 1938215682, 1938201532, 357574030, 10033501291, 10010091368]
 
+# Want to capture the idea that a "bowtie" hike should really be done as two loops.
+
 def powerset(xs):
     return (combo for r in range(len(xs) + 1) for combo in itertools.combinations(xs, r))
 
@@ -90,7 +107,7 @@ def loops_for_lot(g, lot_node, peaks):
     return loops
 
 all_cycles = []
-for lot, peaks in lot_to_peaks.items():
+for lot, peaks in tqdm(lot_to_peaks.items()):
     all_cycles.append({
         'trailhead': lot,
         'cycles': loops_for_lot(G, lot, peaks)
@@ -99,8 +116,8 @@ for lot, peaks in lot_to_peaks.items():
 with open('data/loops.json', 'w') as out:
     json.dump(all_cycles, out)
 
-# 960 total cycles
-# print(len(all_cycles), 'total cycles')
+num_cycles = sum(len(c['cycles']) for c in all_cycles)
+print(num_cycles, 'total cycles')
 
 # sample = loops_for_trailhead(G, 2955316486, [2955311547, 1938215682, 1938201532, 357574030, 10033501291, 10010091368])
 # print(len(sample), sample)
@@ -144,4 +161,7 @@ https://openstreetmap.org/node/357574030, North Dome
 https://openstreetmap.org/node/10010091368, Sherrill
 https://openstreetmap.org/node/9785950126, Kaaterskill
 https://openstreetmap.org/node/357563196, Halcott
+
+9147145385 = Panther
+[1938215682, 2882649917, 1938201532, 2882649730, 7982977638, 2955311547, 10033501291, 7978185605, 357574030, 10010091368]
 """
