@@ -234,12 +234,8 @@ for a in tqdm(matched_lots):
         if lot_lot_d < 5000:
             d_km = lot_lot_d / 1000
             path = nx.shortest_path(road_graph, a, b, weight='weight')
-            is_invalid = False
-            for i, node_id in enumerate(path):
-                if node_id in id_to_trailhead and i < len(path) - 1 and path[i+1] in id_to_trail_node:
-                    is_invalid = True
-                    break
-            if is_invalid:
+            nodes_on_path = len([n for n in path if n not in id_to_road_node])
+            if nodes_on_path > 0.5 * len(path):
                 print(f'Tossing out {a} -> {b} as more of a hike.')
                 continue
             lot_lot_paths += 1
@@ -266,9 +262,7 @@ for a in tqdm(matched_lots):
                 }
             })
 
-# Added 37 lot<->lot paths.
-# TODO: if >50% of the path is on a trail, discard it. It's just a through hike.
-# or if you walk over a trailhead and onto the path?
+# Added 31 lot<->lot paths.
 print(f'Added {lot_lot_paths} lot<->lot paths.')
 
 with open('data/parking-connections.geojson', 'w') as out:
