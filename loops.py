@@ -24,6 +24,12 @@ G.remove_edge(385488238, 385488236)
 # 8 10s
 # 24 12s
 
+total = 0
+n = 11
+for i in range(1, n + 1):
+    total += math.comb(n, i) * math.factorial(i)
+print(total)
+
 lot_to_peaks = {}
 
 for lot_node in G.nodes():
@@ -118,11 +124,24 @@ with open('data/loops.json', 'w') as out:
 
 # Find all loops starting and ending at the same trailhead and going over at least one high peak.
 
-# total = 0
-# n = 9
-# for i in range(1, n + 1):
-#     total += math.comb(n, i) * math.factorial(i)
-
-#  986409 sequences per 9-peak trailhead
-# 9864100 sequences per 10-peak trailhead
+#       986,409 sequences per 9-peak trailhead
+#     9,864,100 sequences per 10-peak trailhead
+#   108,505,111 sequences per 11-peak trailhead
+# 1,302,061,344 sequences per 12-peak trailhead
 # print(f'{total} sequences per {n}-peak trailhead')
+
+"""
+This is the group of 12:
+https://openstreetmap.org/node/1938215682, SW Hunter
+https://openstreetmap.org/node/2882649917, Plateau
+https://openstreetmap.org/node/1938201532, Hunter
+https://openstreetmap.org/node/2882649730, Sugarloaf
+https://openstreetmap.org/node/7982977638, Twin
+https://openstreetmap.org/node/2955311547, Westkill
+https://openstreetmap.org/node/10033501291, Rusk
+https://openstreetmap.org/node/7978185605, Indian Head
+https://openstreetmap.org/node/357574030, North Dome
+https://openstreetmap.org/node/10010091368, Sherrill
+https://openstreetmap.org/node/9785950126, Kaaterskill
+https://openstreetmap.org/node/357563196, Halcott
+"""
