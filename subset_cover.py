@@ -7,13 +7,14 @@ from SetCoverPy import setcover
 
 from graph import read_hiking_graph
 
-loops = json.load(open('data/loops.json'))
+# loops = json.load(open('data/loops.json'))
+all_loops = json.load(open('data/hikes.json'))
 
-all_loops = [
-    (d, [loop['trailhead'], *peaks, loop['trailhead']])
-    for loop in loops
-    for (d, peaks) in loop['cycles']
-]
+# all_loops = [
+#     (d, [loop['trailhead'], *peaks, loop['trailhead']])
+#     for loop in loops
+#     for (d, peaks) in loop['cycles']
+# ]
 
 num_loops = len(all_loops)
 print(f'Will consider {num_loops} total cycles')
@@ -51,7 +52,8 @@ for f in tsp_fs:
     f['properties']['marker-size'] = 'small'
 for d_km, loop in chosen_loops:
     tsp_fs.append(id_to_lot[loop[0]])
-    # tsp_fs.append(id_to_trailhead[loop[-1]])
+    if loop[0] != loop[-1]:
+        tsp_fs.append(id_to_lot[loop[-1]])
     coordinates = []
     for a, b in zip(loop[:-1], loop[1:]):
         path = nx.shortest_path(G, a, b, weight='weight')

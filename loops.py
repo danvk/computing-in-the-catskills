@@ -83,6 +83,8 @@ def powerset(xs):
 def through_hikes_for_peak_seq(g, lots, peaks, peak_seqs):
     peaks = list(peaks)
     lots = list(lots)
+    if len(lots) == 1:
+        return []  # No through hikes with only one lot
     hikes = []
     gp = make_complete_graph(g, peaks + lots)
     for peak_seq_d, peak_seq in peak_seqs:
@@ -137,9 +139,12 @@ def loop_hikes_for_peak_seq(g, lots, peaks, peak_seqs):
     return hikes
 
 
+# TODO: this could be constructed recursively for greater efficiency
 def plausible_peak_sequences(g, peaks: list[int]):
     sequences = []
     peaks = list(peaks)
+    if len(peaks) == 1:
+        return [(0, (peaks[0],))]
 
     gp = make_complete_graph(g, peaks)
     for peak_subset in powerset(peaks):
