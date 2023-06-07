@@ -53,6 +53,7 @@ lots = [
     if el.get('tags', {}).get('amenity') == 'parking'  # exclude nodes that are part of parking ways
 ]
 lot_nodes = {el['id']: el for el in parking_elements if el['type'] == 'node'}
+id_to_lot = {el['id']: el for el in lots}
 
 # Found 315 parking lots.
 print(f'Found {len(lots)} parking lots.')
@@ -187,6 +188,7 @@ for trailhead_id in trailheads:
                 'coordinates': path,
             },
             'properties': {
+                'type': 'lot-to-trailhead',
                 'from': lot_id,
                 'to': trailhead_id,
                 'trailhead': th,
@@ -199,12 +201,8 @@ for trailhead_id in trailheads:
         lot_fs.append(f)
         print(json.dumps(f))
 
-        # TODO: for parking lots that are ways, try routing from every corner and pick the shortest result
-        # TODO: output a version of network.geojson with parking lots and paths from lots->trailheads
-        # TODO: add reasonable parking lot -> parking lot walks
         # TODO: node/213609657 has an out-and-back path for parking
-        # TODO: node/2955316486 gets dropped incorrectly
-        # TODO: route to the closest parking lot w/o the 400m threshold and apply a walking distance threshold?
+        # TODO: node/2955316486 has an out-and-back path for parking
     else:
         print(f'{th_txt}: no nearby lots')
 
@@ -227,43 +225,51 @@ for lot_id in matched_lots:
         }
     })
 
+lot_lot_paths = 0
+for a in tqdm(matched_lots):
+    for b in matched_lots:
+        if b >= a:
+            continue
+        lot_lot_d = nx.shortest_path_length(road_graph, a, b, weight='weight')
+        if lot_lot_d < 5000:
+            d_km = lot_lot_d / 1000
+            path = nx.shortest_path(road_graph, a, b, weight='weight')
+            is_invalid = False
+            for i, node_id in enumerate(path):
+                if node_id in id_to_trailhead and i < len(path) - 1 and path[i+1] in id_to_trail_node:
+                    is_invalid = True
+                    break
+            if is_invalid:
+                print(f'Tossing out {a} -> {b} as more of a hike.')
+                continue
+            lot_lot_paths += 1
+            lot_fs.append({
+                'type': 'Feature',
+                'geometry': {
+                    'type': 'LineString',
+                    'coordinates': [
+                        (node['lon'], node['lat']) if node else element_centroid(id_to_lot[node_id], lot_nodes)
+                        for node_id, node in
+                        (
+                            (node, id_to_walkable_node.get(node))
+                            for node in path
+                        )
+                    ]
+                },
+                'properties': {
+                    'type': 'lot-to-lot',
+                    'from': a,
+                    'to': b,
+                    'd_km': round(d_km, 2),
+                    'd_mi': round(d_km * 0.621371, 2),
+                    'nodes': path,
+                }
+            })
+
+# Added 37 lot<->lot paths.
+# TODO: if >50% of the path is on a trail, discard it. It's just a through hike.
+# or if you walk over a trailhead and onto the path?
+print(f'Added {lot_lot_paths} lot<->lot paths.')
+
 with open('data/parking-connections.geojson', 'w') as out:
     json.dump({'type': 'FeatureCollection', 'features': lot_fs}, out)
-
-mckinley_lot = 2947971907
-burnham_lot = 10942786419
-
-lot_lot_d = nx.shortest_path_length(road_graph, mckinley_lot, burnham_lot, weight='weight')
-print(f'Lot/lot distance: {lot_lot_d:.1f}m')
-
-"""
-num_matched, num_unmatched = 0, 0
-for el in lots:
-    if el['type'] == 'node':
-        lot_loc = (el['lon'], el['lat'])
-    elif el['type'] == 'way':
-        node = lot_nodes[el['nodes'][0]]
-        lot_loc = (node['lon'], node['lat'])
-    d, node = closest_point_on_trail(lot_loc, trail_ways, id_to_trail_node)
-    if d < 250:
-        num_matched += 1
-        if el['id'] not in matched_lots:
-            print(f'Unmatched lot {element_link(el)} is {d:.0f}m from trail {element_link(node)}')
-    else:
-        num_unmatched += 1
-
-# 245 lots matched a trail, 70 did not.
-print(f'{num_matched} lots matched a trail, {num_unmatched} did not.')
-
-"""
-# For each matched trailhead:
-# - if the parking lot is <20m away, add the lot and a link to the trailhead.
-# - if the parking lot is <20m away from a node on a trail in network.geojson:
-#   - add a link to that node
-#   - this might require splitting some paths to promote that node into a junction.
-#     (or am I generating network.geojson from OsmElements here?)
-# - otherwise:
-#   - route from the closest parking lot (as the crow flies) to the trailhead on the road network
-#   - repeat while this distance is > the as-the-crow-flies distance to the next closest lot
-#   - if this is <1km? then add the lot + route to trailhead to the network.
-
