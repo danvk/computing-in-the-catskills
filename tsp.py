@@ -10,13 +10,13 @@ from graph import cycle_weight, make_complete_graph, read_hiking_graph, scale_gr
 from ort_wrapper import solve_tsp_with_or_tools
 from util import splitlist
 
-features = json.load(open('data/network.geojson'))['features']
-G, id_to_peak, id_to_trailhead = read_hiking_graph(features)
+features = json.load(open('data/network+parking.geojson'))['features']
+G, id_to_peak, _, id_to_lot = read_hiking_graph(features)
 peak_features = [f for f in features if f['properties'].get('type') == 'high-peak']
 
 print(f'Input graph: {G.number_of_nodes()} nodes / {G.number_of_edges()} edges')
 print(f'  Peaks: {len(id_to_peak)}')
-print(f'  Trailheads: {len(id_to_trailhead)}')
+print(f'  Parking Lots: {len(id_to_lot)}')
 
 assert not G.has_node(0)
 
@@ -24,8 +24,14 @@ assert not G.has_node(0)
 nodes = [*G.nodes()]
 
 for node_id in nodes:
-    if id_to_trailhead.get(node_id):
+    if id_to_lot.get(node_id):
         G.add_edge(0, node_id, weight=0)
+
+print('Slide / Slide Lot path:', nx.shortest_path(G, 816358667, 2426171552, weight='weight'))
+print('Slide lot / Panther lot:', nx.shortest_path(G, 816358667, 816358666, weight='weight'))
+print('Panther lot / trailhead', nx.shortest_path(G, 816358666, 213833958, weight='weight'))
+print('Panther / Panther Lot', nx.shortest_path(G, 816358666, 9147145385, weight='weight'))
+print('Slide / Panther path:', nx.shortest_path(G, 2426171552, 9147145385))
 
 GG = make_complete_graph(G, nodes=[*id_to_peak.keys()])
 print(f'Complete graph: {GG.number_of_nodes()} nodes / {GG.number_of_edges()} edges')
@@ -43,7 +49,8 @@ for i, node in enumerate(peak_nodes):
     name = id_to_peak[node]['properties']['name']
     print(f'  {i+1}: {name} ({node})')
 d_km = cycle_weight(GG, peak_nodes)
-print(f'Total distance: {d_km:.2f} km')
+d_mi = d_km * 0.621371
+print(f'Total distance: {d_km:.2f} km = {d_mi:.2f} mi')
 
 # map this back to a list of nodes in the input graph
 nodes = []
@@ -72,8 +79,8 @@ for f in tsp_fs:
 
 total_d_km = 0
 for node_seq in chunks:
-    tsp_fs.append(id_to_trailhead[node_seq[0]])
-    tsp_fs.append(id_to_trailhead[node_seq[-1]])
+    tsp_fs.append(id_to_lot[node_seq[0]])
+    tsp_fs.append(id_to_lot[node_seq[-1]])
     d_km = sum(
         G.edges[a, b]['weight']
         for a, b in zip(node_seq[:-1], node_seq[1:])

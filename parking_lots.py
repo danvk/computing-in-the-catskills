@@ -21,7 +21,7 @@ id_to_trail_node = {el['id']: el for el in raw_trails if el['type'] == 'node'}
 print(f'Found {len(raw_trailheads)} trailheads in network.geojson')
 
 G: nx.Graph
-G, id_to_peak, id_to_trailhead = read_hiking_graph(features)
+G, id_to_peak, id_to_trailhead, _ = read_hiking_graph(features)
 
 # We only want trailheads where you can hike from a trailhead to a high peak
 # without walking over another trailhead.
@@ -168,12 +168,14 @@ for trailhead_id in trailheads:
         if lot['type'] == 'way' and lot_trailhead_path[0] == lot['id']:
             # The way is irrelevant for the walking path; just use the node.
             is_truncated = True
-            lot_trailhead_path = lot_trailhead_path[1:]
+            coord_path = lot_trailhead_path[1:]
+        else:
+            coord_path = lot_trailhead_path
 
         matched_lots.add(lot_id)
         path = [
             (id_to_walkable_node[n]['lon'], id_to_walkable_node[n]['lat'])
-            for n in lot_trailhead_path
+            for n in coord_path
         ]
         if is_truncated:
             path = [element_centroid(lot, lot_nodes)] + path  # avoid degenerate paths
