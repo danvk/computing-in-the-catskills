@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 """Find all reasonable loop/out-and-back hikes."""
 
+from collections import defaultdict
 import itertools
 import json
 import math
@@ -39,13 +40,15 @@ peak_features = [f for f in features if f['properties'].get('type') == 'high-pea
 # 8 10s
 # 24 12s
 
-total = 0
-n = 11
-for i in range(1, n + 1):
-    total += math.comb(n, i) * math.factorial(i)
-print(total)
+def powerfact(n):
+    # TODO: figure out this formula
+    total = 0
+    for i in range(1, n + 1):
+        total += math.comb(n, i) * math.factorial(i)
+    return total
 
 lot_to_peaks = {}
+peaks_to_lots = defaultdict(list)
 
 for lot_node in G.nodes():
     if G.nodes[lot_node]['type'] != 'parking-lot':
@@ -63,24 +66,82 @@ for lot_node in G.nodes():
         print(f'Filtered out lot {lot_node}')
         continue
 
+    reachable_nodes.sort()
+    reachable_nodes = tuple(reachable_nodes)
     lot_to_peaks[lot_node] = reachable_nodes
+    peaks_to_lots[reachable_nodes].append(lot_node)
 
 for lot, peaks in sorted(lot_to_peaks.items(), key=lambda x: len(x[1])):
     print(node_link(lot), len(peaks), peaks)
-
 print(len(lot_to_peaks), 'lots')
 
-# 2955316486 6 [2955311547, 1938215682, 1938201532, 357574030, 10033501291, 10010091368]
-
-# Want to capture the idea that a "bowtie" hike should really be done as two loops.
 
 def powerset(xs):
     return (combo for r in range(len(xs) + 1) for combo in itertools.combinations(xs, r))
 
 
-def loops_for_lot(g, lot_node, peaks):
-    loops = []
-    gp = make_complete_graph(g, peaks + [lot_node])
+def through_hikes_for_peak_seq(g, lots, peaks, peak_seqs):
+    peaks = list(peaks)
+    lots = list(lots)
+    hikes = []
+    gp = make_complete_graph(g, peaks + lots)
+    for peak_seq_d, peak_seq in peak_seqs:
+        best_d = math.inf
+        best_cycle = None
+        for lot1, lot2 in itertools.product(lots, lots):
+            if lot1 == lot2:
+                continue  # we'll handle loops separately
+
+            d = gp.edges[lot1, peak_seq[0]]['weight'] + peak_seq_d + gp.edges[peak_seq[-1], lot2]['weight']
+            if d < best_d:
+                best_d = d
+                best_cycle = [lot1, *peak_seq, lot2]
+        all_peaks = {
+            node
+            for a, b in zip(best_cycle[:-1], best_cycle[1:])
+            for node in gp.edges[a, b]['path']
+            if g.nodes[node]['type'] == 'high-peak'
+        }
+        if len(all_peaks) == len(peak_seq):
+            # Exclude paths that go over unexpected peaks.
+            # A more stringent check would also exclude paths that go within ~100m of unexpected peaks.
+            hikes.append((best_d, best_cycle))
+
+    return hikes
+
+
+def loop_hikes_for_peak_seq(g, lots, peaks, peak_seqs):
+    peaks = list(peaks)
+    lots = list(lots)
+    hikes = []
+    gp = make_complete_graph(g, peaks + lots)
+    for peak_seq_d, peak_seq in peak_seqs:
+        best_d = math.inf
+        best_cycle = None
+        for lot in lots:
+            d = gp.edges[lot, peak_seq[0]]['weight'] + peak_seq_d + gp.edges[peak_seq[-1], lot]['weight']
+            if d < best_d:
+                best_d = d
+                best_cycle = [lot, *peak_seq, lot]
+        all_peaks = {
+            node
+            for a, b in zip(best_cycle[:-1], best_cycle[1:])
+            for node in gp.edges[a, b]['path']
+            if g.nodes[node]['type'] == 'high-peak'
+        }
+        if len(all_peaks) == len(peak_seq):
+            # Exclude paths that go over unexpected peaks.
+            # A more stringent check would also exclude paths that go within ~100m of unexpected peaks.
+            hikes.append((best_d, best_cycle))
+
+    return hikes
+
+
+def plausible_peak_sequences(g, peaks: list[int]):
+    sequences = []
+    peaks = list(peaks)
+
+    gp = make_complete_graph(g, peaks)
     for peak_subset in powerset(peaks):
         if not peak_subset:
             continue
@@ -88,7 +149,6 @@ def loops_for_lot(g, lot_node, peaks):
         best_d = math.inf
         best_cycle = None
         for cycle in itertools.permutations(peak_subset):
-            cycle = [lot_node, *cycle, lot_node]
             d = cycle_weight(gp, cycle)
             if d < best_d:
                 best_d = d
@@ -102,22 +162,46 @@ def loops_for_lot(g, lot_node, peaks):
         if len(all_peaks) == len(peak_subset):
             # Exclude paths that go over unexpected peaks.
             # A more stringent check would also exclude paths that go within ~100m of unexpected peaks.
-            loops.append((best_d, best_cycle[1:-1]))
+            sequences.append((best_d, best_cycle))
+    return sequences
 
-    return loops
 
-all_cycles = []
-for lot, peaks in tqdm(lot_to_peaks.items()):
-    all_cycles.append({
-        'trailhead': lot,
-        'cycles': loops_for_lot(G, lot, peaks)
-    })
+# Plausible spruceton sequences: 158 / 9864100
+# Plausible subsets: 158 / 1023
+# plausible_spruceton_seqs = plausible_peak_sequences(G, spruceton_peaks)
+# print(f'Plausible spruceton sequences: {len(plausible_spruceton_seqs)} / {powerfact(len(spruceton_peaks))}')
+# print(through_hikes_for_peak_seq(G, spruceton_lots, spruceton_peaks, plausible_spruceton_seqs))
 
-with open('data/loops.json', 'w') as out:
-    json.dump(all_cycles, out)
 
-num_cycles = sum(len(c['cycles']) for c in all_cycles)
-print(num_cycles, 'total cycles')
+# 2955316486 6 [2955311547, 1938215682, 1938201532, 357574030, 10033501291, 10010091368]
+
+# Want to capture the idea that a "bowtie" hike should really be done as two loops.
+
+
+# 10 peaks / 20 lots
+# 10 peaks / 8 lots
+print('')
+hikes = []
+num_loops = 0
+num_thrus = 0
+for peaks, lots in tqdm(peaks_to_lots.items()):
+    print(len(peaks), peaks, len(lots), lots)
+    plausible_seqs = plausible_peak_sequences(G, peaks)
+    print(f'  plausible sequences: {len(plausible_seqs)}')
+    loops = loop_hikes_for_peak_seq(G, lots, peaks, plausible_seqs)
+    thrus = through_hikes_for_peak_seq(G, lots, peaks, plausible_seqs)
+    hikes += loops
+    hikes += thrus
+    print(f'  loops: {len(loops)}, thru: {len(thrus)}')
+    num_loops += len(loops)
+    num_thrus += len(thrus)
+
+with open('data/hikes.json', 'w') as out:
+    json.dump(hikes, out)
+
+print(f'Loops: {num_loops}')
+print(f'Thrus: {num_thrus}')
+print(f'Total hikes: {num_loops + num_thrus}')
 
 # sample = loops_for_trailhead(G, 2955316486, [2955311547, 1938215682, 1938201532, 357574030, 10033501291, 10010091368])
 # print(len(sample), sample)
