@@ -7,7 +7,7 @@ from tqdm import tqdm
 import networkx as nx
 
 from graph import read_hiking_graph
-from osm import OsmElement, closest_point_on_trail, distance, element_centroid, element_link, node_link, way_length
+from osm import OsmElement, closest_point_on_trail, element_centroid, node_link
 from util import catskills_haversine
 
 features = json.load(open('data/network.geojson'))['features']
@@ -267,3 +267,6 @@ print(f'Added {lot_lot_paths} lot<->lot paths.')
 
 with open('data/parking-connections.geojson', 'w') as out:
     json.dump({'type': 'FeatureCollection', 'features': lot_fs}, out)
+
+with open('data/network+parking.geojson', 'w') as out:
+    json.dump({'type': 'FeatureCollection', 'features': features + lot_fs}, out)
