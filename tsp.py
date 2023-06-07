@@ -38,7 +38,7 @@ print(f'Complete graph: {GG.number_of_nodes()} nodes / {GG.number_of_edges()} ed
 
 # peak_nodes: List[int] = nx.approximation.traveling_salesman_problem(GG)
 peak_nodes: List[int]
-peak_nodes, cost = solve_tsp_with_or_tools(scale_graph(GG, 100))
+peak_nodes, cost = solve_tsp_with_or_tools(scale_graph(GG, 100), time_limit_secs=600)
 
 # This could yield a better result but does not:
 # init_nodes: List[int] = nx.approximation.traveling_salesman_problem(GG)

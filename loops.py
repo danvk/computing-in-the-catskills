@@ -1,19 +1,5 @@
 #!/usr/bin/env python
-"""Find minimum hiking distance, requiring loop hikes."""
-
-# Each node is a (trailhead, peak) pair, where the trailhead is where you parked your car.
-# Each nodeset is (*, peak)
-# Traveling from (A, X) to (B, Y) requires traveling:
-# - From X to A on trails
-# - From A to B by car
-# - From B to Y on trails
-
-# Plan of attack:
-# ✓ Form a new graph consisting of (trailhead, peak) pairs; Trailhead nodes are left as-is.
-# - Attach the artificial zero node and produce a complete graph.
-# - Run GTSP over this complete graph w/ relevant nodesets.
-# - Map this back to a sequence of hikes
-# - Visualize
+"""Find all reasonable loop/out-and-back hikes."""
 
 import itertools
 import json
@@ -25,44 +11,43 @@ import networkx as nx
 from graph import cycle_weight, make_complete_graph, read_hiking_graph
 from osm import node_link
 
-features = json.load(open('data/network.geojson'))['features']
+features = json.load(open('data/network+parking.geojson'))['features']
 G: nx.Graph
-G, id_to_peak, id_to_trailhead = read_hiking_graph(features)
+G, id_to_peak, id_to_trailhead, id_to_lot = read_hiking_graph(features)
 peak_features = [f for f in features if f['properties'].get('type') == 'high-peak']
 
-# Remove trailhead<->trailhead edges
-to_remove = []
-for a, b in G.edges():
-    if a in id_to_trailhead and b in id_to_trailhead:
-        to_remove.append((a, b))
-G.remove_edges_from(to_remove)
+# This walk connects the Devil's Path to the Panther/Slide area, which is not desirable.
+G.remove_edge(385488241, 385488236)
+G.remove_edge(385488238, 385488236)
 
-trailhead_to_peaks = {}
+# Now we have:
+# 8 10s
+# 24 12s
 
-for th_node in G.nodes():
-    if G.nodes[th_node]['type'] != 'trailhead':
+lot_to_peaks = {}
+
+for lot_node in G.nodes():
+    if G.nodes[lot_node]['type'] != 'parking-lot':
         continue
 
     # Get the reachable set of non-trailhead nodes from this trailhead
-    node_to_length, node_to_path = nx.single_source_dijkstra(G, th_node)
+    node_to_length, node_to_path = nx.single_source_dijkstra(G, lot_node)
     reachable_nodes = [
         n
         for n in node_to_length.keys()
         if G.nodes[n]['type'] == 'high-peak'
-        # This breaks up the Devil's Path East & West
-        and not any(G.nodes[k]['type'] == 'trailhead' for k in node_to_path[n][1:-1])
     ]
 
     if not reachable_nodes:
-        print(f'Filtered out trailhead {th_node}')
+        print(f'Filtered out lot {lot_node}')
         continue
 
-    trailhead_to_peaks[th_node] = reachable_nodes
+    lot_to_peaks[lot_node] = reachable_nodes
 
-for trailhead, peaks in sorted(trailhead_to_peaks.items(), key=lambda x: len(x[1])):
-    print(node_link(trailhead), len(peaks), peaks)
+for lot, peaks in sorted(lot_to_peaks.items(), key=lambda x: len(x[1])):
+    print(node_link(lot), len(peaks), peaks)
 
-print(len(trailhead_to_peaks), 'trailheads')
+print(len(lot_to_peaks), 'lots')
 
 # 2955316486 6 [2955311547, 1938215682, 1938201532, 357574030, 10033501291, 10010091368]
 
@@ -70,9 +55,9 @@ def powerset(xs):
     return (combo for r in range(len(xs) + 1) for combo in itertools.combinations(xs, r))
 
 
-def loops_for_trailhead(g, th_node, peaks):
+def loops_for_lot(g, lot_node, peaks):
     loops = []
-    gp = make_complete_graph(g, peaks + [th_node])
+    gp = make_complete_graph(g, peaks + [lot_node])
     for peak_subset in powerset(peaks):
         if not peak_subset:
             continue
@@ -80,7 +65,7 @@ def loops_for_trailhead(g, th_node, peaks):
         best_d = math.inf
         best_cycle = None
         for cycle in itertools.permutations(peak_subset):
-            cycle = [th_node, *cycle, th_node]
+            cycle = [lot_node, *cycle, lot_node]
             d = cycle_weight(gp, cycle)
             if d < best_d:
                 best_d = d
@@ -99,10 +84,10 @@ def loops_for_trailhead(g, th_node, peaks):
     return loops
 
 all_cycles = []
-for trailhead, peaks in trailhead_to_peaks.items():
+for lot, peaks in lot_to_peaks.items():
     all_cycles.append({
-        'trailhead': trailhead,
-        'cycles': loops_for_trailhead(G, trailhead, peaks)
+        'trailhead': lot,
+        'cycles': loops_for_lot(G, lot, peaks)
     })
 
 with open('data/loops.json', 'w') as out:
