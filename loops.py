@@ -151,10 +151,21 @@ def plausible_peak_sequences(g, peaks: list[int]):
         if not peak_subset:
             continue
 
+        if len(peak_subset) == 1:
+            sequences.append((0, peak_subset))
+            continue
+
+        logging = set(peak_subset) == {10010091368, 357574030, 2955311547, 1938215682, 1938201532, 10033501291}
+        if logging:
+            print(peak_subset)
+
         best_d = math.inf
         best_cycle = None
         for cycle in itertools.permutations(peak_subset):
             d = cycle_weight(gp, cycle)
+            if logging and cycle == (10010091368, 357574030, 2955311547, 1938215682, 1938201532, 10033501291):
+                print(d, cycle)
+                print(best_d, best_cycle)
             if d < best_d:
                 best_d = d
                 best_cycle = cycle
@@ -164,6 +175,9 @@ def plausible_peak_sequences(g, peaks: list[int]):
             for node in gp.edges[a, b]['path']
             if g.nodes[node]['type'] == 'high-peak'
         }
+        if logging:
+            print(all_peaks)
+            print(best_d, best_cycle)
         if len(all_peaks) == len(peak_subset):
             # Exclude paths that go over unexpected peaks.
             # A more stringent check would also exclude paths that go within ~100m of unexpected peaks.
@@ -182,6 +196,33 @@ def plausible_peak_sequences(g, peaks: list[int]):
 
 # Want to capture the idea that a "bowtie" hike should really be done as two loops.
 
+# plausible_peak_sequences doesn't generate any one-peak sequences
+# the_ten = (-1136, -538, 2398015279, 2426171552, 2884119551, 2884119672, 7292479776, 9147145385, 9953707705, 9953729846)
+the_ten = (357574030, 1938201532, 1938215682, 2882649730, 2882649917, 2955311547, 7978185605, 7982977638, 10010091368, 10033501291)
+seqs = plausible_peak_sequences(G, the_ten)
+print(seqs)
+assert any(peaks == (10010091368, 357574030, 2955311547, 1938215682, 1938201532, 10033501291) for _d, peaks in seqs)
+# 10010091368, 357574030, 2955311547, 1938215682, 1938201532, 10033501291
+
+"""
+26.136381029694984 (
+    10010091368, Sherrill
+    357574030, ND
+    2955311547, WK
+    1938215682, SW Hunter
+    1938201532, Hunter
+    10033501291, Rusk
+)
+
+25.86459324669115 (
+    1938215682,  SW Hunter
+    1938201532,  Hunter
+    10033501291, Rusk
+    2955311547,  WK
+    357574030,  ND
+    10010091368,  Sherrill
+)
+"""
 
 # 10 peaks / 20 lots
 # 10 peaks / 8 lots
