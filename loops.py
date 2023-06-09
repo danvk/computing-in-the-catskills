@@ -128,24 +128,34 @@ def plausible_peak_sequences(
 ) -> list[tuple[float, tuple[int, ...]]]:
     sequences = []
     peaks = list(peaks)
-    if len(peaks) == 0:
-        return []
-    if len(peaks) == 1:
-        return [(0, (peaks[0],))]
+
+    # zero peaks / single peaks are always a valid sequence
+    sequences: list[tuple[float, tuple[int, ...]]] = [(0, tuple())] + [
+        (0, (x,)) for x in peaks
+    ]
+    if len(peaks) <= 1:
+        return sequences
 
     gp = make_complete_graph(g, peaks)
+    """
     if len(peaks) == 2:
+        # TODO: can this fit into the recursive part below?
         a, b = peaks
-        d = g.edges[a, b]['weight']
-        return [
-            (0, (a,)),
-            (0, (b,)),
-            (d, (a, b)),
-            (d, (b, a)),
-        ]
+        all_peaks = {
+            node
+            for node in gp.edges[a, b]['path']
+            if g.nodes[node]['type'] == 'high-peak'
+        }
+        if len(all_peaks) == 2:
+            d = g.edges[a, b]['weight']
+            sequences += [
+                (d, (a, b)),
+                (d, (b, a)),
+            ]
+        return sequences
+    """
 
     # You can start and end with any pair of peaks.
-    sequences: list[tuple[float, tuple[int, ...]]] = []
     for start_peak, end_peak in itertools.product(peaks, peaks):
         if start_peak == end_peak:
             continue  # TODO: require start_peak < end_peak as an optimizaition
@@ -156,22 +166,27 @@ def plausible_peak_sequences(
         # For each set of "inner" peaks, choose the best sequence and eliminate
         # it if it crosses any surprise peaks.
         by_inner_peaks = index_by(remaining_seqs, lambda ds: tuple(sorted(ds[1])))
+        print('by_inner_peaks', by_inner_peaks)
         for inner_peaks, inner_seqs in by_inner_peaks.items():
             best_d = math.inf
             best_inner_seq = None
-            for remaining_d, remaining_seq in remaining_seqs:
-                start_d = gp.edges[start_peak, remaining_seq[0]]['weight']
-                end_d = gp.edges[remaining_seq[-1], end_peak]['weight']
-                d = start_d + remaining_d + end_d
-                if d < best_d:
-                    best_d = d
-                    best_inner_seq = remaining_seq
-            if best_inner_seq is None:
-                assert len(inner_peaks) == 0
+            print('  inner_peaks', inner_peaks)
+            print('  inner_seqs ', inner_seqs)
+            if len(inner_peaks) == 0:
                 best_d = gp.edges[start_peak, end_peak]['weight']
                 best_inner_seq = tuple()
+            else:
+                for remaining_d, remaining_seq in inner_seqs:
+                    print('    remaining_d  ', remaining_d)
+                    print('    remaining_seq', remaining_seq)
+                    start_d = gp.edges[start_peak, remaining_seq[0]]['weight']
+                    end_d = gp.edges[remaining_seq[-1], end_peak]['weight']
+                    d = start_d + remaining_d + end_d
+                    if d < best_d:
+                        best_d = d
+                        best_inner_seq = remaining_seq
             # Check for surprise peaks
-            best_seq = tuple(start_peak, *best_inner_seq, end_peak)
+            best_seq = tuple([start_peak, *best_inner_seq, end_peak])
             all_peaks = {
                 node
                 for a, b in zip(best_seq[:-1], best_seq[1:])
