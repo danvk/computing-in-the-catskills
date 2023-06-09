@@ -67,9 +67,10 @@ def rotate_to_start(xs: List[T], desired_first: T) -> List[T]:
 
 
 def powerfact(n):
-    # TODO: figure out this formula
+    """Total number of permutations of all subsets of an n-set."""
+    # https://oeis.org/A000522
     total = 0
-    for i in range(1, n + 1):
+    for i in range(0, n + 1):
         total += math.comb(n, i) * math.factorial(i)
     return total
 

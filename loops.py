@@ -123,6 +123,9 @@ def loop_hikes_for_peak_seq(g, lots, peaks, peak_seqs):
     return hikes
 
 
+_cache = {}
+
+
 def plausible_peak_sequences(
     g, peaks: list[int]
 ) -> list[tuple[float, tuple[int, ...]]]:
@@ -136,6 +139,12 @@ def plausible_peak_sequences(
     if len(peaks) <= 1:
         return sequences
 
+    cache_key = tuple(sorted(peaks))
+    result = _cache.get(cache_key)
+    if result is not None:
+        return result
+
+    # would be really nice to eliminate this call!
     gp = make_complete_graph(g, peaks)
 
     # You can start and end with any pair of peaks.
@@ -178,9 +187,11 @@ def plausible_peak_sequences(
             }
             if len(all_peaks) == len(best_seq):
                 # Exclude paths that go over unexpected peaks.
-                # A more stringent check would also exclude paths that go within ~100m of
-                # unexpected peaks.
+                # A more stringent check would also exclude paths that go within ~100m
+                #  of unexpected peaks.
                 sequences.append((best_d, best_seq))
+
+    _cache[cache_key] = sequences
     return sequences
 
 
