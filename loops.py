@@ -137,23 +137,6 @@ def plausible_peak_sequences(
         return sequences
 
     gp = make_complete_graph(g, peaks)
-    """
-    if len(peaks) == 2:
-        # TODO: can this fit into the recursive part below?
-        a, b = peaks
-        all_peaks = {
-            node
-            for node in gp.edges[a, b]['path']
-            if g.nodes[node]['type'] == 'high-peak'
-        }
-        if len(all_peaks) == 2:
-            d = g.edges[a, b]['weight']
-            sequences += [
-                (d, (a, b)),
-                (d, (b, a)),
-            ]
-        return sequences
-    """
 
     # You can start and end with any pair of peaks.
     for start_peak, end_peak in itertools.product(peaks, peaks):
@@ -166,19 +149,19 @@ def plausible_peak_sequences(
         # For each set of "inner" peaks, choose the best sequence and eliminate
         # it if it crosses any surprise peaks.
         by_inner_peaks = index_by(remaining_seqs, lambda ds: tuple(sorted(ds[1])))
-        print('by_inner_peaks', by_inner_peaks)
+        # print('by_inner_peaks', by_inner_peaks)
         for inner_peaks, inner_seqs in by_inner_peaks.items():
             best_d = math.inf
             best_inner_seq = None
-            print('  inner_peaks', inner_peaks)
-            print('  inner_seqs ', inner_seqs)
+            # print('  inner_peaks', inner_peaks)
+            # print('  inner_seqs ', inner_seqs)
             if len(inner_peaks) == 0:
                 best_d = gp.edges[start_peak, end_peak]['weight']
                 best_inner_seq = tuple()
             else:
                 for remaining_d, remaining_seq in inner_seqs:
-                    print('    remaining_d  ', remaining_d)
-                    print('    remaining_seq', remaining_seq)
+                    # print('    remaining_d  ', remaining_d)
+                    # print('    remaining_seq', remaining_seq)
                     start_d = gp.edges[start_peak, remaining_seq[0]]['weight']
                     end_d = gp.edges[remaining_seq[-1], end_peak]['weight']
                     d = start_d + remaining_d + end_d

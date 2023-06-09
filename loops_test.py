@@ -67,4 +67,39 @@ def test_three_sequence():
 def test_six_sequence():
     # There are multiple sequences of the Spruceton Six that could be
     # optimal when connected to a parking lot to form a complete hike.
-    pass
+    sherrill = 10010091368
+    westkill = 2955311547
+    northdome = 357574030
+    sw_hunter = 1938215682
+    hunter = 1938201532
+    rusk = 10033501291
+    all_seqs = plausible_peak_sequences(
+        G, [sherrill, northdome, westkill, sw_hunter, hunter, rusk]
+    )
+    # 177 sequences
+    mega_spruceton = [
+        (d, seq)
+        for d, seq in all_seqs
+        if len(seq) == 6 and seq[0] == sherrill and seq[-1] == rusk
+    ]
+    assert mega_spruceton == [
+        (26.136381029694984, (sherrill, northdome, westkill, sw_hunter, hunter, rusk))
+    ]
+
+    from_sw_hunter = [
+        (d, seq) for d, seq in all_seqs if len(seq) == 6 and seq[0] == sw_hunter
+    ]
+    assert from_sw_hunter == [
+        (
+            25.86459324669115,
+            (1938215682, 1938201532, 10033501291, 2955311547, 357574030, 10010091368),
+        ),
+        (
+            38.5343748975213,
+            (1938215682, 10010091368, 357574030, 2955311547, 10033501291, 1938201532),
+        ),
+        (
+            38.770926804660675,
+            (1938215682, 1938201532, 2955311547, 357574030, 10010091368, 10033501291),
+        ),
+    ]
