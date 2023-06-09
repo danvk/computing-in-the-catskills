@@ -19,7 +19,15 @@ tqdm = "^4.65.0"
 [tool.poetry.group.dev.dependencies]
 ipython = "^8.13.2"
 pytest = "^7.3.1"
+ruff = "^0.0.272"
+black = "^23.3.0"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[tool.black]
+skip-string-normalization = true

@@ -5,7 +5,6 @@ from collections import defaultdict
 import itertools
 import json
 import math
-from typing import List
 
 from tqdm import tqdm
 import networkx as nx
@@ -40,12 +39,14 @@ peak_features = [f for f in features if f['properties'].get('type') == 'high-pea
 # 8 10s
 # 24 12s
 
+
 def powerfact(n):
     # TODO: figure out this formula
     total = 0
     for i in range(1, n + 1):
         total += math.comb(n, i) * math.factorial(i)
     return total
+
 
 lot_to_peaks = {}
 peaks_to_lots = defaultdict(list)
@@ -57,9 +58,7 @@ for lot_node in G.nodes():
     # Get the reachable set of non-trailhead nodes from this trailhead
     node_to_length, node_to_path = nx.single_source_dijkstra(G, lot_node)
     reachable_nodes = [
-        n
-        for n in node_to_length.keys()
-        if G.nodes[n]['type'] == 'high-peak'
+        n for n in node_to_length.keys() if G.nodes[n]['type'] == 'high-peak'
     ]
 
     if not reachable_nodes:
@@ -77,7 +76,9 @@ print(len(lot_to_peaks), 'lots')
 
 
 def powerset(xs):
-    return (combo for r in range(len(xs) + 1) for combo in itertools.combinations(xs, r))
+    return (
+        combo for r in range(len(xs) + 1) for combo in itertools.combinations(xs, r)
+    )
 
 
 def through_hikes_for_peak_seq(g, lots, peaks, peak_seqs):
@@ -94,7 +95,11 @@ def through_hikes_for_peak_seq(g, lots, peaks, peak_seqs):
             if lot1 == lot2:
                 continue  # we'll handle loops separately
 
-            d = gp.edges[lot1, peak_seq[0]]['weight'] + peak_seq_d + gp.edges[peak_seq[-1], lot2]['weight']
+            d = (
+                gp.edges[lot1, peak_seq[0]]['weight']
+                + peak_seq_d
+                + gp.edges[peak_seq[-1], lot2]['weight']
+            )
             if d < best_d:
                 best_d = d
                 best_cycle = [lot1, *peak_seq, lot2]
@@ -106,7 +111,8 @@ def through_hikes_for_peak_seq(g, lots, peaks, peak_seqs):
         }
         if len(all_peaks) == len(peak_seq):
             # Exclude paths that go over unexpected peaks.
-            # A more stringent check would also exclude paths that go within ~100m of unexpected peaks.
+            # A more stringent check would also exclude paths that go within ~100m of
+            # unexpected peaks.
             hikes.append((best_d, best_cycle))
 
     return hikes
@@ -121,7 +127,11 @@ def loop_hikes_for_peak_seq(g, lots, peaks, peak_seqs):
         best_d = math.inf
         best_cycle = None
         for lot in lots:
-            d = gp.edges[lot, peak_seq[0]]['weight'] + peak_seq_d + gp.edges[peak_seq[-1], lot]['weight']
+            d = (
+                gp.edges[lot, peak_seq[0]]['weight']
+                + peak_seq_d
+                + gp.edges[peak_seq[-1], lot]['weight']
+            )
             if d < best_d:
                 best_d = d
                 best_cycle = [lot, *peak_seq, lot]
@@ -133,7 +143,8 @@ def loop_hikes_for_peak_seq(g, lots, peaks, peak_seqs):
         }
         if len(all_peaks) == len(peak_seq):
             # Exclude paths that go over unexpected peaks.
-            # A more stringent check would also exclude paths that go within ~100m of unexpected peaks.
+            # A more stringent check would also exclude paths that go within ~100m of
+            # unexpected peaks.
             hikes.append((best_d, best_cycle))
 
     return hikes
@@ -155,7 +166,14 @@ def plausible_peak_sequences(g, peaks: list[int]):
             sequences.append((0, peak_subset))
             continue
 
-        logging = set(peak_subset) == {10010091368, 357574030, 2955311547, 1938215682, 1938201532, 10033501291}
+        logging = set(peak_subset) == {
+            10010091368,
+            357574030,
+            2955311547,
+            1938215682,
+            1938201532,
+            10033501291,
+        }
         if logging:
             print(peak_subset)
 
@@ -163,7 +181,14 @@ def plausible_peak_sequences(g, peaks: list[int]):
         best_cycle = None
         for cycle in itertools.permutations(peak_subset):
             d = cycle_weight(gp, cycle)
-            if logging and cycle == (10010091368, 357574030, 2955311547, 1938215682, 1938201532, 10033501291):
+            if logging and cycle == (
+                10010091368,
+                357574030,
+                2955311547,
+                1938215682,
+                1938201532,
+                10033501291,
+            ):
                 print(d, cycle)
                 print(best_d, best_cycle)
             if d < best_d:
@@ -180,7 +205,8 @@ def plausible_peak_sequences(g, peaks: list[int]):
             print(best_d, best_cycle)
         if len(all_peaks) == len(peak_subset):
             # Exclude paths that go over unexpected peaks.
-            # A more stringent check would also exclude paths that go within ~100m of unexpected peaks.
+            # A more stringent check would also exclude paths that go within ~100m of
+            # unexpected peaks.
             sequences.append((best_d, best_cycle))
     return sequences
 
@@ -188,8 +214,10 @@ def plausible_peak_sequences(g, peaks: list[int]):
 # Plausible spruceton sequences: 158 / 9864100
 # Plausible subsets: 158 / 1023
 # plausible_spruceton_seqs = plausible_peak_sequences(G, spruceton_peaks)
-# print(f'Plausible spruceton sequences: {len(plausible_spruceton_seqs)} / {powerfact(len(spruceton_peaks))}')
-# print(through_hikes_for_peak_seq(G, spruceton_lots, spruceton_peaks, plausible_spruceton_seqs))
+# print(f'Plausible spruceton sequences: {len(plausible_spruceton_seqs)} /
+# {powerfact(len(spruceton_peaks))}')
+# print(through_hikes_for_peak_seq(G, spruceton_lots, spruceton_peaks,
+#       plausible_spruceton_seqs))
 
 
 # 2955316486 6 [2955311547, 1938215682, 1938201532, 357574030, 10033501291, 10010091368]
@@ -197,11 +225,26 @@ def plausible_peak_sequences(g, peaks: list[int]):
 # Want to capture the idea that a "bowtie" hike should really be done as two loops.
 
 # plausible_peak_sequences doesn't generate any one-peak sequences
-# the_ten = (-1136, -538, 2398015279, 2426171552, 2884119551, 2884119672, 7292479776, 9147145385, 9953707705, 9953729846)
-the_ten = (357574030, 1938201532, 1938215682, 2882649730, 2882649917, 2955311547, 7978185605, 7982977638, 10010091368, 10033501291)
+# the_ten = (-1136, -538, 2398015279, 2426171552, 2884119551, 2884119672, 7292479776,
+#            9147145385, 9953707705, 9953729846)
+the_ten = (
+    357574030,
+    1938201532,
+    1938215682,
+    2882649730,
+    2882649917,
+    2955311547,
+    7978185605,
+    7982977638,
+    10010091368,
+    10033501291,
+)
 seqs = plausible_peak_sequences(G, the_ten)
 print(seqs)
-assert any(peaks == (10010091368, 357574030, 2955311547, 1938215682, 1938201532, 10033501291) for _d, peaks in seqs)
+assert any(
+    peaks == (10010091368, 357574030, 2955311547, 1938215682, 1938201532, 10033501291)
+    for _d, peaks in seqs
+)
 # 10010091368, 357574030, 2955311547, 1938215682, 1938201532, 10033501291
 
 """
@@ -249,14 +292,19 @@ print(f'Loops: {num_loops}')
 print(f'Thrus: {num_thrus}')
 print(f'Total hikes: {num_loops + num_thrus}')
 
-# sample = loops_for_trailhead(G, 2955316486, [2955311547, 1938215682, 1938201532, 357574030, 10033501291, 10010091368])
+# sample = loops_for_trailhead(G, 2955316486, [2955311547, 1938215682, 1938201532,
+# 357574030, 10033501291, 10010091368])
 # print(len(sample), sample)
-# sample = loops_for_trailhead(G, 7609349952, [9953707705, 9953729846, 2884119551, -538, 2884119672, 2426171552, -1136, 7292479776, 2398015279])
-# sample = loops_for_trailhead(G, 212271460, [1938215682, 2882649917, 1938201532, 2882649730, 7982977638, 2955311547, 10033501291, 7978185605, 357574030, 10010091368])
+# sample = loops_for_trailhead(G, 7609349952, [9953707705, 9953729846, 2884119551,
+# -538, 2884119672, 2426171552, -1136, 7292479776, 2398015279])
+# sample = loops_for_trailhead(G, 212271460, [1938215682, 2882649917, 1938201532,
+# 2882649730, 7982977638, 2955311547, 10033501291, 7978185605, 357574030, 10010091368])
 # print(len(sample))
 # print(sample[0][1][0])
 # for d, cycle in sample:
-#     print(f'{d:.2f}km:', '->'.join(id_to_peak[node]['properties']['name'] + f' ({node})' for node in cycle[1:-1]))
+#     print(f'{d:.2f}km:', '->'.join(id_to_peak[node]['properties']['name'] +
+#                f' ({node})'
+#         for node in cycle[1:-1]))
 
 # 93 trailheads
 #  1: 16
@@ -269,7 +317,8 @@ print(f'Total hikes: {num_loops + num_thrus}')
 # The 10 is Spruceton + Rusk + Hunter/SW Hunter + Devil's Path
 #  these probably mostly don't make sense
 
-# Find all loops starting and ending at the same trailhead and going over at least one high peak.
+# Find all loops starting and ending at the same trailhead and going over at least one
+# high peak.
 
 #       986,409 sequences per 9-peak trailhead
 #     9,864,100 sequences per 10-peak trailhead
@@ -293,5 +342,6 @@ https://openstreetmap.org/node/9785950126, Kaaterskill
 https://openstreetmap.org/node/357563196, Halcott
 
 9147145385 = Panther
-[1938215682, 2882649917, 1938201532, 2882649730, 7982977638, 2955311547, 10033501291, 7978185605, 357574030, 10010091368]
+[1938215682, 2882649917, 1938201532, 2882649730, 7982977638, 2955311547, 10033501291,
+7978185605, 357574030, 10010091368]
 """

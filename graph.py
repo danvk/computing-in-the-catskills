@@ -1,5 +1,6 @@
 import networkx as nx
 
+
 def make_complete_graph(G, nodes, weight='weight'):
     dist = {}
     path = {}
@@ -36,11 +37,21 @@ def scale_graph(g, factor):
     return scaled_g
 
 
-def read_hiking_graph(features) -> tuple[nx.Graph, dict[int, any], dict[int, any], dict[int, any]]:
+def read_hiking_graph(
+    features,
+) -> tuple[nx.Graph, dict[int, any], dict[int, any], dict[int, any]]:
     peak_features = [f for f in features if f['properties'].get('type') == 'high-peak']
     id_to_peak = {f['properties']['id']: f for f in peak_features}
-    id_to_lot = {f['properties']['id']: f for f in features if f['properties'].get('type') == 'parking-lot'}
-    id_to_trailhead = {f['properties']['id']: f for f in features if f['properties'].get('type') == 'trailhead'}
+    id_to_lot = {
+        f['properties']['id']: f
+        for f in features
+        if f['properties'].get('type') == 'parking-lot'
+    }
+    id_to_trailhead = {
+        f['properties']['id']: f
+        for f in features
+        if f['properties'].get('type') == 'trailhead'
+    }
 
     G = nx.Graph()
     for f in features:

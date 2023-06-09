@@ -40,11 +40,8 @@ OsmElement = Union[OsmNode, OsmWay, OsmRelation]
 def dedupe_ways(ways_with_dupes: Iterable[OsmWay]):
     """De-dupe a list of ways, preferring the version with more tags."""
     for _id, ways in itertools.groupby(
-        sorted(
-            ways_with_dupes,
-            key=lambda way: (way['id'], -len(way.get('tags', [])))
-        ),
-        lambda way: way['id']
+        sorted(ways_with_dupes, key=lambda way: (way['id'], -len(way.get('tags', [])))),
+        lambda way: way['id'],
     ):
         yield next(ways)
 
@@ -55,16 +52,16 @@ def find_path(way: OsmWay, a: int, b: int) -> List[int]:
     i = nodes.index(a)
     j = nodes.index(b)
     if i < j:
-        return nodes[i:j+1]
+        return nodes[i : j + 1]
     if j == 0:
         return nodes[i::-1]
-    return nodes[i:j-1:-1]
+    return nodes[i : j - 1 : -1]
 
 
 def closest_point_on_trail(
     lon_lat: Tuple[float, float],
     trail_ways: List[OsmWay],
-    trail_nodes: Dict[int, OsmNode]
+    trail_nodes: Dict[int, OsmNode],
 ):
     best_node = None
     best_d = 1000
@@ -83,9 +80,7 @@ def closest_point_on_trail(
 
 
 def distance(
-    lon_lat: Tuple[float, float],
-    element: OsmElement,
-    nodes: Dict[int, OsmNode]
+    lon_lat: Tuple[float, float], element: OsmElement, nodes: Dict[int, OsmNode]
 ) -> float:
     lon1, lat1 = lon_lat
 
@@ -95,7 +90,7 @@ def distance(
     elif element['type'] == 'relation':
         raise NotImplementedError()
 
-    best_d = 1000 # km
+    best_d = 1000  # km
     for node_id in element['nodes']:
         node = nodes[node_id]
         lon2 = node['lon']
@@ -106,17 +101,14 @@ def distance(
     return best_d * 1000
 
 
-def element_centroid(
-    el: OsmElement,
-    nodes: Dict[int, OsmNode]
-) -> tuple[float, float]:
+def element_centroid(el: OsmElement, nodes: Dict[int, OsmNode]) -> tuple[float, float]:
     if el['type'] == 'node':
         return el['lon'], el['lat']
     elif el['type'] == 'way':
         ns = el['nodes']
         return (
             sum(nodes[n]['lon'] for n in ns) / len(ns),
-            sum(nodes[n]['lat'] for n in ns) / len(ns)
+            sum(nodes[n]['lat'] for n in ns) / len(ns),
         )
 
 
@@ -128,7 +120,7 @@ def way_length(nodes: list[int], id_to_node: Dict[int, OsmNode]) -> float:
     )
 
 
-CATSKILLS_BBOX = (41.813,-74.652,42.352,-73.862)
+CATSKILLS_BBOX = (41.813, -74.652, 42.352, -73.862)
 
 
 def is_in_catskills(lon: float, lat: float) -> bool:
@@ -142,12 +134,19 @@ def link(url: str, text: str):
         console.print(f'[link={url}]{text}[/link]', end='')
     return capture.get()
 
+
 def node_link(node: int, name: str | None = None):
-    return link(f'https://www.openstreetmap.org/node/{node}', f'node/{node}' + (f' ({name})' if name else ''))
+    return link(
+        f'https://www.openstreetmap.org/node/{node}',
+        f'node/{node}' + (f' ({name})' if name else ''),
+    )
 
 
 def way_link(way: int, name: str | None = None):
-    return link(f'https://www.openstreetmap.org/way/{way}', f'way/{way}' + (f' ({name})' if name else ''))
+    return link(
+        f'https://www.openstreetmap.org/way/{way}',
+        f'way/{way}' + (f' ({name})' if name else ''),
+    )
 
 
 def element_link(el: OsmElement):

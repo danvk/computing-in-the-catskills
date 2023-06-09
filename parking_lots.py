@@ -50,7 +50,8 @@ parking_elements: list[OsmElement] = json.load(open('data/parking.json'))['eleme
 lots = [
     el
     for el in parking_elements
-    if el.get('tags', {}).get('amenity') == 'parking'  # exclude nodes that are part of parking ways
+    if el.get('tags', {}).get('amenity')
+    == 'parking'  # exclude nodes that are part of parking ways
 ]
 lot_nodes = {el['id']: el for el in parking_elements if el['type'] == 'node'}
 id_to_lot = {el['id']: el for el in lots}
@@ -87,19 +88,21 @@ id_to_walkable_node.update(lot_nodes)
 road_graph = nx.Graph()
 walkable_ways = road_ways + trail_ways
 for way in tqdm(walkable_ways):
-    way_id=way['id']
+    way_id = way['id']
     node_ids = way['nodes']
     nodes = [id_to_walkable_node[n] for n in node_ids]
 
     for a, b in zip(nodes[:-1], nodes[1:]):
         road_graph.add_edge(
-            a['id'], b['id'],
+            a['id'],
+            b['id'],
             way_id=way_id,
-            weight=1000*catskills_haversine(a['lon'], a['lat'], b['lon'], b['lat'])
+            weight=1000 * catskills_haversine(a['lon'], a['lat'], b['lon'], b['lat']),
         )
 
 # Add parking lots to the graph.
-# For parking lots that are ways, add all nodes and a connection from the centroid to each node.
+# For parking lots that are ways,
+#   add all nodes and a connection from the centroid to each node.
 # For parking lots that are nodes, just add the node.
 # If any node is already in the graph, it's connected and we're done.
 # If not, find the closest walkable node for each lot node.
@@ -107,7 +110,10 @@ for way in tqdm(walkable_ways):
 hiking_lot_ids = set()
 for el in tqdm(lots):
     lot_loc = element_centroid(el, lot_nodes)
-    d = min(catskills_haversine(*lot_loc, *t['geometry']['coordinates']) for t in trailhead_features)
+    d = min(
+        catskills_haversine(*lot_loc, *t['geometry']['coordinates'])
+        for t in trailhead_features
+    )
     if d > 1:
         # print(f'Skipping lot {element_link(el)} @ {d:.2f} km')
         continue
@@ -117,19 +123,21 @@ for el in tqdm(lots):
     if el['type'] == 'node':
         nodes = [el]
     else:
-        nodes = [lot_nodes[n] for n in  el['nodes']]
+        nodes = [lot_nodes[n] for n in el['nodes']]
     nodes_in_graph = [n for n in nodes if road_graph.has_node(n['id'])]
     if nodes_in_graph:
         # if the lot is a node, there's nothing to do.
         if el['type'] == 'way':
-            # for a way, add zero-weight connections from the lot to the connected nodes.
+            # for a way, add zero-weight connections from the lot to the connected nodes
             for node in nodes_in_graph:
                 road_graph.add_edge(el['id'], node['id'], weight=0)
     else:
         # for each node, find the closest point and add a connection.
         for node in nodes:
-            d, graph_node = closest_point_on_trail((node['lon'], node['lat']), walkable_ways, id_to_walkable_node)
-            # print(f'Connected {element_link(node)} to {element_link(graph_node)} @ {d:.0f}m')
+            d, graph_node = closest_point_on_trail(
+                (node['lon'], node['lat']), walkable_ways, id_to_walkable_node
+            )
+            # print(f'{element_link(node)} to {element_link(graph_node)} @ {d:.0f}m')
             road_graph.add_edge(node['id'], graph_node['id'], weight=d)
             if el['type'] == 'way':
                 road_graph.add_edge(el['id'], node['id'], weight=0)
@@ -137,7 +145,9 @@ for el in tqdm(lots):
 # Road network: 45529 nodes / 26514 edges
 # Road network: 45739 nodes / 27004 edges
 # Road + Lot network: 370723 nodes / 378994 edges
-print(f'Road + Lot network: {road_graph.number_of_nodes()} nodes / {road_graph.number_of_edges()} edges')
+nn = road_graph.number_of_nodes()
+ne = road_graph.number_of_edges()
+print(f'Road + Lot network: {nn} nodes / {ne} edges')
 # Found 93 hiking lots.
 print(f'Found {len(hiking_lot_ids)} hiking lots.')
 
@@ -147,12 +157,10 @@ matched_lots = set()
 lot_fs = []
 for trailhead_id in trailheads:
     th = id_to_trailhead[trailhead_id]
-    distances = nx.single_source_dijkstra_path_length(road_graph, trailhead_id, weight='weight', cutoff=1600)
-    nearby_lots = [
-        (d, id)
-        for id, d in distances.items()
-        if id in hiking_lot_ids
-    ]
+    distances = nx.single_source_dijkstra_path_length(
+        road_graph, trailhead_id, weight='weight', cutoff=1600
+    )
+    nearby_lots = [(d, id) for id, d in distances.items() if id in hiking_lot_ids]
     nearby_lots.sort()
 
     th_txt = node_link(trailhead_id, th['properties'].get('name'))
@@ -162,7 +170,9 @@ for trailhead_id in trailheads:
         lot_distance_m, lot_id = nearby_lots[0]
         lot = next(lot for lot in lots if lot['id'] == lot_id)  # could be node or way
 
-        lot_trailhead_path = nx.shortest_path(road_graph, lot_id, trailhead_id, weight='weight')
+        lot_trailhead_path = nx.shortest_path(
+            road_graph, lot_id, trailhead_id, weight='weight'
+        )
         print(f'  lot/th walking distance: {lot_distance_m:.2f} m')
         is_truncated = False
         if lot['type'] == 'way' and lot_trailhead_path[0] == lot['id']:
@@ -198,7 +208,7 @@ for trailhead_id in trailheads:
                 'nodes': lot_trailhead_path,
                 'd_km': round(d_km, 2),
                 'd_mi': round(d_km * 0.621371, 2),
-            }
+            },
         }
         lot_fs.append(f)
         print(json.dumps(f))
@@ -213,19 +223,21 @@ print('')
 
 for lot_id in matched_lots:
     lot = next(lot for lot in lots if lot['id'] == lot_id)  # could be node or way
-    lot_fs.append({
-        'type': 'Feature',
-        'geometry': {
-            'type': 'Point',
-            'coordinates': element_centroid(lot, lot_nodes),
-        },
-        'properties': {
-            'type': 'parking-lot',
-            'id': lot_id,
-            'url': f'https://www.openstreetmap.org/{lot["type"]}/{lot["id"]}',
-            **lot['tags']
+    lot_fs.append(
+        {
+            'type': 'Feature',
+            'geometry': {
+                'type': 'Point',
+                'coordinates': element_centroid(lot, lot_nodes),
+            },
+            'properties': {
+                'type': 'parking-lot',
+                'id': lot_id,
+                'url': f'https://www.openstreetmap.org/{lot["type"]}/{lot["id"]}',
+                **lot['tags'],
+            },
         }
-    })
+    )
 
 lot_lot_paths = 0
 for a in tqdm(matched_lots):
@@ -241,28 +253,30 @@ for a in tqdm(matched_lots):
                 print(f'Tossing out {a} -> {b} as more of a hike.')
                 continue
             lot_lot_paths += 1
-            lot_fs.append({
-                'type': 'Feature',
-                'geometry': {
-                    'type': 'LineString',
-                    'coordinates': [
-                        (node['lon'], node['lat']) if node else element_centroid(id_to_lot[node_id], lot_nodes)
-                        for node_id, node in
-                        (
-                            (node, id_to_walkable_node.get(node))
-                            for node in path
-                        )
-                    ]
-                },
-                'properties': {
-                    'type': 'lot-to-lot',
-                    'from': a,
-                    'to': b,
-                    'd_km': round(d_km, 2),
-                    'd_mi': round(d_km * 0.621371, 2),
-                    'nodes': path,
+            lot_fs.append(
+                {
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'LineString',
+                        'coordinates': [
+                            (node['lon'], node['lat'])
+                            if node
+                            else element_centroid(id_to_lot[node_id], lot_nodes)
+                            for node_id, node in (
+                                (node, id_to_walkable_node.get(node)) for node in path
+                            )
+                        ],
+                    },
+                    'properties': {
+                        'type': 'lot-to-lot',
+                        'from': a,
+                        'to': b,
+                        'd_km': round(d_km, 2),
+                        'd_mi': round(d_km * 0.621371, 2),
+                        'nodes': path,
+                    },
                 }
-            })
+            )
 
 # Added 31 lot<->lot paths.
 print(f'Added {lot_lot_paths} lot<->lot paths.')

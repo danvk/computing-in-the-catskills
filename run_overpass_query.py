@@ -10,7 +10,7 @@ import requests
 
 
 def fetch_from_overpass(query: str) -> str:
-    r = requests.post(f'https://overpass-api.de/api/interpreter', data={'data': query})
+    r = requests.post('https://overpass-api.de/api/interpreter', data={'data': query})
     r.raise_for_status()
     return r.text
 

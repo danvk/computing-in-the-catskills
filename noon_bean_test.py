@@ -25,6 +25,7 @@ NB_NODE_SETS = [
     ['c1', 'c2', 'c3'],
 ]
 
+
 def test_gtsp_to_tsp():
     gp = gtsp_to_tsp(NB, NB_NODE_SETS)
 
@@ -48,9 +49,23 @@ def test_gtsp_to_tsp():
 
 
 def test_tsp_on_transformed_gtsp():
-    gp = gtsp_to_tsp(NB, NB_NODE_SETS)
     # cycle = nx.approximation.traveling_salesman_problem(gp)
-    cycle = ['b3', 'b1', 'b2', 'c2', 'c3', 'c1', 'a1', 'a2', 'a1', 'a2', 'b3', 'b1', 'b2', 'b3']
+    cycle = [
+        'b3',
+        'b1',
+        'b2',
+        'c2',
+        'c3',
+        'c1',
+        'a1',
+        'a2',
+        'a1',
+        'a2',
+        'b3',
+        'b1',
+        'b2',
+        'b3',
+    ]
     gtsp_cycle = tsp_solution_to_gtsp(cycle, NB_NODE_SETS)
     print(cycle)
     print(gtsp_cycle)

@@ -45,7 +45,10 @@ for j, (d, loop) in enumerate(all_loops):
     if solver.s[j]:
         chosen_loops.append((d, loop))
 
-print(f'{len(chosen_loops)} hikes, total distance: {d_km:.2f} km = {d_km * 0.621371:.2f} mi')
+print(
+    f'{len(chosen_loops)} hikes, '
+    f'total distance: {d_km:.2f} km = {d_km * 0.621371:.2f} mi'
+)
 
 tsp_fs = [*peak_features]
 for f in tsp_fs:
@@ -61,22 +64,20 @@ for d_km, loop in chosen_loops:
             G.edges[node_a, node_b]['feature']['geometry']['coordinates']
             for node_a, node_b in zip(path[:-1], path[1:])
         ]
-    tsp_fs.append({
-        'type': 'Feature',
-        'properties': {
-            'nodes': loop,
-            'd_km': round(d_km, 2),
-            'd_mi': round(d_km * 0.621371, 2),
-            'peaks': [
-                id_to_peak[node]['properties']['name']
-                for node in loop[1:-1]
-            ]
-        },
-        'geometry': {
-            'type': 'MultiLineString',
-            'coordinates': coordinates
+    tsp_fs.append(
+        {
+            'type': 'Feature',
+            'properties': {
+                'nodes': loop,
+                'd_km': round(d_km, 2),
+                'd_mi': round(d_km * 0.621371, 2),
+                'peaks': [
+                    id_to_peak[node]['properties']['name'] for node in loop[1:-1]
+                ],
+            },
+            'geometry': {'type': 'MultiLineString', 'coordinates': coordinates},
         }
-    })
+    )
 
 with open('data/loop-tsp.geojson', 'w') as out:
     json.dump({'type': 'FeatureCollection', 'features': tsp_fs}, out)

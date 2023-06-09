@@ -27,10 +27,21 @@ for node_id in nodes:
     if id_to_lot.get(node_id):
         G.add_edge(0, node_id, weight=0)
 
-print('Slide / Slide Lot path:', nx.shortest_path(G, 816358667, 2426171552, weight='weight'))
-print('Slide lot / Panther lot:', nx.shortest_path(G, 816358667, 816358666, weight='weight'))
-print('Panther lot / trailhead', nx.shortest_path(G, 816358666, 213833958, weight='weight'))
-print('Panther / Panther Lot', nx.shortest_path(G, 816358666, 9147145385, weight='weight'))
+print(
+    'Slide / Slide Lot path:',
+    nx.shortest_path(G, 816358667, 2426171552, weight='weight'),
+)
+print(
+    'Slide lot / Panther lot:',
+    nx.shortest_path(G, 816358667, 816358666, weight='weight'),
+)
+print(
+    'Panther lot / trailhead',
+    nx.shortest_path(G, 816358666, 213833958, weight='weight'),
+)
+print(
+    'Panther / Panther Lot', nx.shortest_path(G, 816358666, 9147145385, weight='weight')
+)
 print('Slide / Panther path:', nx.shortest_path(G, 2426171552, 9147145385))
 
 GG = make_complete_graph(G, nodes=[*id_to_peak.keys()])
@@ -81,31 +92,30 @@ total_d_km = 0
 for node_seq in chunks:
     tsp_fs.append(id_to_lot[node_seq[0]])
     tsp_fs.append(id_to_lot[node_seq[-1]])
-    d_km = sum(
-        G.edges[a, b]['weight']
-        for a, b in zip(node_seq[:-1], node_seq[1:])
-    )
+    d_km = sum(G.edges[a, b]['weight'] for a, b in zip(node_seq[:-1], node_seq[1:]))
     total_d_km += d_km
-    tsp_fs.append({
-        'type': 'Feature',
-        'properties': {
-            'nodes': node_seq,
-            'd_km': round(d_km, 2),
-            'd_mi': round(d_km * 0.621371, 2),
-            'peaks': [
-                id_to_peak[node]['properties']['name']
-                for node in node_seq
-                if node in id_to_peak
-            ]
-        },
-        'geometry': {
-            'type': 'MultiLineString',
-            'coordinates': [
-                G.edges[a, b]['feature']['geometry']['coordinates']
-                for a, b in zip(node_seq[:-1], node_seq[1:])
-            ]
+    tsp_fs.append(
+        {
+            'type': 'Feature',
+            'properties': {
+                'nodes': node_seq,
+                'd_km': round(d_km, 2),
+                'd_mi': round(d_km * 0.621371, 2),
+                'peaks': [
+                    id_to_peak[node]['properties']['name']
+                    for node in node_seq
+                    if node in id_to_peak
+                ],
+            },
+            'geometry': {
+                'type': 'MultiLineString',
+                'coordinates': [
+                    G.edges[a, b]['feature']['geometry']['coordinates']
+                    for a, b in zip(node_seq[:-1], node_seq[1:])
+                ],
+            },
         }
-    })
+    )
 
 
 with open('data/tsp.geojson', 'w') as out:

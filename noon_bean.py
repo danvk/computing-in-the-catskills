@@ -22,11 +22,7 @@ def gtsp_to_tsp(
     for a, b in itertools.combinations(node_sets, 2):
         assert set(a).isdisjoint(set(b))
 
-    node_to_idx = {
-        node: i
-        for i, node_set in enumerate(node_sets)
-        for node in node_set
-    }
+    node_to_idx = {node: i for i, node_set in enumerate(node_sets) for node in node_set}
 
     for a, b, d in g.edges(data=True):
         assert node_to_idx[a] != node_to_idx[b], f'Intra-cluster edge from {a}->{b}'
@@ -56,7 +52,7 @@ def gtsp_to_tsp(
         ai = node_set.index(a)
         n = len(node_set)
         preva = node_set[(ai - 1 + n) % n]
-        gt.add_edge(preva, b, weight=weight+big_val)
+        gt.add_edge(preva, b, weight=weight + big_val)
 
     return gt
 
@@ -66,11 +62,7 @@ def tsp_solution_to_gtsp(
     node_sets: list[list],
 ) -> list:
     """Map a solution to TSP back onto a solution to the GTSP."""
-    node_to_idx = {
-        node: i
-        for i, node_set in enumerate(node_sets)
-        for node in node_set
-    }
+    node_to_idx = {node: i for i, node_set in enumerate(node_sets) for node in node_set}
     gtsp_cycle = []
     for a, b in zip(cycle[:-1], cycle[1:]):
         i = node_to_idx[a]

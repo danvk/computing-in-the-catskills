@@ -17,22 +17,20 @@ files = [
 trails_elements = json.load(open('data/trails.json'))['elements']
 
 osm_elements: List[OsmElement] = (
-    trails_elements +
-    json.load(open('data/roads.json'))['elements']
+    trails_elements + json.load(open('data/roads.json'))['elements']
 )
 osm_ways = [el for el in osm_elements if el['type'] == 'way']
-osm_nodes = {
-    el['id']: el
-    for el in osm_elements
-    if el['type'] == 'node'
-}
+osm_nodes = {el['id']: el for el in osm_elements if el['type'] == 'node'}
 
 
 ID = 0
+
+
 def nextid():
     global ID
     ID -= 1
     return ID
+
 
 elements: List[OsmElement] = []
 
@@ -56,28 +54,25 @@ for file in files:
     nodes: List[OsmNode] = [
         start_node,
         *[
-            {
-                'id': nextid(),
-                'type': 'node',
-                'lat': lat,
-                'lon': lon
-            }
+            {'id': nextid(), 'type': 'node', 'lat': lat, 'lon': lon}
             for (lon, lat, _) in coords
         ],
         end_node,
     ]
 
     elements += nodes
-    elements.append({
-        'id': nextid(),
-        'type': 'way',
-        'nodes': [n['id'] for n in nodes],
-        'tags': {
-            'highway': 'path',
-            'informal': 'yes',
-            **f['properties'],
+    elements.append(
+        {
+            'id': nextid(),
+            'type': 'way',
+            'nodes': [n['id'] for n in nodes],
+            'tags': {
+                'highway': 'path',
+                'informal': 'yes',
+                **f['properties'],
+            },
         }
-    })
+    )
 
 with open('data/additional-trails.json', 'w') as out:
     json.dump({'elements': elements}, out, indent=2)

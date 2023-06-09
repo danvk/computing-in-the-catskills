@@ -19,11 +19,7 @@ trail_ways = [el for el in trail_elements if el['type'] == 'way']
 for el in trail_ways:
     for node in el['nodes']:
         node_to_trails[node].append(el['id'])
-trail_nodes = {
-    el['id']: el
-    for el in trail_elements
-    if el['type'] == 'node'
-}
+trail_nodes = {el['id']: el for el in trail_elements if el['type'] == 'node'}
 
 # Are the start/end nodes of each trail connected to a road or another trail?
 road_elements: List[OsmElement] = json.load(open('data/roads.json'))['elements']

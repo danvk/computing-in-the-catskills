@@ -21,12 +21,11 @@ from osm import OsmElement, OsmNode, dedupe_ways, find_path, is_in_catskills
 from util import haversine, pairkey
 
 peak_nodes: List[OsmNode] = json.load(open('data/peaks-connected.json'))['elements']
-id_to_peak_node = {
-    el['id']: el
-    for el in peak_nodes
-}
+id_to_peak_node = {el['id']: el for el in peak_nodes}
 
-trail_elements: List[OsmElement] = json.load(open('data/combined-trails.json'))['elements']
+trail_elements: List[OsmElement] = json.load(open('data/combined-trails.json'))[
+    'elements'
+]
 node_to_trails = defaultdict(list)
 trail_ways_dupes = [el for el in trail_elements if el['type'] == 'way']
 trail_ways = [*dedupe_ways(trail_ways_dupes)]
@@ -38,9 +37,7 @@ trail_nodes = {
     and is_in_catskills(el['lon'], el['lat'])
 }
 trail_ways = [
-    way
-    for way in trail_ways
-    if all(node in trail_nodes for node in way['nodes'])
+    way for way in trail_ways if all(node in trail_nodes for node in way['nodes'])
 ]
 for el in trail_ways:
     for node in el['nodes']:
@@ -76,10 +73,16 @@ print(f'Trailhead nodes: {len(trailhead_nodes)}')
 
 # A path can be relevant because it connects a peak/trail, trail/trail or trail/road
 # but not because it connects two roads.
-connections: Dict[Tuple[int, int], List[int]] = defaultdict(list)  # (node, node) -> way[]; nodes are sorted
+connections: Dict[Tuple[int, int], List[int]] = defaultdict(
+    list
+)  # (node, node) -> way[]; nodes are sorted
 for way in trail_ways:
     id = way['id']
-    nodes = [node for node in way['nodes'] if node in notable_nodes or node in trailhead_nodes]
+    nodes = [
+        node
+        for node in way['nodes']
+        if node in notable_nodes or node in trailhead_nodes
+    ]
     if not nodes:
         continue
 
@@ -143,9 +146,7 @@ for a, b in peak_g.edges():
             n = trail_nodes[node_id]
             latlons.append((n['lon'], n['lat']))
         d_km = sum(
-            haversine(
-                alon, alat, blon, blat
-            )
+            haversine(alon, alat, blon, blat)
             for (alon, alat), (blon, blat) in zip(latlons[:-1], latlons[1:])
         )
         if not best or d_km < best.d_km:
@@ -189,59 +190,70 @@ features = []
 for node_id in peak_g.nodes():
     peak_node = id_to_peak_node.get(node_id)
     if peak_node:
-        features.append({
-            'type': 'Feature',
-            'geometry': { 'type': 'Point', 'coordinates': (peak_node['lon'], peak_node['lat'])},
-            'properties': {
-                'id': node_id,
-                'type': 'high-peak',
-                **peak_node['tags'],
-                'marker-color': '#0000ff',
-                'marker-size': 'large',
-                'degree': peak_g.degree[node_id]
+        features.append(
+            {
+                'type': 'Feature',
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': (peak_node['lon'], peak_node['lat']),
+                },
+                'properties': {
+                    'id': node_id,
+                    'type': 'high-peak',
+                    **peak_node['tags'],
+                    'marker-color': '#0000ff',
+                    'marker-size': 'large',
+                    'degree': peak_g.degree[node_id],
+                },
             }
-        })
+        )
         continue
     trail_node = trail_nodes[node_id]
-    features.append({
-        'type': 'Feature',
-        'geometry': { 'type': 'Point', 'coordinates': (trail_node['lon'], trail_node['lat'])},
-        'properties': {
-            'id': node_id,
-            'type': 'trailhead' if node_to_roads.get(node_id) else 'junction',
-            **trail_node.get('tags', {}),
-            'marker-size': 'small',
-            'marker-color':
-                '#00ff00' if peak_g.degree[node_id] == 1 and not node_to_roads.get(node_id) else
-                '#ff00ff' if peak_g.degree[node_id] == 2 and not node_to_roads.get(node_id) else
-                '#555555' if not node_to_roads.get(node_id) else
-                '#ff0000',
-            'trail-ways': node_to_trails[node_id],
-            'road-ways': node_to_roads.get(node_id, None),
-            'degree': peak_g.degree[node_id]
+    features.append(
+        {
+            'type': 'Feature',
+            'geometry': {
+                'type': 'Point',
+                'coordinates': (trail_node['lon'], trail_node['lat']),
+            },
+            'properties': {
+                'id': node_id,
+                'type': 'trailhead' if node_to_roads.get(node_id) else 'junction',
+                **trail_node.get('tags', {}),
+                'marker-size': 'small',
+                'marker-color': '#00ff00'
+                if peak_g.degree[node_id] == 1 and not node_to_roads.get(node_id)
+                else '#ff00ff'
+                if peak_g.degree[node_id] == 2 and not node_to_roads.get(node_id)
+                else '#555555'
+                if not node_to_roads.get(node_id)
+                else '#ff0000',
+                'trail-ways': node_to_trails[node_id],
+                'road-ways': node_to_roads.get(node_id, None),
+                'degree': peak_g.degree[node_id],
+            },
         }
-    })
+    )
 
 for path in paths.values():
     a, b = path.nodes[0], path.nodes[-1]
     if not peak_g.has_edge(a, b):
         continue  # must have been pruned
-    features.append({
-        'type': 'Feature',
-        'geometry': {
-            'type': 'LineString',
-            'coordinates': path.latlons
-        },
-        'properties': {
-            'id': path.way,
-            'd_km': path.d_km,
-            **id_to_trail_way[path.way].get('tags', {}),
-            'nodes': path.nodes,
-            'stroke': '#555555',
-            'stroke-width': 2,
-            'stroke-opacity': 1
+    features.append(
+        {
+            'type': 'Feature',
+            'geometry': {'type': 'LineString', 'coordinates': path.latlons},
+            'properties': {
+                'id': path.way,
+                'd_km': path.d_km,
+                **id_to_trail_way[path.way].get('tags', {}),
+                'nodes': path.nodes,
+                'stroke': '#555555',
+                'stroke-width': 2,
+                'stroke-opacity': 1,
+            },
         }
-    })
+    )
 
 with open('data/network.geojson', 'w') as out:
     json.dump({'type': 'FeatureCollection', 'features': features}, out)
