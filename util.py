@@ -1,5 +1,7 @@
+import itertools
 from math import radians, cos, sin, asin, sqrt
-from typing import List, Tuple, TypeVar
+import math
+from typing import Iterable, List, Tuple, TypeVar, Callable
 
 
 # https://stackoverflow.com/a/4913653/388951
@@ -39,6 +41,7 @@ def pairkey(a: int, b: int) -> Tuple[int, int]:
 
 
 T = TypeVar("T")
+U = TypeVar("U")
 
 
 def splitlist(xs: List[T], delim: T) -> List[List[T]]:
@@ -61,3 +64,26 @@ def rotate_to_start(xs: List[T], desired_first: T) -> List[T]:
     """Rotate a list so that it starts with a particular element."""
     i = xs.index(desired_first)
     return xs[i:] + xs[:i]
+
+
+def powerfact(n):
+    # TODO: figure out this formula
+    total = 0
+    for i in range(1, n + 1):
+        total += math.comb(n, i) * math.factorial(i)
+    return total
+
+
+def powerset(xs):
+    return (
+        combo for r in range(len(xs) + 1) for combo in itertools.combinations(xs, r)
+    )
+
+
+def index_by(xs: Iterable[T], key: Callable[[T], U]) -> dict[U, list[T]]:
+    out: dict[U, list[T]] = {}
+    for x in xs:
+        k = key(x)
+        out.setdefault(k, [])
+        out[k].append(x)
+    return out

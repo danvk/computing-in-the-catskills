@@ -7,16 +7,9 @@ from SetCoverPy import setcover
 
 from graph import read_hiking_graph
 
-# loops = json.load(open('data/loops.json'))
-all_loops = json.load(open('data/hikes.json'))
+all_hikes = json.load(open('data/hikes.json'))
 
-# all_loops = [
-#     (d, [loop['trailhead'], *peaks, loop['trailhead']])
-#     for loop in loops
-#     for (d, peaks) in loop['cycles']
-# ]
-
-num_loops = len(all_loops)
+num_loops = len(all_hikes)
 print(f'Will consider {num_loops} total cycles')
 
 features = json.load(open('data/network+parking.geojson'))['features']
@@ -28,7 +21,7 @@ peak_id_to_idx = {f['properties']['id']: i for i, f in enumerate(peak_features)}
 
 covers = np.zeros(shape=(num_peaks, num_loops), dtype=bool)
 costs = np.zeros(shape=(num_loops,), dtype=float)
-for j, (d, loop) in enumerate(all_loops):
+for j, (d, loop) in enumerate(all_hikes):
     costs[j] = d
     for peak in loop[1:-1]:
         i = peak_id_to_idx[peak]
@@ -41,7 +34,7 @@ solver = setcover.SetCover(covers, costs)
 solution, time_used = solver.SolveSCP()
 d_km = solver.total_cost * median_cost
 chosen_loops = []
-for j, (d, loop) in enumerate(all_loops):
+for j, (d, loop) in enumerate(all_hikes):
     if solver.s[j]:
         chosen_loops.append((d, loop))
 

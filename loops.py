@@ -9,76 +9,49 @@ import math
 from tqdm import tqdm
 import networkx as nx
 
-from graph import cycle_weight, make_complete_graph, read_hiking_graph
-from osm import node_link
-
-raw_features = json.load(open('data/network+parking.geojson'))['features']
-
-# Nix these for now; they really expand the clusters which blows up the number of loops.
-features = [f for f in raw_features if f['properties'].get('type') != 'lot-to-lot']
-
-# Very carefully add in lot<->lot walks
-ok_lot_walks = [
-    {10942786419, 2947971907},  # Burnam / McKinley Hollow
-    {1075850833, 995422357},  # Spruceton / Diamond Notch
-]
-for f in raw_features:
-    p = f['properties']
-    if p.get('type') == 'lot-to-lot' and {p['from'], p['to']} in ok_lot_walks:
-        features.append(f)
-
-G: nx.Graph
-G, id_to_peak, id_to_trailhead, id_to_lot = read_hiking_graph(features)
-peak_features = [f for f in features if f['properties'].get('type') == 'high-peak']
-
-# This walk connects the Devil's Path to the Panther/Slide area, which is not desirable.
-# G.remove_edge(385488241, 385488236)
-# G.remove_edge(385488238, 385488236)
-
-# Now we have:
-# 8 10s
-# 24 12s
+from graph import make_complete_graph, read_hiking_graph
+from util import index_by
 
 
-def powerfact(n):
-    # TODO: figure out this formula
-    total = 0
-    for i in range(1, n + 1):
-        total += math.comb(n, i) * math.factorial(i)
-    return total
+def load_and_index(raw_features: list):
+    # Nix these for now; they really expand the clusters which blows up the problem.
+    features = [f for f in raw_features if f['properties'].get('type') != 'lot-to-lot']
 
-
-lot_to_peaks = {}
-peaks_to_lots = defaultdict(list)
-
-for lot_node in G.nodes():
-    if G.nodes[lot_node]['type'] != 'parking-lot':
-        continue
-
-    # Get the reachable set of non-trailhead nodes from this trailhead
-    node_to_length, node_to_path = nx.single_source_dijkstra(G, lot_node)
-    reachable_nodes = [
-        n for n in node_to_length.keys() if G.nodes[n]['type'] == 'high-peak'
+    # Very carefully add in lot<->lot walks
+    ok_lot_walks = [
+        {10942786419, 2947971907},  # Burnam / McKinley Hollow
+        {1075850833, 995422357},  # Spruceton / Diamond Notch
     ]
+    for f in raw_features:
+        p = f['properties']
+        if p.get('type') == 'lot-to-lot' and {p['from'], p['to']} in ok_lot_walks:
+            features.append(f)
 
-    if not reachable_nodes:
-        print(f'Filtered out lot {lot_node}')
-        continue
+    G, _id_to_peak, _id_to_trailhead, _id_to_lot = read_hiking_graph(features)
 
-    reachable_nodes.sort()
-    reachable_nodes = tuple(reachable_nodes)
-    lot_to_peaks[lot_node] = reachable_nodes
-    peaks_to_lots[reachable_nodes].append(lot_node)
+    lot_to_peaks = {}
+    peaks_to_lots = defaultdict(list)
 
-for lot, peaks in sorted(lot_to_peaks.items(), key=lambda x: len(x[1])):
-    print(node_link(lot), len(peaks), peaks)
-print(len(lot_to_peaks), 'lots')
+    for lot_node in G.nodes():
+        if G.nodes[lot_node]['type'] != 'parking-lot':
+            continue
 
+        # Get the reachable set of non-trailhead nodes from this trailhead
+        node_to_length, node_to_path = nx.single_source_dijkstra(G, lot_node)
+        reachable_nodes = [
+            n for n in node_to_length.keys() if G.nodes[n]['type'] == 'high-peak'
+        ]
 
-def powerset(xs):
-    return (
-        combo for r in range(len(xs) + 1) for combo in itertools.combinations(xs, r)
-    )
+        if not reachable_nodes:
+            print(f'Filtered out lot {lot_node}')
+            continue
+
+        reachable_nodes.sort()
+        reachable_nodes = tuple(reachable_nodes)
+        lot_to_peaks[lot_node] = reachable_nodes
+        peaks_to_lots[reachable_nodes].append(lot_node)
+
+    return G, peaks_to_lots
 
 
 def through_hikes_for_peak_seq(g, lots, peaks, peak_seqs):
@@ -150,64 +123,66 @@ def loop_hikes_for_peak_seq(g, lots, peaks, peak_seqs):
     return hikes
 
 
-# TODO: this could be constructed recursively for greater efficiency
-def plausible_peak_sequences(g, peaks: list[int]):
+def plausible_peak_sequences(
+    g, peaks: list[int]
+) -> list[tuple[float, tuple[int, ...]]]:
     sequences = []
     peaks = list(peaks)
+    if len(peaks) == 0:
+        return []
     if len(peaks) == 1:
         return [(0, (peaks[0],))]
 
     gp = make_complete_graph(g, peaks)
-    for peak_subset in powerset(peaks):
-        if not peak_subset:
-            continue
+    if len(peaks) == 2:
+        a, b = peaks
+        d = g.edges[a, b]['weight']
+        return [
+            (0, (a,)),
+            (0, (b,)),
+            (d, (a, b)),
+            (d, (b, a)),
+        ]
 
-        if len(peak_subset) == 1:
-            sequences.append((0, peak_subset))
-            continue
+    # You can start and end with any pair of peaks.
+    sequences: list[tuple[float, tuple[int, ...]]] = []
+    for start_peak, end_peak in itertools.product(peaks, peaks):
+        if start_peak == end_peak:
+            continue  # TODO: require start_peak < end_peak as an optimizaition
+        other_peaks = [p for p in peaks if p != start_peak and p != end_peak]
+        # might be more efficient (but tricky) to pass down gp here rather than g.
+        remaining_seqs = plausible_peak_sequences(g, other_peaks)
 
-        logging = set(peak_subset) == {
-            10010091368,
-            357574030,
-            2955311547,
-            1938215682,
-            1938201532,
-            10033501291,
-        }
-        if logging:
-            print(peak_subset)
-
-        best_d = math.inf
-        best_cycle = None
-        for cycle in itertools.permutations(peak_subset):
-            d = cycle_weight(gp, cycle)
-            if logging and cycle == (
-                10010091368,
-                357574030,
-                2955311547,
-                1938215682,
-                1938201532,
-                10033501291,
-            ):
-                print(d, cycle)
-                print(best_d, best_cycle)
-            if d < best_d:
-                best_d = d
-                best_cycle = cycle
-        all_peaks = {
-            node
-            for a, b in zip(best_cycle[:-1], best_cycle[1:])
-            for node in gp.edges[a, b]['path']
-            if g.nodes[node]['type'] == 'high-peak'
-        }
-        if logging:
-            print(all_peaks)
-            print(best_d, best_cycle)
-        if len(all_peaks) == len(peak_subset):
-            # Exclude paths that go over unexpected peaks.
-            # A more stringent check would also exclude paths that go within ~100m of
-            # unexpected peaks.
-            sequences.append((best_d, best_cycle))
+        # For each set of "inner" peaks, choose the best sequence and eliminate
+        # it if it crosses any surprise peaks.
+        by_inner_peaks = index_by(remaining_seqs, lambda ds: tuple(sorted(ds[1])))
+        for inner_peaks, inner_seqs in by_inner_peaks.items():
+            best_d = math.inf
+            best_inner_seq = None
+            for remaining_d, remaining_seq in remaining_seqs:
+                start_d = gp.edges[start_peak, remaining_seq[0]]['weight']
+                end_d = gp.edges[remaining_seq[-1], end_peak]['weight']
+                d = start_d + remaining_d + end_d
+                if d < best_d:
+                    best_d = d
+                    best_inner_seq = remaining_seq
+            if best_inner_seq is None:
+                assert len(inner_peaks) == 0
+                best_d = gp.edges[start_peak, end_peak]['weight']
+                best_inner_seq = tuple()
+            # Check for surprise peaks
+            best_seq = tuple(start_peak, *best_inner_seq, end_peak)
+            all_peaks = {
+                node
+                for a, b in zip(best_seq[:-1], best_seq[1:])
+                for node in gp.edges[a, b]['path']
+                if g.nodes[node]['type'] == 'high-peak'
+            }
+            if len(all_peaks) == len(best_seq):
+                # Exclude paths that go over unexpected peaks.
+                # A more stringent check would also exclude paths that go within ~100m of
+                # unexpected peaks.
+                sequences.append((best_d, best_seq))
     return sequences
 
 
@@ -227,6 +202,7 @@ def plausible_peak_sequences(g, peaks: list[int]):
 # plausible_peak_sequences doesn't generate any one-peak sequences
 # the_ten = (-1136, -538, 2398015279, 2426171552, 2884119551, 2884119672, 7292479776,
 #            9147145385, 9953707705, 9953729846)
+"""
 the_ten = (
     357574030,
     1938201532,
@@ -246,7 +222,7 @@ assert any(
     for _d, peaks in seqs
 )
 # 10010091368, 357574030, 2955311547, 1938215682, 1938201532, 10033501291
-
+"""
 """
 26.136381029694984 (
     10010091368, Sherrill
@@ -267,30 +243,40 @@ assert any(
 )
 """
 
-# 10 peaks / 20 lots
-# 10 peaks / 8 lots
-print('')
-hikes = []
-num_loops = 0
-num_thrus = 0
-for peaks, lots in tqdm(peaks_to_lots.items()):
-    print(len(peaks), peaks, len(lots), lots)
-    plausible_seqs = plausible_peak_sequences(G, peaks)
-    print(f'  plausible sequences: {len(plausible_seqs)}')
-    loops = loop_hikes_for_peak_seq(G, lots, peaks, plausible_seqs)
-    thrus = through_hikes_for_peak_seq(G, lots, peaks, plausible_seqs)
-    hikes += loops
-    hikes += thrus
-    print(f'  loops: {len(loops)}, thru: {len(thrus)}')
-    num_loops += len(loops)
-    num_thrus += len(thrus)
 
-with open('data/hikes.json', 'w') as out:
-    json.dump(hikes, out)
+if __name__ == '__main__':
+    G, peaks_to_lots = load_and_index(
+        json.load(open('data/network+parking.geojson'))['features']
+    )
 
-print(f'Loops: {num_loops}')
-print(f'Thrus: {num_thrus}')
-print(f'Total hikes: {num_loops + num_thrus}')
+    for peaks, lots in sorted(peaks_to_lots.items(), key=lambda x: len(x[1])):
+        print(len(lots), lots, len(peaks), peaks)
+    print(len(peaks_to_lots), 'connected clusters of peaks.')
+
+    # 10 peaks / 20 lots
+    # 10 peaks / 8 lots
+    print('')
+    hikes = []
+    num_loops = 0
+    num_thrus = 0
+    for peaks, lots in tqdm(peaks_to_lots.items()):
+        print(len(peaks), peaks, len(lots), lots)
+        plausible_seqs = plausible_peak_sequences(G, peaks)
+        print(f'  plausible sequences: {len(plausible_seqs)}')
+        loops = loop_hikes_for_peak_seq(G, lots, peaks, plausible_seqs)
+        thrus = through_hikes_for_peak_seq(G, lots, peaks, plausible_seqs)
+        hikes += loops
+        hikes += thrus
+        print(f'  loops: {len(loops)}, thru: {len(thrus)}')
+        num_loops += len(loops)
+        num_thrus += len(thrus)
+
+    with open('data/hikes.json', 'w') as out:
+        json.dump(hikes, out)
+
+    print(f'Loops: {num_loops}')
+    print(f'Thrus: {num_thrus}')
+    print(f'Total hikes: {num_loops + num_thrus}')
 
 # sample = loops_for_trailhead(G, 2955316486, [2955311547, 1938215682, 1938201532,
 # 357574030, 10033501291, 10010091368])
