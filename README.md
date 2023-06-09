@@ -6,6 +6,8 @@ Question: What's the least amount of hiking you have to do to hike all [33 of th
 
 ## Gallery of solutions
 
+### Shortest hiking distance
+
 This [set of 12 hikes][geojson-95.4] weighs in at 95.4 miles of total hiking:
 
 [![A set of 12 through hikes at 95.4 miles](/gallery/12-through-hikes-95.4-miles.png)][geojson-95.4]
@@ -27,6 +29,12 @@ Through hikes:
 8. FirBBiE Loop from Burnham Hollow to McKinley Hollow (4 peaks / 12.23 miles)
 8. The Nine from Oliverea Rd to Peekamoose Rd (9 peaks / 16.47 miles)
 8. Super Spruceton from Shaft Rd to Lane Rd (5 peaks / 17.31 miles)
+
+### Shortest hike using only loop / out-and-back hikes
+
+Best solution is 12 hikes / 104.89 miles.
+
+TODO: add image and explain this one.
 
 ## Quickstart
 
