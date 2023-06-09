@@ -144,13 +144,13 @@ def plausible_peak_sequences(
     if result is not None:
         return result
 
-    # would be really nice to eliminate this call!
+    # TODO: would be really nice to eliminate this call!
     gp = make_complete_graph(g, peaks)
 
     # You can start and end with any pair of peaks.
     for start_peak, end_peak in itertools.product(peaks, peaks):
         if start_peak == end_peak:
-            continue  # TODO: require start_peak < end_peak as an optimizaition
+            continue  # TODO: require start_peak < end_peak as an optimization
         other_peaks = [p for p in peaks if p != start_peak and p != end_peak]
         # might be more efficient (but tricky) to pass down gp here rather than g.
         remaining_seqs = plausible_peak_sequences(g, other_peaks)
@@ -195,62 +195,7 @@ def plausible_peak_sequences(
     return sequences
 
 
-# Plausible spruceton sequences: 158 / 9864100
-# Plausible subsets: 158 / 1023
-# plausible_spruceton_seqs = plausible_peak_sequences(G, spruceton_peaks)
-# print(f'Plausible spruceton sequences: {len(plausible_spruceton_seqs)} /
-# {powerfact(len(spruceton_peaks))}')
-# print(through_hikes_for_peak_seq(G, spruceton_lots, spruceton_peaks,
-#       plausible_spruceton_seqs))
-
-
-# 2955316486 6 [2955311547, 1938215682, 1938201532, 357574030, 10033501291, 10010091368]
-
 # Want to capture the idea that a "bowtie" hike should really be done as two loops.
-
-# plausible_peak_sequences doesn't generate any one-peak sequences
-# the_ten = (-1136, -538, 2398015279, 2426171552, 2884119551, 2884119672, 7292479776,
-#            9147145385, 9953707705, 9953729846)
-"""
-the_ten = (
-    357574030,
-    1938201532,
-    1938215682,
-    2882649730,
-    2882649917,
-    2955311547,
-    7978185605,
-    7982977638,
-    10010091368,
-    10033501291,
-)
-seqs = plausible_peak_sequences(G, the_ten)
-print(seqs)
-assert any(
-    peaks == (10010091368, 357574030, 2955311547, 1938215682, 1938201532, 10033501291)
-    for _d, peaks in seqs
-)
-# 10010091368, 357574030, 2955311547, 1938215682, 1938201532, 10033501291
-"""
-"""
-26.136381029694984 (
-    10010091368, Sherrill
-    357574030, ND
-    2955311547, WK
-    1938215682, SW Hunter
-    1938201532, Hunter
-    10033501291, Rusk
-)
-
-25.86459324669115 (
-    1938215682,  SW Hunter
-    1938201532,  Hunter
-    10033501291, Rusk
-    2955311547,  WK
-    357574030,  ND
-    10010091368,  Sherrill
-)
-"""
 
 
 if __name__ == '__main__':
@@ -270,7 +215,8 @@ if __name__ == '__main__':
     num_thrus = 0
     for peaks, lots in tqdm(peaks_to_lots.items()):
         print(len(peaks), peaks, len(lots), lots)
-        plausible_seqs = plausible_peak_sequences(G, peaks)
+        # Lot->Lot hikes are not interesting
+        plausible_seqs = [p for p in plausible_peak_sequences(G, peaks) if p[1]]
         print(f'  plausible sequences: {len(plausible_seqs)}')
         loops = loop_hikes_for_peak_seq(G, lots, peaks, plausible_seqs)
         thrus = through_hikes_for_peak_seq(G, lots, peaks, plausible_seqs)
@@ -286,40 +232,6 @@ if __name__ == '__main__':
     print(f'Loops: {num_loops}')
     print(f'Thrus: {num_thrus}')
     print(f'Total hikes: {num_loops + num_thrus}')
-
-# sample = loops_for_trailhead(G, 2955316486, [2955311547, 1938215682, 1938201532,
-# 357574030, 10033501291, 10010091368])
-# print(len(sample), sample)
-# sample = loops_for_trailhead(G, 7609349952, [9953707705, 9953729846, 2884119551,
-# -538, 2884119672, 2426171552, -1136, 7292479776, 2398015279])
-# sample = loops_for_trailhead(G, 212271460, [1938215682, 2882649917, 1938201532,
-# 2882649730, 7982977638, 2955311547, 10033501291, 7978185605, 357574030, 10010091368])
-# print(len(sample))
-# print(sample[0][1][0])
-# for d, cycle in sample:
-#     print(f'{d:.2f}km:', '->'.join(id_to_peak[node]['properties']['name'] +
-#                f' ({node})'
-#         for node in cycle[1:-1]))
-
-# 93 trailheads
-#  1: 16
-#  2:  6
-#  4: 42
-#  9:  7
-# 10: 22
-
-# The 9s are the ones you'd expect
-# The 10 is Spruceton + Rusk + Hunter/SW Hunter + Devil's Path
-#  these probably mostly don't make sense
-
-# Find all loops starting and ending at the same trailhead and going over at least one
-# high peak.
-
-#       986,409 sequences per 9-peak trailhead
-#     9,864,100 sequences per 10-peak trailhead
-#   108,505,111 sequences per 11-peak trailhead
-# 1,302,061,344 sequences per 12-peak trailhead
-# print(f'{total} sequences per {n}-peak trailhead')
 
 """
 This is the group of 12:

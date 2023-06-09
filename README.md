@@ -8,15 +8,14 @@ Question: What's the least amount of hiking you have to do to hike all [33 of th
 
 ### Shortest hiking distance
 
-This [set of 12 hikes][geojson-95.4] weighs in at 95.4 miles of total hiking:
+This [set of 11 hikes][geojson-95.2] weighs in at 95.2 miles of total hiking:
 
-[![A set of 12 through hikes at 95.4 miles](/gallery/12-through-hikes-95.4-miles.png)][geojson-95.4]
+[![A set of 11 through hikes at 95.2 miles](/gallery/11-through-hikes-95.2-miles.png)][geojson-95.2]
 
 Out-and-backs:
 
 1. Windham High Peak from Peck Rd (5.94 miles)
 1. Kaaterskill High Peak from Cortina Ln (6.51 miles)
-1. Rusk Mountain from Spruceton Rd (2.77 miles)
 1. Halcott Mountain from SR 42 (3.13 miles)
 1. Panther Mountain from Giant Ledge Trailhead (6.04 miles)
 1. Balsam Lake Mountain via Dry Brook Ridge (3.27 miles)
@@ -24,11 +23,11 @@ Out-and-backs:
 
 Through hikes:
 
-8. Blackhead Range from Barnum Rd to Big Hollow Rd (3 peaks / 6.98 miles)
-8. Devil's Path East from Prediger Rd to Mink Hollow Rd (4 peaks / 8.32)
-8. FirBBiE Loop from Burnham Hollow to McKinley Hollow (4 peaks / 12.23 miles)
-8. The Nine from Oliverea Rd to Peekamoose Rd (9 peaks / 16.47 miles)
-8. Super Spruceton from Shaft Rd to Lane Rd (5 peaks / 17.31 miles)
+7. Blackhead Range from Barnum Rd to Big Hollow Rd (3 peaks / 6.98 miles)
+7. Devil's Path East from Prediger Rd to Mink Hollow Rd (4 peaks / 8.32)
+7. FirBBiE Loop from Burnham Hollow to McKinley Hollow (4 peaks / 12.23 miles)
+7. The Nine from Oliverea Rd to Peekamoose Rd (9 peaks / 16.47 miles)
+7. Super Spruceton from Shaft Rd to Spruceton Rd (6 peaks / 19.85 miles)
 
 ### Shortest hike using only loop / out-and-back hikes
 
@@ -88,7 +87,7 @@ Then we can run a set cover solver to get our set of hikes directly. This [old P
 This approach is nice because it gives us more flexibility to answer variations of the problem. For example, we can only allow loop hikes or set a max distance on any one hike by filtering the set of hikes that we give the solver.
 
 [peaks]: http://catskill-3500-club.org/peaks.php
-[geojson-95.4]: https://geojson.io/#id=github:danvk/computing-in-the-catskills/blob/main/gallery/12-through-hikes-95.4-miles.geojson
+[geojson-95.2]: https://geojson.io/#id=github:danvk/computing-in-the-catskills/blob/main/gallery/11-through-hikes-95.2-miles.geojson
 [blog]: https://www.danvk.org/catskills/
 [tsp]: https://en.wikipedia.org/wiki/Travelling_salesman_problem
 [or-tools]: https://developers.google.com/optimization/routing/tsp
