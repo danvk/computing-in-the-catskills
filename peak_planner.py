@@ -1,4 +1,9 @@
-"""I need to hike a set of peaks. What are my options?"""
+"""I need to hike a set of peaks. What are my options?
+
+Sample invocation:
+
+    poetry run python peak_planner.py H,BD,TC,C,Pl,Su,W,SW,KHP,Tw,IH,WHP
+"""
 
 import json
 import sys
