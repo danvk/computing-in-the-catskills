@@ -8,14 +8,18 @@ from SetCoverPy import setcover
 from graph import get_lot_index, get_peak_index, read_hiking_graph
 
 
-def find_optimal_hikes_subset_cover(features: list, hikes: list):
+def find_optimal_hikes_subset_cover(
+    features: list, hikes: list, peak_osm_ids: list[int] | None = None
+):
     G = read_hiking_graph(features)
     id_to_peak = get_peak_index(features)
     id_to_lot = get_lot_index(features)
     peak_features = [*id_to_peak.values()]
+    if not peak_osm_ids:
+        peak_osm_ids = [f['properties']['id'] for f in peak_features]
     num_loops = len(hikes)
-    num_peaks = len(peak_features)
-    peak_id_to_idx = {f['properties']['id']: i for i, f in enumerate(peak_features)}
+    num_peaks = len(peak_osm_ids)
+    peak_id_to_idx = {osm_id: i for i, osm_id in enumerate(peak_osm_ids)}
 
     covers = np.zeros(shape=(num_peaks, num_loops), dtype=bool)
     costs = np.zeros(shape=(num_loops,), dtype=float)
@@ -23,8 +27,9 @@ def find_optimal_hikes_subset_cover(features: list, hikes: list):
         cost, loop = hike[:2]
         costs[j] = cost
         for peak in loop[1:-1]:
-            i = peak_id_to_idx[peak]
-            covers[i, j] = True
+            if peak in peak_id_to_idx:
+                i = peak_id_to_idx[peak]
+                covers[i, j] = True
 
     median_cost = np.median(costs)
     costs = costs / median_cost
@@ -38,7 +43,7 @@ def find_optimal_hikes_subset_cover(features: list, hikes: list):
             chosen_hikes.append(hike)
 
     total_d_km = 0
-    tsp_fs = [*peak_features]
+    tsp_fs = [f for f in peak_features if f['properties']['id'] in peak_id_to_idx]
     for f in tsp_fs:
         f['properties']['marker-size'] = 'small'
     for hike in chosen_hikes:
