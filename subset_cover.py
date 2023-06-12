@@ -5,12 +5,14 @@ import numpy as np
 import networkx as nx
 from SetCoverPy import setcover
 
-from graph import read_hiking_graph
+from graph import get_lot_index, get_peak_index, read_hiking_graph
 
 
 def find_optimal_hikes_subset_cover(features: list, hikes: list):
-    G, id_to_peak, _id_to_trailhead, id_to_lot = read_hiking_graph(features)
-    peak_features = [f for f in features if f['properties'].get('type') == 'high-peak']
+    G = read_hiking_graph(features)
+    id_to_peak = get_peak_index(features)
+    id_to_lot = get_lot_index(features)
+    peak_features = [*id_to_peak.values()]
     num_loops = len(hikes)
     num_peaks = len(peak_features)
     peak_id_to_idx = {f['properties']['id']: i for i, f in enumerate(peak_features)}

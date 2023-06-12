@@ -6,7 +6,7 @@ import json
 from tqdm import tqdm
 import networkx as nx
 
-from graph import read_hiking_graph
+from graph import get_trailhead_index, read_hiking_graph
 from osm import OsmElement, closest_point_on_trail, element_centroid, node_link
 from util import catskills_haversine
 
@@ -20,8 +20,8 @@ id_to_trail_node = {el['id']: el for el in raw_trails if el['type'] == 'node'}
 # Found 120 trailheads
 print(f'Found {len(raw_trailheads)} trailheads in network.geojson')
 
-G: nx.Graph
-G, id_to_peak, id_to_trailhead, _ = read_hiking_graph(features)
+G = read_hiking_graph(features)
+id_to_trailhead = get_trailhead_index(features)
 
 # We only want trailheads where you can hike from a trailhead to a high peak
 # without walking over another trailhead.

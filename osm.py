@@ -155,3 +155,40 @@ def element_link(el: OsmElement):
     elif el['type'] == 'way':
         return way_link(el['id'], el.get('tags', {}).get('name'))
     raise NotImplementedError('Links to relations are not implemented.')
+
+
+PEAKS = [
+    ('S', 2426171552, 'Slide Mountain'),
+    ('H', 1938201532, 'Hunter Mountain'),
+    ('BD', 2473476912, 'Blackdome Mountain'),
+    ('BH', 2473476747, 'Blackhead Mountain'),
+    ('TC', 2473476927, 'Thomas Cole Mountain'),
+    ('We', 2955311547, 'West Kill Mountain'),
+    ('C', 2884119551, 'Cornell Mountain'),
+    ('Ta', 7292479776, 'Table Mountain'),
+    ('Pk', 2398015279, 'Peekamoose Mountain'),
+    ('Pl', 2882649917, 'Plateau Mountain'),
+    ('Su', 2882649730, 'Sugarloaf Mountain'),
+    ('W', 2884119672, 'Wittenberg Mountain'),
+    ('SW', 1938215682, 'Southwest Hunter'),
+    ('L', -1136, 'Lone Mountain'),
+    ('BL', 2897919022, 'Balsam Lake Mountain'),
+    ('P', 9147145385, 'Panther Mountain'),
+    ('BI', 357548762, 'Big Indian Mtn Mountain'),
+    ('Fr', 9953707705, 'Friday Mountain'),
+    ('Ru', 10033501291, 'Rusk Mountain'),
+    ('KHP', 9785950126, 'Kaaterskill High Peak'),
+    ('Tw', 7982977638, 'Twin Mountain'),
+    ('BC', 9953729846, 'Balsam Cap Mountain'),
+    ('Fi', 357559622, 'Fir Mountain'),
+    ('ND', 357574030, 'North Dome Mountain'),
+    ('B', 2845338212, 'Balsam Mountain'),
+    ('Bp', 212348771, 'Bearpen Mountain'),
+    ('E', 357557378, 'Eagle Mountain'),
+    ('IH', 7978185605, 'Indian Head Mountain'),
+    ('Sh', 10010091368, 'Sherrill Mountain'),
+    ('V', 10010051278, 'Vly Mountain'),
+    ('WHP', 2426236522, 'Windham High Peak'),
+    ('Ha', 357563196, 'Halcott Mountain'),
+    ('Ro', -538, 'Rocky Mountain'),
+]

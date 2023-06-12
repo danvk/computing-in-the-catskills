@@ -6,13 +6,22 @@ from typing import List
 
 import networkx as nx
 
-from graph import cycle_weight, make_complete_graph, read_hiking_graph, scale_graph
+from graph import (
+    cycle_weight,
+    get_lot_index,
+    get_peak_index,
+    make_complete_graph,
+    read_hiking_graph,
+    scale_graph,
+)
 from ort_wrapper import solve_tsp_with_or_tools
 from util import splitlist
 
 features = json.load(open('data/network+parking.geojson'))['features']
-G, id_to_peak, _, id_to_lot = read_hiking_graph(features)
-peak_features = [f for f in features if f['properties'].get('type') == 'high-peak']
+G = read_hiking_graph(features)
+id_to_peak = get_peak_index(features)
+id_to_lot = get_lot_index(features)
+peak_features = [*id_to_peak.values()]
 
 print(f'Input graph: {G.number_of_nodes()} nodes / {G.number_of_edges()} edges')
 print(f'  Peaks: {len(id_to_peak)}')

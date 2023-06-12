@@ -27,7 +27,7 @@ def load_and_index(raw_features: list):
         if p.get('type') == 'lot-to-lot' and {p['from'], p['to']} in ok_lot_walks:
             features.append(f)
 
-    G, _id_to_peak, _id_to_trailhead, _id_to_lot = read_hiking_graph(features)
+    G = read_hiking_graph(features)
 
     lot_to_peaks = {}
     peaks_to_lots = defaultdict(list)

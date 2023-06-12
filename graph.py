@@ -37,21 +37,27 @@ def scale_graph(g, factor):
     return scaled_g
 
 
+def get_index_for_type(features: list, type: str) -> dict[int, any]:
+    type_features = [f for f in features if f['properties'].get('type') == type]
+    return {f['properties']['id']: f for f in type_features}
+
+
+def get_peak_index(features: list):
+    return get_index_for_type(features, 'high-peak')
+
+
+def get_lot_index(features: list):
+    return get_index_for_type(features, 'parking-lot')
+
+
+def get_trailhead_index(features: list):
+    return get_index_for_type(features, 'trailhead')
+
+
 def read_hiking_graph(
     features,
 ) -> tuple[nx.Graph, dict[int, any], dict[int, any], dict[int, any]]:
-    peak_features = [f for f in features if f['properties'].get('type') == 'high-peak']
-    id_to_peak = {f['properties']['id']: f for f in peak_features}
-    id_to_lot = {
-        f['properties']['id']: f
-        for f in features
-        if f['properties'].get('type') == 'parking-lot'
-    }
-    id_to_trailhead = {
-        f['properties']['id']: f
-        for f in features
-        if f['properties'].get('type') == 'trailhead'
-    }
+    id_to_peak = get_peak_index(features)
 
     G = nx.Graph()
     for f in features:
@@ -65,13 +71,8 @@ def read_hiking_graph(
         G.add_edge(a, b, weight=d_km, feature=f)
 
     for n in G.nodes():
-        if n in id_to_peak:
-            G.nodes[n]['type'] = 'high-peak'
-        elif n in id_to_lot:
-            G.nodes[n]['type'] = 'parking-lot'
-        elif n in id_to_trailhead:
-            G.nodes[n]['type'] = 'trailhead'
-        else:
-            G.nodes[n]['type'] = 'junction'
+        f = G.nodes[n].get('feature', {})
+        p = f.get('properties', {})
+        G.nodes[n]['type'] = p.get('type', 'junction')
 
-    return G, id_to_peak, id_to_trailhead, id_to_lot
+    return G
