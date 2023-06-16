@@ -18,3 +18,46 @@ def test_find_path():
 
     path = find_path(way, 10741871039, 213833732)
     assert path == [10741871039, 213833734, 213833732]
+
+    # With multiple paths between two nodes within a way, pick the shorter one.
+    way_with_dupe_nodes = {
+        'type': 'way',
+        'id': 287207779,
+        'nodes': [
+            2908399218,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            2908399438,
+            7,
+            8,
+            9,
+            2908399218,
+        ],
+    }
+    path = find_path(way_with_dupe_nodes, 2908399438, 2908399218)
+    assert path == [2908399438, 7, 8, 9, 2908399218]
+
+    way_with_dupe_nodes = {
+        'type': 'way',
+        'id': 287207779,
+        'nodes': [
+            2908399218,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            2908399438,
+            7,
+            8,
+            9,
+            2908399438,
+        ],
+    }
+    path = find_path(way_with_dupe_nodes, 2908399438, 2908399438)
+    assert path == [2908399438, 7, 8, 9, 2908399438]

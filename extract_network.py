@@ -85,6 +85,9 @@ for el in trail_ways:
 print(f'Notable nodes: {len(notable_nodes)}')
 print(f'Trailhead nodes: {len(trailhead_nodes)}')
 
+assert 2908399218 in notable_nodes
+assert 2908399438 in notable_nodes
+
 # Notable nodes: 15406
 # Trailhead nodes: 2077
 

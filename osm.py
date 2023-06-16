@@ -49,8 +49,29 @@ def dedupe_ways(ways_with_dupes: Iterable[OsmWay]):
 def find_path(way: OsmWay, a: int, b: int) -> List[int]:
     """Find the subsequence of nodes between a and b, raising if there is none."""
     nodes = way['nodes']
-    i = nodes.index(a)
-    j = nodes.index(b)
+    ais = [i for i, v in enumerate(nodes) if v == a]
+    bis = [i for i, v in enumerate(nodes) if v == b]
+    assert ais and bis
+    if len(ais) == 1 and len(bis) == 1:
+        i = ais[0]
+        j = bis[0]
+    elif len(ais) == 2 and len(bis) == 1:
+        j = bis[0]
+        if abs(ais[0] - j) < abs(ais[1] - j):
+            i = ais[0]
+        else:
+            i = ais[1]
+    elif len(ais) == 1 and len(bis) == 2:
+        i = ais[0]
+        if abs(bis[0] - i) < abs(bis[1] - i):
+            j = bis[0]
+        else:
+            j = bis[1]
+    elif len(ais) == 2 and a == b:
+        i = ais[0]
+        j = ais[1]
+    else:
+        raise ValueError(f'Too complicated! {way["id"]} / {a} / {b}')
     if i < j:
         return nodes[i : j + 1]
     if j == 0:
