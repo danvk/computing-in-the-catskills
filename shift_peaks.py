@@ -7,18 +7,22 @@ This script shifts the peaks to use nearby nodes that are on trails.
 
 from collections import Counter, defaultdict
 import json
-from typing import List
 
 from osm import OsmElement, OsmNode, closest_point_on_trail
 
-peak_nodes: List[OsmNode] = json.load(open('data/peaks-3500.json'))['elements']
+peak_nodes: list[OsmNode] = json.load(open('data/peaks-3500.json'))['elements']
 assert len(peak_nodes) == 33
 
-alternate_peak_nodes: List[OsmNode] = json.load(open('data/alternate-peaks.json'))[
+alternate_peak_nodes: list[OsmNode] = json.load(open('data/alternate-peaks.json'))[
     'elements'
 ]
+assert len(alternate_peak_nodes) == 4
+for node in alternate_peak_nodes:
+    node['tags']['alternate'] = True
 
-trail_elements: List[OsmElement] = json.load(open('data/combined-trails.json'))[
+peak_nodes += alternate_peak_nodes
+
+trail_elements: list[OsmElement] = json.load(open('data/combined-trails.json'))[
     'elements'
 ]
 node_to_trails = defaultdict(list)
@@ -29,7 +33,7 @@ for el in trail_ways:
 trail_nodes = {el['id']: el for el in trail_elements if el['type'] == 'node'}
 
 
-new_peaks: List[OsmNode] = []
+new_peaks: list[OsmNode] = []
 for peak in peak_nodes:
     name = peak['tags']['name']
     peak_id = peak['id']
@@ -63,6 +67,7 @@ for peak in peak_nodes:
     # Must be an un-trailed peak; leave it as-is.
     peak['tags']['connected'] = False
     new_peaks.append(peak)
+    print(f'Disconnected peak ({pt_m} m from {pt_node}): {peak}')
 
 counts = Counter(peak['tags']['connected'] for peak in new_peaks)
 
@@ -70,7 +75,7 @@ print('Peaks:')
 print(f' Connected: {counts[True]}')
 print(f' Disconnected: {counts[False]}')
 
-assert len(new_peaks) == 33
+assert len(new_peaks) == 33 + 4
 with open('data/peaks-connected.json', 'w') as out:
     json.dump(
         {

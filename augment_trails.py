@@ -98,6 +98,12 @@ for node_id in detached_nodes:
     ]
     assert len(node_ways) == 1
     node_way = node_ways[0]
+    if (
+        node_way['tags']['source-file']
+        == 'data/additional-trails/dry-brook-true-summit.geojson'
+    ):
+        # this is just a spur to the true summit; it can be detached.
+        continue
     way_id = node_way['id']
     node = osm_nodes[node_id]
     is_start_node = node_id == node_way['nodes'][0]
@@ -106,8 +112,7 @@ for node_id in detached_nodes:
     other_ways = [way for way in osm_ways if way['id'] != way_id]
     coords = (node['lon'], node['lat'])
     d, closest_node = closest_point_on_trail(coords, other_ways, osm_nodes)
-    assert closest_node['id'] not in node_way['nodes']
-    assert d < 100, f'{coords} is {d} meters from {closest_node}'
+    assert d < 80, f'{coords} is {d} meters from {closest_node}'
 
     if is_end_node:
         node_way['nodes'].append(closest_node['id'])
