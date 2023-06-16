@@ -54,7 +54,7 @@ for peak in peak_nodes:
     pt_m, pt_node = closest_point_on_trail(
         (peak['lon'], peak['lat']), trail_ways, trail_nodes
     )
-    if pt_m < 53:
+    if pt_m < 53:  # The Mill Brook Ridge peak node is 52.6m from the trail.
         pt_node['tags'] = {
             **peak['tags'],
             'original_node': peak_id,

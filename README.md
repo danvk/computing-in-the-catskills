@@ -102,6 +102,9 @@ The file `data/peaks-3500.json` is a hand-edited version of `data/peaks.json`. T
     poetry run python shift_peaks.py
     # produces data/peaks-connected.json
 
+Next we produce the preliminary `network.geojson` file, which connects trailheads to peaks via trails:
+
+    poetry run python extract_network.py
 
 [peaks]: http://catskill-3500-club.org/peaks.php
 [geojson-95.2]: https://geojson.io/#id=github:danvk/computing-in-the-catskills/blob/main/gallery/11-through-hikes-95.2-miles.geojson
