@@ -13,7 +13,7 @@ This outputs a list of notable nodes and the paths between them.
 from collections import Counter, defaultdict
 from dataclasses import dataclass
 import json
-from typing import Dict, List, Set, Tuple, Union
+from typing import Dict, List, Set, Tuple
 
 import networkx as nx
 
@@ -62,6 +62,7 @@ for el in road_ways:
 # 1. High peaks
 notable_nodes: Dict[int, OsmElement] = {node['id']: node for node in peak_nodes}
 trailhead_nodes: Dict[int, OsmElement] = {}
+assert len(notable_nodes) == 37
 
 # 2. Junction of 2+ trails
 for node_id, trails in node_to_trails.items():

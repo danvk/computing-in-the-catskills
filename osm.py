@@ -120,7 +120,7 @@ def way_length(nodes: list[int], id_to_node: Dict[int, OsmNode]) -> float:
     )
 
 
-CATSKILLS_BBOX = (41.813, -74.652, 42.352, -73.862)
+CATSKILLS_BBOX = (41.813, -74.855, 42.352, -73.862)
 
 
 def is_in_catskills(lon: float, lat: float) -> bool:
