@@ -10,14 +10,22 @@ A node is notable if:
 This outputs a list of notable nodes and the paths between them.
 """
 
-from collections import defaultdict
+from collections import Counter, defaultdict
 from dataclasses import dataclass
 import json
 from typing import Dict, List, Set, Tuple, Union
 
 import networkx as nx
 
-from osm import OsmElement, OsmNode, dedupe_ways, find_path, is_in_catskills
+from osm import (
+    OsmElement,
+    OsmNode,
+    dedupe_ways,
+    find_path,
+    is_in_catskills,
+    node_link,
+    way_link,
+)
 from util import haversine, pairkey
 
 peak_nodes: List[OsmNode] = json.load(open('data/peaks-connected.json'))['elements']
@@ -65,6 +73,14 @@ for node_id, trails in node_to_trails.items():
     if node_id in node_to_roads:
         trailhead_nodes[node_id] = node
 
+# 3. Nodes that appear twice in a way (i.e. a loop / lollipop)
+for el in trail_ways:
+    node_counts = Counter(el['nodes'])
+    for node_id, count in node_counts.items():
+        if count >= 2:
+            print(f'{node_link(node_id)} appears 2+ times in {way_link(el["id"])}')
+            notable_nodes[node_id] = trail_nodes[node_id]
+
 print(f'Notable nodes: {len(notable_nodes)}')
 print(f'Trailhead nodes: {len(trailhead_nodes)}')
 
@@ -89,7 +105,7 @@ for way in trail_ways:
     for a, b in zip(nodes[:-1], nodes[1:]):
         # At least one node must be notable; they can't both be trailheads.
         if a in notable_nodes or b in notable_nodes:
-            key = (a, b) if a < b else (b, a)
+            key = pairkey(a, b)
             connections[key].append(id)
 
 print(f'Connections: {len(connections)}')
@@ -130,12 +146,10 @@ class Trail:
 # - extract the sequence of coordinates
 # - pick the shorter one (where relevant)
 # - record whether it's trail/trail or road/trail
-paths: Dict[Tuple[int, int], Trail] = {}
-ab: Tuple[int, int]
+paths: list[Trail] = []
 for a, b in peak_g.edges():
     key = pairkey(a, b)
     way_ids = connections[key]
-    best: Union[Trail, None] = None
     for way_id in way_ids:
         # Find the subsequence of nodes and calculate a distance
         way = id_to_trail_way[way_id]
@@ -149,17 +163,15 @@ for a, b in peak_g.edges():
             haversine(alon, alat, blon, blat)
             for (alon, alat), (blon, blat) in zip(latlons[:-1], latlons[1:])
         )
-        if not best or d_km < best.d_km:
-            best = Trail(
+        paths.append(
+            Trail(
                 d_km=d_km,
                 way=way_id,
                 nodes=nodes,
                 latlons=latlons,
             )
-    assert key not in paths
-    assert best
-    paths[key] = best
-    peak_g.edges[a, b]['weight'] = best.d_km
+        )
+    # peak_g.edges[a, b]['weight'] = best.d_km
 
 # Repeat until convergence:
 # - Remove all nodes with degree 1 that aren't peaks or trailheads
@@ -237,7 +249,7 @@ for node_id in peak_g.nodes():
         }
     )
 
-for path in paths.values():
+for path in paths:
     a, b = path.nodes[0], path.nodes[-1]
     if not peak_g.has_edge(a, b):
         continue  # must have been pruned
