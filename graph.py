@@ -58,7 +58,9 @@ def read_hiking_graph(
     features,
 ) -> nx.Graph:
     id_to_peak = get_peak_index(features)
-    id_to_feature = {f['properties']['id']: f for f in features}
+    id_to_feature = {
+        f['properties']['id']: f for f in features if 'id' in f['properties']
+    }
 
     G = nx.Graph()
     for f in features:
