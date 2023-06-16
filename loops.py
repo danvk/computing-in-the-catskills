@@ -12,19 +12,26 @@ import networkx as nx
 from graph import make_complete_graph, read_hiking_graph
 from util import index_by
 
+bad_lot_walks = [
+    # {1273010086, 1273001263},
+    # {9217245722, 1273010086},
+    {385488241, 385488236},
+    {385488238, 385488236},
+]
+
 
 def load_and_index(raw_features: list):
     # Nix these for now; they really expand the clusters which blows up the problem.
     features = [f for f in raw_features if f['properties'].get('type') != 'lot-to-lot']
 
     # Very carefully add in lot<->lot walks
-    ok_lot_walks = [
-        {10942786419, 2947971907},  # Burnam / McKinley Hollow
-        {1075850833, 995422357},  # Spruceton / Diamond Notch
-    ]
+    # ok_lot_walks = [
+    #    {10942786419, 2947971907},  # Burnam / McKinley Hollow
+    #    {1075850833, 995422357},  # Spruceton / Diamond Notch
+    # ]
     for f in raw_features:
         p = f['properties']
-        if p.get('type') == 'lot-to-lot' and {p['from'], p['to']} in ok_lot_walks:
+        if p.get('type') == 'lot-to-lot' and {p['from'], p['to']} not in bad_lot_walks:
             features.append(f)
 
     G = read_hiking_graph(features)
