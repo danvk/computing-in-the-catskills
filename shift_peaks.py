@@ -54,7 +54,7 @@ for peak in peak_nodes:
     pt_m, pt_node = closest_point_on_trail(
         (peak['lon'], peak['lat']), trail_ways, trail_nodes
     )
-    if pt_m < 30:
+    if pt_m < 53:
         pt_node['tags'] = {
             **peak['tags'],
             'original_node': peak_id,

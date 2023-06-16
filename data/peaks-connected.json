@@ -185,7 +185,7 @@
       }
     },
     {
-      "id": -6683,
+      "id": -6726,
       "type": "node",
       "lat": 41.9692,
       "lon": -74.39,
@@ -240,7 +240,7 @@
       }
     },
     {
-      "id": -6085,
+      "id": -6128,
       "type": "node",
       "lat": 41.97278,
       "lon": -74.37275,
@@ -316,7 +316,7 @@
       }
     },
     {
-      "id": -5212,
+      "id": -5255,
       "type": "node",
       "lat": 42.24588038434422,
       "lon": -74.44844221707307,
@@ -606,10 +606,10 @@
       }
     },
     {
+      "id": -3421,
       "type": "node",
-      "id": 357583100,
-      "lat": 42.1684222,
-      "lon": -74.094583,
+      "lat": 42.16869,
+      "lon": -74.0947,
       "tags": {
         "ele": "1052",
         "gnis:county_id": "039",
@@ -620,37 +620,43 @@
         "natural": "peak",
         "wikidata": "Q34831581",
         "alternate": true,
-        "connected": false
+        "original_node": 357583100,
+        "original_d_m": 31.3,
+        "connected": true
       }
     },
     {
       "type": "node",
-      "id": 2897869334,
-      "lat": 42.0523606,
-      "lon": -74.6329273,
+      "id": 2897869318,
+      "lat": 42.0528302,
+      "lon": -74.6330051,
       "tags": {
         "ele": "1080",
         "name": "Millbrook Ridge",
         "natural": "peak",
         "alternate": true,
-        "connected": false
+        "original_node": 2897869334,
+        "original_d_m": 52.61,
+        "connected": true
       }
     },
     {
+      "id": -1317,
       "type": "node",
-      "id": 4953805629,
-      "lat": 42.1130364,
-      "lon": -74.6041347,
+      "lat": 42.11282,
+      "lon": -74.60416,
       "tags": {
         "ele": "1058",
         "name": "Dry Brook Ridge",
         "natural": "peak",
         "alternate": true,
-        "connected": false
+        "original_node": 4953805629,
+        "original_d_m": 24.15,
+        "connected": true
       }
     },
     {
-      "id": -5503,
+      "id": -5546,
       "type": "node",
       "lat": 42.02337,
       "lon": -74.52558,
