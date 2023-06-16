@@ -164,6 +164,7 @@ for a, b in peak_g.edges():
 # Repeat until convergence:
 # - Remove all nodes with degree 1 that aren't peaks or trailheads
 # - "Inline" all nodes with degree 2 that aren't peaks or trailheads
+"""
 while True:
     any_changed = False
 
@@ -185,6 +186,7 @@ while True:
 
 print('After pruning:')
 print(f'nodes: {peak_g.number_of_nodes()}, edges: {peak_g.number_of_edges()}')
+"""
 
 features = []
 for node_id in peak_g.nodes():
@@ -202,7 +204,7 @@ for node_id in peak_g.nodes():
                     'type': 'high-peak',
                     **peak_node['tags'],
                     'marker-color': '#0000ff',
-                    'marker-size': 'large',
+                    'marker-size': 'medium',
                     'degree': peak_g.degree[node_id],
                 },
             }
