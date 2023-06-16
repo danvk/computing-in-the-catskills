@@ -29,9 +29,11 @@ def nextid():
     return ID
 
 
-elements: List[OsmElement] = []
+elements: list[OsmElement] = []
+detached_nodes: set[str] = set()
 
 for file in files:
+    print(f'Adding {file}...')
     fc = json.load(open(file))
     assert fc['type'] == 'FeatureCollection'
     features = fc['features']
@@ -43,33 +45,75 @@ for file in files:
     # Force the trail to be connected by adding the closest nodes from other
     # trails/roads on either end.
     d, start_node = closest_point_on_trail(coords[0][:2], osm_ways, osm_nodes)
-    assert d < 50
+    if d >= 50:
+        print(f'Warning: {coords[0][:2]} is {d} meters from {start_node} for {file}')
+        start_node = None
 
     d, end_node = closest_point_on_trail(coords[-1][:2], osm_ways, osm_nodes)
-    assert d < 50, f'{coords[-1][:2]} is {d} meters from {end_node}'
+    if d >= 50:
+        print(f'Warning: {coords[-1][:2]} is {d} meters from {end_node} for {file}')
+        end_node = None
+
+    assert start_node or end_node
 
     nodes: List[OsmNode] = [
-        start_node,
+        *([start_node] if start_node else []),
         *[
             {'id': nextid(), 'type': 'node', 'lat': lat, 'lon': lon}
             for (lon, lat, _) in coords
         ],
-        end_node,
+        *([end_node] if end_node else []),
     ]
 
     elements += nodes
-    elements.append(
-        {
-            'id': nextid(),
-            'type': 'way',
-            'nodes': [n['id'] for n in nodes],
-            'tags': {
-                'highway': 'path',
-                'informal': 'yes',
-                **f['properties'],
-            },
-        }
-    )
+    new_way = {
+        'id': nextid(),
+        'type': 'way',
+        'nodes': [n['id'] for n in nodes],
+        'tags': {
+            'highway': 'path',
+            'informal': 'yes',
+            'source-file': file,
+            **f['properties'],
+        },
+    }
+    elements.append(new_way)
+
+    # this allows additional trails to connect with each other
+    osm_ways.append(new_way)
+    for node in nodes:
+        if node['id'] not in osm_nodes:
+            osm_nodes[node['id']] = node
+
+    if not start_node:
+        detached_nodes.add(nodes[0]['id'])
+
+    if not end_node:
+        detached_nodes.add(nodes[-1]['id'])
+
+print(f'Remaining detached nodes: {detached_nodes}')
+for node_id in detached_nodes:
+    node_ways = [
+        way for way in elements if way['type'] == 'way' and node_id in way['nodes']
+    ]
+    assert len(node_ways) == 1
+    node_way = node_ways[0]
+    way_id = node_way['id']
+    node = osm_nodes[node_id]
+    is_start_node = node_id == node_way['nodes'][0]
+    is_end_node = node_id == node_way['nodes'][-1]
+    assert is_start_node or is_end_node
+    other_ways = [way for way in osm_ways if way['id'] != way_id]
+    coords = (node['lon'], node['lat'])
+    d, closest_node = closest_point_on_trail(coords, other_ways, osm_nodes)
+    assert closest_node['id'] not in node_way['nodes']
+    assert d < 100, f'{coords} is {d} meters from {closest_node}'
+
+    if is_end_node:
+        node_way['nodes'].append(closest_node['id'])
+    else:
+        node_way['nodes'].insert(0, closest_node['id'])
+    print(f'Reattached {node_id} to {closest_node["id"]} @ {d} m')
 
 with open('data/additional-trails.json', 'w') as out:
     json.dump({'elements': elements}, out, indent=2)
