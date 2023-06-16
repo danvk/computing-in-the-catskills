@@ -56,8 +56,9 @@ def get_trailhead_index(features: list):
 
 def read_hiking_graph(
     features,
-) -> tuple[nx.Graph, dict[int, any], dict[int, any], dict[int, any]]:
+) -> nx.Graph:
     id_to_peak = get_peak_index(features)
+    id_to_feature = {f['properties']['id']: f for f in features}
 
     G = nx.Graph()
     for f in features:
@@ -71,7 +72,8 @@ def read_hiking_graph(
         G.add_edge(a, b, weight=d_km, feature=f)
 
     for n in G.nodes():
-        f = G.nodes[n].get('feature', {})
+        f = id_to_feature[n]
+        G.nodes[n]['feature'] = f
         p = f.get('properties', {})
         G.nodes[n]['type'] = p.get('type', 'junction')
 

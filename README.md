@@ -105,6 +105,14 @@ The file `data/peaks-3500.json` is a hand-edited version of `data/peaks.json`. T
 Next we produce the preliminary `network.geojson` file, which connects trailheads to peaks via trails:
 
     poetry run python extract_network.py
+    # produces data/network.geojson
+
+This script also removes lots of trails that don't connect to a high peak. A "trailhead" is a node where the road network and the trail network meet. It might be on private land, or it might be in a residential area where you can't park. For that reason it's better to start and end hikes with parking lots:
+
+    poetry run python parking_lots.py
+    # produces data/network+parking.geojson
+
+This is the key file that `loops.py`, `tsp.py` and `subset_cover.py` work off of.
 
 [peaks]: http://catskill-3500-club.org/peaks.php
 [geojson-95.2]: https://geojson.io/#id=github:danvk/computing-in-the-catskills/blob/main/gallery/11-through-hikes-95.2-miles.geojson
