@@ -1,17 +1,14 @@
 #!/usr/bin/env python
 """Augment OSM trail with a few extra bushwhacks."""
 
+from glob import glob
 import json
 from typing import List
 
 from osm import OsmElement, OsmNode, closest_point_on_trail
 
-files = [
-    'data/balsam-cap-to-table.geojson',
-    'data/slide-cornell-to-friday.geojson',
-    'data/north-dome-to-devils-path.geojson',
-    'data/burnham-hollow-fir.geojson',
-]
+files = glob('data/additional-trails/*.geojson')
+print(f'Loading additional trails from {len(files)}: {files}')
 
 
 trails_elements = json.load(open('data/trails.json'))['elements']

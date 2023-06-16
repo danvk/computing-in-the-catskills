@@ -14,6 +14,10 @@ from osm import OsmElement, OsmNode, closest_point_on_trail
 peak_nodes: List[OsmNode] = json.load(open('data/peaks-3500.json'))['elements']
 assert len(peak_nodes) == 33
 
+alternate_peak_nodes: List[OsmNode] = json.load(open('data/alternate-peaks.json'))[
+    'elements'
+]
+
 trail_elements: List[OsmElement] = json.load(open('data/combined-trails.json'))[
     'elements'
 ]

@@ -1,0 +1,13 @@
+// This adds in the three alternate peaks
+[out:json][timeout:25];
+(
+  node(id:
+    2897869334,  // Mill Brook Ridge
+    4953805629,  // Dry Brook Ridge
+    10126858006,  // South Doubletop
+    357583100  // Roundtop
+  );
+);
+out body;
+>;
+out skel qt;

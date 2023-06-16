@@ -43,10 +43,7 @@ TODO: add image and explain this one.
     # Find the minimal set of hikes
     poetry run python subset_cover.py
 
-To regenerate data:
-
-    for query in queries/*.txt; poetry run python run_overpass_query.py $query
-    # TODO: reconstruct steps to create network.geojson
+To regenerate data, see below.
 
 ## Notes on the problem
 
@@ -85,6 +82,26 @@ To answer the hiking question using a Set Cover solver, we first need to generat
 Then we can run a set cover solver to get our set of hikes directly. This [old Python repo][SetCoverPy] works great. It's very fast compared to the TSP solver (<1s vs. minutes to hours) and finds equally good solutions.
 
 This approach is nice because it gives us more flexibility to answer variations of the problem. For example, we can only allow loop hikes or set a max distance on any one hike by filtering the set of hikes that we give the solver.
+
+## Data ingestion flow
+
+Pull down data from OSM using the Overpass API:
+
+    for query in queries/*.txt; poetry run python run_overpass_query.py $query
+
+Next, augment the trails with some key bushwhacks that aren't in OSM:
+
+    poetry run python augment_trails.py
+    # produces data/additional-trails.json (just the extra bushwhacks) and
+    #          data/combined-trails.json (all the trails)
+
+This will create fake OSM node and way IDs. These are all negative numbers to distinguish them from real IDs.
+
+The file `data/peaks-3500.json` is a hand-edited version of `data/peaks.json`. The nodes for peaks in OSM tend not to be on trails and in some cases (Vly) they are actually quite far off. The next step is to make a version of the peaks that are connected to the trail graph:
+
+    poetry run python shift_peaks.py
+    # produces data/peaks-connected.json
+
 
 [peaks]: http://catskill-3500-club.org/peaks.php
 [geojson-95.2]: https://geojson.io/#id=github:danvk/computing-in-the-catskills/blob/main/gallery/11-through-hikes-95.2-miles.geojson

@@ -1,0 +1,62 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.60.6 e2dc3e5b",
+  "osm3s": {
+    "timestamp_osm_base": "2023-06-16T16:18:44Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 357583100,
+  "lat": 42.1684222,
+  "lon": -74.0945830,
+  "tags": {
+    "ele": "1052",
+    "gnis:county_id": "039",
+    "gnis:created": "01/23/1980",
+    "gnis:feature_id": "963044",
+    "gnis:state_id": "36",
+    "name": "Roundtop Mountain",
+    "natural": "peak",
+    "wikidata": "Q34831581"
+  }
+},
+{
+  "type": "node",
+  "id": 2897869334,
+  "lat": 42.0523606,
+  "lon": -74.6329273,
+  "tags": {
+    "ele": "1080",
+    "name": "Millbrook Ridge",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 4953805629,
+  "lat": 42.1130364,
+  "lon": -74.6041347,
+  "tags": {
+    "ele": "1058",
+    "name": "Dry Brook Ridge",
+    "natural": "peak"
+  }
+},
+{
+  "type": "node",
+  "id": 10126858006,
+  "lat": 42.0233910,
+  "lon": -74.5255714,
+  "tags": {
+    "ele": "1175",
+    "name": "Doubletop Mountain - South Peak",
+    "natural": "peak",
+    "website": "https://peakbagger.com/peak.aspx?pid=96873"
+  }
+}
+
+  ]
+}
