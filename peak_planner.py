@@ -25,6 +25,13 @@ if __name__ == '__main__':
         h for h in all_hikes if any(peak_id in osm_ids_set for peak_id in h[1])
     ]
 
+    covered_ids = set()
+    for h in relevant_hikes:
+        covered_ids.update(h[1])
+    missing = osm_ids_set.difference(covered_ids)
+    if missing:
+        print('Missing', missing)
+
     print(f'Unrestricted hikes: {len(relevant_hikes)}')
     d_km, chosen, fc = find_optimal_hikes_subset_cover(
         features, relevant_hikes, osm_ids
