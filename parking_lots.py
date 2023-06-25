@@ -23,6 +23,9 @@ print(f'Found {len(raw_trailheads)} trailheads in network.geojson')
 G = read_hiking_graph(features)
 id_to_trailhead = get_trailhead_index(features)
 
+extra_names = json.load(open('data/extra-lot-names.json'))
+id_to_extra_name = {id: name for id, name in extra_names}
+
 # We only want trailheads where you can hike from a trailhead to a high peak
 # without walking over another trailhead.
 trailheads: list[int] = []
@@ -234,6 +237,7 @@ for lot_id in matched_lots:
                 'type': 'parking-lot',
                 'id': lot_id,
                 'url': f'https://www.openstreetmap.org/{lot["type"]}/{lot["id"]}',
+                'name': id_to_extra_name.get(lot_id),
                 **lot['tags'],
             },
         }
