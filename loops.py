@@ -13,8 +13,8 @@ from graph import make_complete_graph, read_hiking_graph
 from util import index_by
 
 bad_lot_walks = [
-    # {1273010086, 1273001263},
-    # {9217245722, 1273010086},
+    {1273010086, 1273001263},
+    {9217245722, 1273010086},
     {385488241, 385488236},
     {385488238, 385488236},
 ]

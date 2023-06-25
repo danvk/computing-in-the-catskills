@@ -77,11 +77,23 @@ The hiking problem maps onto the _Weighted_ Set Cover problem. In our case:
 - The subsets are possible hikes (the subset being the subset of high peaks that they visit).
 - The weight is the mileage for each hike.
 
-To answer the hiking question using a Set Cover solver, we first need to generate the set of all possible hikes in the Catskills. With some clever filtering and optimization, this doesn't wind up being too bad. (TODO: explain this)
+To answer the hiking question using a Set Cover solver, we first need to generate the set of all possible hikes in the Catskills. With some clever filtering and optimization, this doesn't wind up being too bad (see below).
 
 Then we can run a set cover solver to get our set of hikes directly. This [old Python repo][SetCoverPy] works great. It's very fast compared to the TSP solver (<1s vs. minutes to hours) and finds equally good solutions.
 
 This approach is nice because it gives us more flexibility to answer variations of the problem. For example, we can only allow loop hikes or set a max distance on any one hike by filtering the set of hikes that we give the solver.
+
+### Generating all possible hikes
+
+The code for this is in `loops.py`.
+
+In order to frame shortest hike problems as set cover problems, we need to generate a list of all possible hikes in the Catskills. At first this seems unreasonable since there are so many peaks, so many trailheads and so many trails. For example, the Spruceton Road (Hunter/Westkill) area has 13 high peaks and 27 parking areas. In theory you could hike any subset of these peaks in any order between any two parking areas. That's trillions of possible hikes!
+
+Fortunately we can do some aggressive pruning to pare this back:
+
+- Consider each pair of lots and each subset of peaks you can reach from them (this is a lot!)
+  - For each of these combinations, there is only one hike worth considering (the shortest one).
+  - If that hike crosses an extra peak,
 
 ## Data ingestion flow
 
