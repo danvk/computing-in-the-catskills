@@ -63,7 +63,7 @@ Data comes mostly from OpenStreetMap with a few tweaks:
 - High peaks have been shifted to be on paths / herd paths.
 - I've added a few strategic bushwhacks using tracks from my [personal experience][blog].
 
-The result of all this (including parking lots, high peaks, trailheads, trail junctions and hikes between all of them) is in `network.geojson`.
+The result of all this (including parking lots, high peaks, trailheads, trail junctions and hikes between all of them) is in `network+parking.geojson`.
 
 Finding the shortest set of hikes maps onto a few famous problems in Computer Science.
 
