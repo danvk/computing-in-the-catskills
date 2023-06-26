@@ -35,7 +35,7 @@ Through hikes:
 
 Best solution is 12 hikes / 104.89 miles.
 
-[![A set of 12 loop hikes at 104.89 miles](/gallery/12-loop-hikes-104.9-miles)][geojson-104.9]
+[![A set of 12 loop hikes at 104.89 miles](/gallery/12-loop-hikes-104.9-miles.png)][geojson-104.9]
 
 The out-and-backs are the same as above, but the through hikes have all been replaced with loops:
 
@@ -141,7 +141,7 @@ This is the key file that `loops.py`, `tsp.py` and `subset_cover.py` work off of
 
 [peaks]: http://catskill-3500-club.org/peaks.php
 [geojson-95.2]: https://geojson.io/#id=github:danvk/computing-in-the-catskills/blob/main/gallery/11-through-hikes-95.2-miles.geojson
-[geojson-104.9]: https://geojson.io/#id=github:danvk/computing-in-the-catskills/blob/main/gallery/12-loop-hikes-104.9-miles
+[geojson-104.9]: https://geojson.io/#id=github:danvk/computing-in-the-catskills/blob/main/gallery/12-loop-hikes-104.9-miles.geojson
 [blog]: https://www.danvk.org/catskills/
 [tsp]: https://en.wikipedia.org/wiki/Travelling_salesman_problem
 [or-tools]: https://developers.google.com/optimization/routing/tsp
