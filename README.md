@@ -2,7 +2,9 @@
 
 What's wrong with a little math in the woods?
 
-Question: What's the least amount of hiking you have to do to hike all [33 of the Catskills High Peaks][peaks]?
+Question: What's the least amount of hiking you have to do to hike all [33 of the Catskills High Peaks][peaks]? This turns out to be a surprisingly fun Math / CS problem that's equivalent to either the Traveling Salesman Problem of the Set Cover Problem, two famous problems in Computer Science.
+
+My solution is available as an [online hike planner][planner], check it out!
 
 ## Gallery of solutions
 
@@ -33,7 +35,16 @@ Through hikes:
 
 Best solution is 12 hikes / 104.89 miles.
 
-TODO: add image and explain this one.
+[![A set of 12 loop hikes at 104.89 miles](/gallery/12-loop-hikes-104.9-miles)][geojson-104.9]
+
+The out-and-backs are the same as above, but the through hikes have all been replaced with loops:
+
+7. Blackhead Range from Big Hollow Rd (3 peaks / 7.29 miles)
+7. Devil's Path East from Mink Hollow Rd (4 peaks / 10.31 miles)
+7. Closed FirBBiE loop (4 peaks / 14.61 miles)
+7. The Nine from Slide Mountain PA (9 peaks / 18.7 miles)
+7. Spruceton Horseshoe (4 peaks / 15.45 miles)
+7. Sherrill / North Dome out & back (2 peaks / 7.17 miles)
 
 ## Quickstart
 
@@ -91,9 +102,11 @@ In order to frame shortest hike problems as set cover problems, we need to gener
 
 Fortunately we can do some aggressive pruning to pare this back:
 
-- Consider each pair of lots and each subset of peaks you can reach from them (this is a lot!)
+- Consider each pair of lots and each subset of peaks you can reach from them (this is potentially huge!)
   - For each of these combinations, there is only one hike worth considering (the shortest one).
-  - If that hike crosses an extra peak,
+  - If that hike crosses an extra peak, discard it (it might be a reasonable hike, but it will be tracked through a larger subset of peaks).
+
+These two forms of filtering can be applied recursively. For example, if we're considering hikes that hit peaks 1, 2 and 3, 4 and 5 going from lot A to B (`A→{1,2,3,4,5}→B`), then we can solve the subproblem for each pair of peaks (`1→{2,3,4}→5`, `1→{3,4,5}→2`, etc.) and try adding each of those resulting possibilities to the larger problem. Combined with some memoization, this is extremely effective at efficiently paring back the total number of hikes. From the trillions of possibilities we started with, we only wind up with ~25,000 possible hikes to plug into the set cover problem.
 
 ## Data ingestion flow
 
@@ -128,9 +141,11 @@ This is the key file that `loops.py`, `tsp.py` and `subset_cover.py` work off of
 
 [peaks]: http://catskill-3500-club.org/peaks.php
 [geojson-95.2]: https://geojson.io/#id=github:danvk/computing-in-the-catskills/blob/main/gallery/11-through-hikes-95.2-miles.geojson
+[geojson-104.9]: https://geojson.io/#id=github:danvk/computing-in-the-catskills/blob/main/gallery/12-loop-hikes-104.9-miles
 [blog]: https://www.danvk.org/catskills/
 [tsp]: https://en.wikipedia.org/wiki/Travelling_salesman_problem
 [or-tools]: https://developers.google.com/optimization/routing/tsp
 [scp]: https://en.wikipedia.org/wiki/Set_cover_problem
 [np-complete]: https://en.wikipedia.org/wiki/NP-completeness
 [SetCoverPy]: https://github.com/guangtunbenzhu/SetCoverPy
+[planner]: https://www.danvk.org/catskills/map/planner/
