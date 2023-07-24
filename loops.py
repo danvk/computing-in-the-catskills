@@ -134,9 +134,8 @@ _cache = {}
 
 
 def plausible_peak_sequences(
-    g, peaks: list[int]
+    g, peaks: list[int], depth=0
 ) -> list[tuple[float, tuple[int, ...]]]:
-    sequences = []
     peaks = list(peaks)
 
     # zero peaks / single peaks are always a valid sequence
@@ -155,12 +154,13 @@ def plausible_peak_sequences(
     gp = make_complete_graph(g, peaks)
 
     # You can start and end with any pair of peaks.
-    for start_peak, end_peak in itertools.product(peaks, peaks):
-        if start_peak == end_peak:
-            continue  # TODO: require start_peak < end_peak as an optimization
+    peak_pairs = itertools.combinations(peaks, 2)
+    if depth == 0:
+        peak_pairs = tqdm([*peak_pairs])
+    for start_peak, end_peak in peak_pairs:
         other_peaks = [p for p in peaks if p != start_peak and p != end_peak]
         # might be more efficient (but tricky) to pass down gp here rather than g.
-        remaining_seqs = plausible_peak_sequences(g, other_peaks)
+        remaining_seqs = plausible_peak_sequences(g, other_peaks, depth + 1)
 
         # For each set of "inner" peaks, choose the best sequence and eliminate
         # it if it crosses any surprise peaks.
@@ -197,6 +197,8 @@ def plausible_peak_sequences(
                 # A more stringent check would also exclude paths that go within ~100m
                 #  of unexpected peaks.
                 sequences.append((best_d, best_seq))
+    # Add in the reverse sequences
+    sequences += [(d, seq[::-1]) for d, seq in sequences if len(seq) >= 2]
 
     _cache[cache_key] = sequences
     return sequences
@@ -211,7 +213,7 @@ if __name__ == '__main__':
     )
 
     for peaks, lots in sorted(peaks_to_lots.items(), key=lambda x: len(x[1])):
-        print(len(lots), lots, len(peaks), peaks)
+        print('Lots:', len(lots), lots, 'Peaks:', len(peaks), peaks)
     print(len(peaks_to_lots), 'connected clusters of peaks.')
 
     # 10 peaks / 20 lots
