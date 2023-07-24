@@ -13,8 +13,8 @@ from graph import make_complete_graph, read_hiking_graph
 from util import index_by
 
 bad_lot_walks = [
-    {1273010086, 1273001263},
-    {9217245722, 1273010086},
+    # {1273010086, 1273001263},
+    # {9217245722, 1273010086},
     {385488241, 385488236},
     {385488238, 385488236},
 ]
@@ -134,7 +134,7 @@ _cache = {}
 
 
 def plausible_peak_sequences(
-    g, peaks: list[int], depth=0
+    g, peaks: list[int], gp, depth=0
 ) -> list[tuple[float, tuple[int, ...]]]:
     peaks = list(peaks)
 
@@ -150,9 +150,6 @@ def plausible_peak_sequences(
     if result is not None:
         return result
 
-    # TODO: would be really nice to eliminate this call!
-    gp = make_complete_graph(g, peaks)
-
     # You can start and end with any pair of peaks.
     peak_pairs = itertools.combinations(peaks, 2)
     if depth == 0:
@@ -160,7 +157,7 @@ def plausible_peak_sequences(
     for start_peak, end_peak in peak_pairs:
         other_peaks = [p for p in peaks if p != start_peak and p != end_peak]
         # might be more efficient (but tricky) to pass down gp here rather than g.
-        remaining_seqs = plausible_peak_sequences(g, other_peaks, depth + 1)
+        remaining_seqs = plausible_peak_sequences(g, other_peaks, gp, depth + 1)
 
         # For each set of "inner" peaks, choose the best sequence and eliminate
         # it if it crosses any surprise peaks.
@@ -222,10 +219,12 @@ if __name__ == '__main__':
     hikes = []
     num_loops = 0
     num_thrus = 0
+
     for peaks, lots in tqdm(peaks_to_lots.items()):
         print(len(peaks), peaks, len(lots), lots)
+        GP = make_complete_graph(G, peaks)
         # Lot->Lot hikes are not interesting
-        plausible_seqs = [p for p in plausible_peak_sequences(G, peaks) if p[1]]
+        plausible_seqs = [p for p in plausible_peak_sequences(G, peaks, GP) if p[1]]
         print(f'  plausible sequences: {len(plausible_seqs)}')
         loops = loop_hikes_for_peak_seq(G, lots, peaks, plausible_seqs)
         thrus = through_hikes_for_peak_seq(G, lots, peaks, plausible_seqs)
