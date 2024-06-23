@@ -1,0 +1,15 @@
+[out:json][timeout:25];
+// gather results
+(
+  node
+  ["natural"="peak"]
+  (if: t["ele"] > 1050)  // 1060m=3445ft
+  (41.813,-74.652,42.352,-73.862);
+);
+// print results
+out body;
+>;
+out skel qt;
+
+// Dry Brook Ridge: 1058
+// Roundtop: 1052

@@ -20,11 +20,11 @@ def element_stats(elements: List[any]):
 
 
 for path in sys.argv[1:]:
-    p = Path(path).name
+    p = Path(path).relative_to('queries')
     query = open(path).read()
     print(f'Running query {path}')
     result = fetch_from_overpass(query)
-    with open(Path('data') / p.replace('.txt', '.json'), 'w') as out:
+    with open(Path('data') / str(p).replace('.txt', '.json'), 'w') as out:
         out.write(result)
         stats = element_stats(json.loads(result)['elements'])
         rels = stats.get('relation') or 0

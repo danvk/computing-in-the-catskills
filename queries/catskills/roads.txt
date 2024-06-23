@@ -1,0 +1,17 @@
+[out:json][timeout:25];
+// gather results
+(
+  // These are all the ways you can drive on; they give us the trail start/end points.
+  way
+  ["highway"~"^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|motorway_link|trunk_link|primary_link|secondary_link|tertiary_link)$"]
+  (41.813,-74.855,42.352,-73.862);
+
+  // These are critical for connectivity, see https://www.openstreetmap.org/way/287424836
+  way
+  ["highway"="service"]
+  (41.813,-74.855,42.352,-73.862);
+);
+// print results
+out body;
+>;
+out skel qt;
