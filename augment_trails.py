@@ -1,5 +1,8 @@
 #!/usr/bin/env python
-"""Augment OSM trail with a few extra bushwhacks."""
+"""Augment OSM trail with a few extra bushwhacks.
+
+This is only relevant for the Catskills -- for the ADKs, we stay on-trail.
+"""
 
 from glob import glob
 import json
@@ -7,14 +10,14 @@ from typing import List
 
 from osm import OsmElement, OsmNode, closest_point_on_trail
 
-files = glob('data/additional-trails/*.geojson')
+files = glob('data/catskills/additional-trails/*.geojson')
 print(f'Loading additional trails from {len(files)}: {files}')
 
 
-trails_elements = json.load(open('data/trails.json'))['elements']
+trails_elements = json.load(open('data/catskills/trails.json'))['elements']
 
 osm_elements: List[OsmElement] = (
-    trails_elements + json.load(open('data/roads.json'))['elements']
+    trails_elements + json.load(open('data/catskills/roads.json'))['elements']
 )
 osm_ways = [el for el in osm_elements if el['type'] == 'way']
 osm_nodes = {el['id']: el for el in osm_elements if el['type'] == 'node'}
@@ -60,7 +63,9 @@ for file in files:
         *([start_node] if start_node else []),
         *[
             {'id': nextid(), 'type': 'node', 'lat': lat, 'lon': lon}
-            for (lon, lat, _) in coords
+            for (lon, lat) in (
+                c[:2] for c in coords
+            )  # drop elevation, we'll re-add it later
         ],
         *([end_node] if end_node else []),
     ]
@@ -100,7 +105,7 @@ for node_id in detached_nodes:
     node_way = node_ways[0]
     if (
         node_way['tags']['source-file']
-        == 'data/additional-trails/dry-brook-true-summit.geojson'
+        == 'data/catskills/additional-trails/dry-brook-true-summit.geojson'
     ):
         # this is just a spur to the true summit; it can be detached.
         continue
@@ -120,8 +125,8 @@ for node_id in detached_nodes:
         node_way['nodes'].insert(0, closest_node['id'])
     print(f'Reattached {node_id} to {closest_node["id"]} @ {d} m')
 
-with open('data/additional-trails.json', 'w') as out:
+with open('data/catskills/additional-trails.json', 'w') as out:
     json.dump({'elements': elements}, out, indent=2)
 
-with open('data/combined-trails.json', 'w') as out:
+with open('data/catskills/combined-trails.json', 'w') as out:
     json.dump({'elements': trails_elements + elements}, out, indent=2)

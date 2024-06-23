@@ -112,13 +112,13 @@ These two forms of filtering can be applied recursively. For example, if we're c
 
 Pull down data from OSM using the Overpass API:
 
-    for query in queries/*.txt; poetry run python run_overpass_query.py $query
+    for query in queries/catskills/*.txt; poetry run python run_overpass_query.py $query
 
 Next, augment the trails with some key bushwhacks that aren't in OSM:
 
     poetry run python augment_trails.py
-    # produces data/additional-trails.json (just the extra bushwhacks) and
-    #          data/combined-trails.json (all the trails)
+    # produces data/catskills/additional-trails.json (just the extra bushwhacks) and
+    #          data/catskills/combined-trails.json (all the trails)
 
 This will create fake OSM node and way IDs. These are all negative numbers to distinguish them from real IDs.
 
