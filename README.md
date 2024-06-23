@@ -2,7 +2,7 @@
 
 What's wrong with a little math in the woods?
 
-Question: What's the least amount of hiking you have to do to hike all [33 of the Catskills High Peaks][peaks]? This turns out to be a surprisingly fun Math / CS problem that's equivalent to either the Traveling Salesman Problem of the Set Cover Problem, two famous problems in Computer Science.
+Question: What's the least amount of hiking you have to do to hike all [33 of the Catskills High Peaks][peaks]? This turns out to be a surprisingly fun Math / CS problem that's equivalent to either the Traveling Salesman Problem or the Set Cover Problem, two famous problems in Computer Science.
 
 My solution is available as an [online hike planner][planner], check it out!
 
