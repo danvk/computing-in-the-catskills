@@ -128,8 +128,7 @@ Next we filter down to just the relevant peaks for the 3500 Club. This also atta
 
 The nodes for peaks in OSM tend not to be on trails and in some cases (Vly) they are actually quite far off. The next step is to make a version of the peaks that are connected to the trail graph:
 
-    poetry run python shift_peaks.py
-    # produces data/peaks-connected.json
+    poetry run python shift_peaks.py data/catskills/peaks-3500.json data/catskills/combined-trails.json > data/catskills/peaks-connected.json
 
 Next we produce the preliminary `network.geojson` file, which connects trailheads to peaks via trails:
 

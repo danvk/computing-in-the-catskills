@@ -5,82 +5,82 @@ OSM is a bit too precise about the location of peaks for our needs.
 This script shifts the peaks to use nearby nodes that are on trails.
 """
 
-from collections import Counter, defaultdict
+import sys
 import json
+from collections import Counter, defaultdict
 
 from osm import OsmElement, OsmNode, closest_point_on_trail
 
-peak_nodes: list[OsmNode] = json.load(open('data/peaks-3500.json'))['elements']
-assert len(peak_nodes) == 33
 
-alternate_peak_nodes: list[OsmNode] = json.load(open('data/alternate-peaks.json'))[
-    'elements'
-]
-assert len(alternate_peak_nodes) == 4
-for node in alternate_peak_nodes:
-    node['tags']['alternate'] = True
+def shift_peaks(peaks_file: str, trails_file: str):
+    peak_nodes: list[OsmNode] = json.load(open(peaks_file))['elements']
 
-peak_nodes += alternate_peak_nodes
+    trail_elements: list[OsmElement] = json.load(open(trails_file))['elements']
+    node_to_trails = defaultdict(list)
+    trail_ways = [el for el in trail_elements if el['type'] == 'way']
+    for el in trail_ways:
+        for node in el['nodes']:
+            node_to_trails[node].append(el['id'])
+    trail_nodes = {el['id']: el for el in trail_elements if el['type'] == 'node'}
 
-trail_elements: list[OsmElement] = json.load(open('data/combined-trails.json'))[
-    'elements'
-]
-node_to_trails = defaultdict(list)
-trail_ways = [el for el in trail_elements if el['type'] == 'way']
-for el in trail_ways:
-    for node in el['nodes']:
-        node_to_trails[node].append(el['id'])
-trail_nodes = {el['id']: el for el in trail_elements if el['type'] == 'node'}
+    new_peaks: list[OsmNode] = []
+    for peak in peak_nodes:
+        name = peak['tags']['name']
+        peak_id = peak['id']
 
+        if name == 'Vly Mountain':
+            # OSM's point for this peak is considerably east of the canister.
+            # This shifts it closer to the end of the herd path.
+            peak['lat'] = 42.24588
+            peak['lon'] = -74.44845
 
-new_peaks: list[OsmNode] = []
-for peak in peak_nodes:
-    name = peak['tags']['name']
-    peak_id = peak['id']
+        trails = node_to_trails.get(peak_id)
+        if trails:
+            # This peak node coincides with a trail node. Keep it as-is.
+            peak['tags']['connected'] = True
+            new_peaks.append(peak)
+            continue
 
-    if name == 'Vly Mountain':
-        # OSM's point for this peak is considerably east of the canister.
-        # This shifts it closer to the end of the herd path.
-        peak['lat'] = 42.24588
-        peak['lon'] = -74.44845
+        pt_m, pt_node = closest_point_on_trail(
+            (peak['lon'], peak['lat']), trail_ways, trail_nodes
+        )
+        # The Mill Brook Ridge peak node is 52.6m from the trail.
+        # The Friday peak node is 61.86m from the OSM herd path
+        if pt_m < 62:
+            pt_node['tags'] = {
+                **peak['tags'],
+                'original_node': peak_id,
+                'original_d_m': round(pt_m, 2),
+                'connected': True,
+            }
+            new_peaks.append(pt_node)
+            continue
 
-    trails = node_to_trails.get(peak_id)
-    if trails:
-        # This peak node coincides with a trail node. Keep it as-is.
-        peak['tags']['connected'] = True
+        # Must be an un-trailed peak; leave it as-is.
+        peak['tags']['connected'] = False
         new_peaks.append(peak)
-        continue
+        sys.stderr.write(f'Disconnected peak ({pt_m} m from {pt_node}): {peak}\n')
 
-    pt_m, pt_node = closest_point_on_trail(
-        (peak['lon'], peak['lat']), trail_ways, trail_nodes
-    )
-    if pt_m < 53:  # The Mill Brook Ridge peak node is 52.6m from the trail.
-        pt_node['tags'] = {
-            **peak['tags'],
-            'original_node': peak_id,
-            'original_d_m': round(pt_m, 2),
-            'connected': True,
-        }
-        new_peaks.append(pt_node)
-        continue
+    counts = Counter(peak['tags']['connected'] for peak in new_peaks)
 
-    # Must be an un-trailed peak; leave it as-is.
-    peak['tags']['connected'] = False
-    new_peaks.append(peak)
-    print(f'Disconnected peak ({pt_m} m from {pt_node}): {peak}')
+    sys.stderr.write('Peaks:\n')
+    sys.stderr.write(f' Connected: {counts[True]}\n')
+    sys.stderr.write(f' Disconnected: {counts[False]}\n')
 
-counts = Counter(peak['tags']['connected'] for peak in new_peaks)
+    assert len(new_peaks) == len(peak_nodes)
 
-print('Peaks:')
-print(f' Connected: {counts[True]}')
-print(f' Disconnected: {counts[False]}')
+    return new_peaks
 
-assert len(new_peaks) == 33 + 4
-with open('data/peaks-connected.json', 'w') as out:
+
+if __name__ == '__main__':
+    peaks_file, trails_file = sys.argv[1:]
+    # peaks_file = 'data/peaks-3500.json'
+    # trails_file = 'data/combined-trails.json'
+    new_peaks = shift_peaks(peaks_file, trails_file)
     json.dump(
         {
             'elements': new_peaks,
         },
-        out,
+        sys.stdout,
         indent=2,
     )
