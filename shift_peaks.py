@@ -9,7 +9,7 @@ import sys
 import json
 from collections import Counter, defaultdict
 
-from osm import OsmElement, OsmNode, closest_point_on_trail
+from osm import OsmElement, OsmNode, closest_point_on_trail, element_link, way_length
 
 
 def shift_peaks(peaks_file: str, trails_file: str):
@@ -22,6 +22,30 @@ def shift_peaks(peaks_file: str, trails_file: str):
         for node in el['nodes']:
             node_to_trails[node].append(el['id'])
     trail_nodes = {el['id']: el for el in trail_elements if el['type'] == 'node'}
+
+    trail_end_nodes = Counter()
+    for way in trail_ways:
+        trail_end_nodes[way['nodes'][0]] += 1
+        trail_end_nodes[way['nodes'][-1]] += 1
+
+    # Remove ways that are short (less than 100m) and not attached to the end of another
+    # way. This removes the option of narrowly bypassing a peak without bagging it,
+    # which greatly reduces the number of possible hikes later.
+    new_ways = []
+    for way in trail_ways:
+        nodes = way['nodes']
+        if way_length(nodes, trail_nodes) < 0.1:
+            start = trail_end_nodes[nodes[0]]
+            end = trail_end_nodes[nodes[-1]]
+            if start == 1 and end == 1:
+                print(f'Dropping {element_link(way)}')
+                continue
+        new_ways.append(way)
+
+    trail_ways = new_ways
+
+    on_trail = 0
+    farthest = 0
 
     new_peaks: list[OsmNode] = []
     for peak in peak_nodes:
@@ -38,12 +62,16 @@ def shift_peaks(peaks_file: str, trails_file: str):
         if trails:
             # This peak node coincides with a trail node. Keep it as-is.
             peak['tags']['connected'] = True
+            sys.stderr.write(f'{name} is a node on a trail\n')
+            on_trail += 1
             new_peaks.append(peak)
             continue
 
         pt_m, pt_node = closest_point_on_trail(
             (peak['lon'], peak['lat']), trail_ways, trail_nodes
         )
+        farthest = max(pt_m, farthest)
+
         # The Mill Brook Ridge peak node is 52.6m from the trail.
         # The Friday peak node is 61.86m from the OSM herd path
         if pt_m < 62:
@@ -53,6 +81,7 @@ def shift_peaks(peaks_file: str, trails_file: str):
                 'original_d_m': round(pt_m, 2),
                 'connected': True,
             }
+            sys.stderr.write(f'{name} is only {pt_m:.3g}m from a trail\n')
             new_peaks.append(pt_node)
             continue
 
@@ -66,6 +95,9 @@ def shift_peaks(peaks_file: str, trails_file: str):
     sys.stderr.write('Peaks:\n')
     sys.stderr.write(f' Connected: {counts[True]}\n')
     sys.stderr.write(f' Disconnected: {counts[False]}\n')
+
+    sys.stderr.write(f'On trail: {on_trail}\n')
+    sys.stderr.write(f'Farthest from trail: {farthest:.2f} m\n')
 
     assert len(new_peaks) == len(peak_nodes)
 
