@@ -2,25 +2,22 @@
 """Find all reasonable loop/out-and-back hikes."""
 
 from collections import defaultdict
+from dataclasses import dataclass
 import itertools
 import json
 import math
+import sys
 
 from tqdm import tqdm
 import networkx as nx
 
-from graph import make_complete_graph, read_hiking_graph
+from graph import make_complete_graph, make_subgraph, read_hiking_graph
+from osm import node_link
+from spec import Spec
 from util import index_by
 
-bad_lot_walks = [
-    # {1273010086, 1273001263},
-    # {9217245722, 1273010086},
-    {385488241, 385488236},
-    {385488238, 385488236},
-]
 
-
-def load_and_index(raw_features: list):
+def load_and_index(spec: Spec, raw_features: list):
     # Nix these for now; they really expand the clusters which blows up the problem.
     features = [f for f in raw_features if f['properties'].get('type') != 'lot-to-lot']
 
@@ -31,32 +28,76 @@ def load_and_index(raw_features: list):
     # ]
     for f in raw_features:
         p = f['properties']
-        if p.get('type') == 'lot-to-lot' and {p['from'], p['to']} not in bad_lot_walks:
+        if (
+            p.get('type') == 'lot-to-lot'
+            and {p['from'], p['to']} not in spec.bad_lot_walks
+        ):
             features.append(f)
 
     G = read_hiking_graph(features)
+    peaks = [f for f in features if f['properties'].get('type') == 'high-peak']
+    code_to_peak = {f['properties']['code']: f for f in peaks}
 
-    lot_to_peaks = {}
+    G.remove_edges_from(spec.edges_to_toss)
+
+    # Find connected components of peaks excluding parking lots.
+    # If you can only hike from peak A to peak B via a parking lot, that's two hikes.
+    G_no_lots = G.copy()
+    G_no_lots.remove_nodes_from(
+        node for node in G.nodes() if G.nodes[node]['type'] == 'parking-lot'
+    )
+    print(G.number_of_nodes(), '/', G.number_of_edges())
+    print(G_no_lots.number_of_nodes(), '/', G_no_lots.number_of_edges())
+    forced_clusters = [
+        {code_to_peak[code]['properties']['id'] for code in codes}
+        for codes in spec.forced_clusters
+    ]
+    all_forced = {n for cluster in forced_clusters for n in cluster}
+    high_peak_nodes = [n for n in G.nodes() if G.nodes[n]['type'] == 'high-peak']
+
+    G_high_peaks = make_subgraph(G_no_lots, high_peak_nodes)
+    print(G_high_peaks.number_of_nodes(), '/', G_high_peaks.number_of_edges())
+
+    peak_components = [
+        [n for n in cluster if n not in all_forced]
+        for cluster in nx.connected_components(G_high_peaks)
+    ]
+    peak_components += forced_clusters
+
+    print('# peak components:', len(peak_components))
+    print(peak_components)
+
+    # tuple of peaks -> list of parking lots
     peaks_to_lots = defaultdict(list)
 
-    for lot_node in G.nodes():
-        if G.nodes[lot_node]['type'] != 'parking-lot':
-            continue
+    G_lots_peaks = make_subgraph(
+        G, [n for n in G.nodes() if G.nodes[n]['type'] in {'high-peak', 'parking-lot'}]
+    )
 
-        # Get the reachable set of non-trailhead nodes from this trailhead
-        node_to_length, node_to_path = nx.single_source_dijkstra(G, lot_node)
-        reachable_nodes = [
-            n for n in node_to_length.keys() if G.nodes[n]['type'] == 'high-peak'
-        ]
+    for peak_component in peak_components:
+        # Given the subgraph with this component's peaks and all parking lots,
+        # the valid trailhead lots are just the neighbors of the peaks
+        # (There will be lot -> lot connections, but we want to exclude these.
+        # There will be peak -> peak connections but they're irrelevant.)
+        G_lots_component = make_subgraph(
+            G_lots_peaks,
+            [
+                n
+                for n in G.nodes()
+                if n in peak_component or G.nodes[n]['type'] == 'parking-lot'
+            ],
+        )
+        peaks = tuple(sorted([*peak_component]))
+        lots = set()
+        for a, b in G_lots_component.edges():
+            at = G.nodes[a]['type']
+            bt = G.nodes[b]['type']
+            if at == 'parking-lot' and bt == 'high-peak':
+                lots.add(a)
+            elif bt == 'parking-lot' and at == 'high-peak':
+                lots.add(b)
 
-        if not reachable_nodes:
-            print(f'Filtered out lot {lot_node}')
-            continue
-
-        reachable_nodes.sort()
-        reachable_nodes = tuple(reachable_nodes)
-        lot_to_peaks[lot_node] = reachable_nodes
-        peaks_to_lots[reachable_nodes].append(lot_node)
+        peaks_to_lots[peaks] = [*lots]
 
     return G, peaks_to_lots
 
@@ -103,6 +144,7 @@ def loop_hikes_for_peak_seq(g, lots, peaks, peak_seqs):
     lots = list(lots)
     hikes = []
     gp = make_complete_graph(g, peaks + lots)
+    # TODO: pick the best loop for any given subset of peaks, not just sequence.
     for peak_seq_d, peak_seq in peak_seqs:
         best_d = math.inf
         best_cycle = None
@@ -133,21 +175,57 @@ def loop_hikes_for_peak_seq(g, lots, peaks, peak_seqs):
 _cache = {}
 
 
-def plausible_peak_sequences(
-    g, peaks: list[int], gp, depth=0
-) -> list[tuple[float, tuple[int, ...]]]:
-    peaks = list(peaks)
+@dataclass
+class PeakPair:
+    d_km: float
+    peaks_between: list[int]
 
+
+def index_peaks(G, peaks):
+    GP = make_complete_graph(G, peaks)
+    pairs = {}
+    for a, b in itertools.combinations(peaks, 2):
+        pairs.setdefault(a, {})
+        pairs.setdefault(b, {})
+        peaks_between = [
+            node
+            for node in GP.edges[a, b]['path']
+            if G.nodes[node]['type'] == 'high-peak' and node != a and node != b
+        ]
+        pairs[a][b] = pairs[b][a] = PeakPair(
+            d_km=GP.edges[a, b]['weight'], peaks_between=peaks_between
+        )
+    return pairs
+
+
+def any_surprise_peaks(seq, peak_set, peak_idx):
+    for a, b in zip(seq[:-1], seq[1:]):
+        for peak in peak_idx[a][b].peaks_between:
+            if peak not in peak_set:
+                return True
+    return False
+
+
+def plausible_peak_sequences(
+    g,
+    peaks: list[int],
+    peak_idx,
+    max_length=100,
+    depth=0,
+) -> list[tuple[float, tuple[int, ...]]]:
     # zero peaks / single peaks are always a valid sequence
+    if max_length == 0:
+        return [(0, tuple())]
     sequences: list[tuple[float, tuple[int, ...]]] = [(0, tuple())] + [
         (0, (x,)) for x in peaks
     ]
-    if len(peaks) <= 1:
+    if len(peaks) <= 1 or max_length <= 1:
         return sequences
 
-    cache_key = tuple(sorted(peaks))
+    cache_key = (max_length, tuple(sorted(peaks)))
     result = _cache.get(cache_key)
     if result is not None:
+        # print(' ' * depth, f'{peaks} Cache hit (size={len(_cache)})')
         return result
 
     # You can start and end with any pair of peaks.
@@ -156,61 +234,65 @@ def plausible_peak_sequences(
         peak_pairs = tqdm([*peak_pairs])
     for start_peak, end_peak in peak_pairs:
         other_peaks = [p for p in peaks if p != start_peak and p != end_peak]
-        # might be more efficient (but tricky) to pass down gp here rather than g.
-        remaining_seqs = plausible_peak_sequences(g, other_peaks, gp, depth + 1)
+        remaining_seqs = plausible_peak_sequences(
+            g, other_peaks, peak_idx, max_length - 2, depth + 1
+        )
 
         # For each set of "inner" peaks, choose the best sequence and eliminate
         # it if it crosses any surprise peaks.
         by_inner_peaks = index_by(remaining_seqs, lambda ds: tuple(sorted(ds[1])))
         # print('by_inner_peaks', by_inner_peaks)
+        by_start = peak_idx[start_peak]
+        by_end = peak_idx[end_peak]
         for inner_peaks, inner_seqs in by_inner_peaks.items():
             best_d = math.inf
             best_inner_seq = None
             # print('  inner_peaks', inner_peaks)
             # print('  inner_seqs ', inner_seqs)
-            if len(inner_peaks) == 0:
-                best_d = gp.edges[start_peak, end_peak]['weight']
+            if len(inner_peaks) == 0 or max_length == 2:
+                best_d = by_start[end_peak].d_km
                 best_inner_seq = tuple()
             else:
                 for remaining_d, remaining_seq in inner_seqs:
                     # print('    remaining_d  ', remaining_d)
                     # print('    remaining_seq', remaining_seq)
-                    start_d = gp.edges[start_peak, remaining_seq[0]]['weight']
-                    end_d = gp.edges[remaining_seq[-1], end_peak]['weight']
+                    start_d = by_start[remaining_seq[0]].d_km
+                    end_d = by_end[remaining_seq[-1]].d_km
                     d = start_d + remaining_d + end_d
                     if d < best_d:
                         best_d = d
                         best_inner_seq = remaining_seq
             # Check for surprise peaks
             best_seq = tuple([start_peak, *best_inner_seq, end_peak])
-            all_peaks = {
-                node
-                for a, b in zip(best_seq[:-1], best_seq[1:])
-                for node in gp.edges[a, b]['path']
-                if g.nodes[node]['type'] == 'high-peak'
-            }
-            if len(all_peaks) == len(best_seq):
+            peak_set = {start_peak, end_peak, *inner_peaks}
+            if not any_surprise_peaks(best_seq, peak_set, peak_idx):
                 # Exclude paths that go over unexpected peaks.
                 # A more stringent check would also exclude paths that go within ~100m
                 #  of unexpected peaks.
                 sequences.append((best_d, best_seq))
+
     # Add in the reverse sequences
     sequences += [(d, seq[::-1]) for d, seq in sequences if len(seq) >= 2]
 
     _cache[cache_key] = sequences
+    if depth <= 1:
+        print(
+            ' ' * depth,
+            f'Completed {peaks} ({len(sequences)} seqs), cache size={len(_cache)}',
+        )
     return sequences
 
 
-# Want to capture the idea that a "bowtie" hike should really be done as two loops.
-
-
 if __name__ == '__main__':
-    G, peaks_to_lots = load_and_index(
-        json.load(open('data/network+parking.geojson'))['features']
-    )
+    spec_file, network_file = sys.argv[1:]
+    spec = Spec(json.load(open(spec_file)))
+    features = json.load(open(network_file))['features']
+    G, peaks_to_lots = load_and_index(spec, features)
 
     for peaks, lots in sorted(peaks_to_lots.items(), key=lambda x: len(x[1])):
         print('Lots:', len(lots), lots, 'Peaks:', len(peaks), peaks)
+        for peak in peaks:
+            print('  ', node_link(peak, G.nodes[peak]['feature']['properties']['name']))
     print(len(peaks_to_lots), 'connected clusters of peaks.')
 
     # 10 peaks / 20 lots
@@ -222,9 +304,14 @@ if __name__ == '__main__':
 
     for peaks, lots in tqdm(peaks_to_lots.items()):
         print(len(peaks), peaks, len(lots), lots)
-        GP = make_complete_graph(G, peaks)
+        peak_idx = index_peaks(G, peaks)
         # Lot->Lot hikes are not interesting
-        plausible_seqs = [p for p in plausible_peak_sequences(G, peaks, GP) if p[1]]
+        _cache = {}
+        plausible_seqs = [
+            p
+            for p in plausible_peak_sequences(G, list(peaks), peak_idx, max_length=8)
+            if p[1]
+        ]
         print(f'  plausible sequences: {len(plausible_seqs)}')
         loops = loop_hikes_for_peak_seq(G, lots, peaks, plausible_seqs)
         thrus = through_hikes_for_peak_seq(G, lots, peaks, plausible_seqs)
@@ -234,8 +321,10 @@ if __name__ == '__main__':
         num_loops += len(loops)
         num_thrus += len(thrus)
 
+    hikes = [(round(d_km, 3), nodes) for d_km, nodes in hikes]
+
     with open('data/hikes.json', 'w') as out:
-        json.dump(hikes, out)
+        json.dump(hikes, out, separators=(',', ':'))
 
     print(f'Loops: {num_loops}')
     print(f'Thrus: {num_thrus}')

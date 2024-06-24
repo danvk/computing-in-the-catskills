@@ -1,3 +1,5 @@
+import itertools
+
 import networkx as nx
 
 
@@ -19,6 +21,21 @@ def make_complete_graph(G, nodes, weight='weight'):
             except KeyError as e:
                 print(f'Missing {u} {v}')
                 raise e
+    return GG
+
+
+def make_subgraph(G: nx.Graph, nodes):
+    # This is what I thought G.subgraph would do, but I guess I don't understand that!
+    # This makes no attempts to preserve weights/paths, just connectivity
+    nodes_set = set(nodes)
+    to_remove = [n for n in G.nodes() if n not in nodes_set]
+    GG = G.copy()
+    for node in to_remove:
+        # Remove node, adding direct connections between all its neighbors
+        ns = nx.neighbors(GG, node)
+        GG.add_edges_from(itertools.combinations(ns, 2))
+        GG.remove_node(node)
+
     return GG
 
 

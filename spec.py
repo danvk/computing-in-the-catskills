@@ -8,6 +8,9 @@ class Spec:
         self.west = bbox['west']
         self.num_peaks = data['num_peaks']
         self.invalid_parking_ids = set(data.get('invalid_parking_ids', []))
+        self.bad_lot_walks = [{a, b} for a, b in data.get('bad_lot_walks', [])]
+        self.edges_to_toss = [(a, b) for a, b in data.get('edges_to_toss', [])]
+        self.forced_clusters = [set(x) for x in data.get('forced_clusters', [])]
 
     def is_in_bbox(self, lon: float, lat: float):
         return self.south <= lat <= self.north and self.west <= lon <= self.east
