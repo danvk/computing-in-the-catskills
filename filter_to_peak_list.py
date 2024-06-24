@@ -2,6 +2,7 @@
 """Filter Overpass results by a list of GNIS Feature IDs for high peaks.
 
 Format of text file is tab-delimted, columns are proprietary code, GNIS ID, ...
+If none of the nodes have that GNIS ID, it will search the wikidata and then name tags.
 """
 
 import json
@@ -20,12 +21,18 @@ def run(osm_file: str, peaks_file: str):
             gnis_to_code[gnis_id] = code
 
     out_els = []
-    for el in osm['elements']:
-        tags = el['tags']
-        gnis_id = tags.get('gnis:feature_id')
-        if gnis_id and gnis_id in gnis_to_code:
-            tags['code'] = gnis_to_code[gnis_id]
-            out_els.append(el)
+    for field in ('gnis:feature_id', 'wikidata', 'name'):
+        for el in osm['elements']:
+            tags = el['tags']
+            if 'code' in tags:
+                continue
+            gnis_id = tags.get(field)
+            if gnis_id and gnis_id in gnis_to_code:
+                tags['code'] = gnis_to_code[gnis_id]
+                out_els.append(el)
+                del gnis_to_code[gnis_id]
+
+    assert len(gnis_to_code) == 0, gnis_to_code
 
     return {
         **osm,
@@ -37,5 +44,4 @@ def run(osm_file: str, peaks_file: str):
 if __name__ == '__main__':
     osm_file, peaks_file = sys.argv[1:]
     output = run(osm_file, peaks_file)
-    assert len(output['elements']) == 46
     json.dump(output, sys.stdout, indent=2)

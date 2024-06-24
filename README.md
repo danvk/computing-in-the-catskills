@@ -122,7 +122,11 @@ Next, augment the trails with some key bushwhacks that aren't in OSM:
 
 This will create fake OSM node and way IDs. These are all negative numbers to distinguish them from real IDs.
 
-The file `data/peaks-3500.json` is a hand-edited version of `data/peaks.json`. The nodes for peaks in OSM tend not to be on trails and in some cases (Vly) they are actually quite far off. The next step is to make a version of the peaks that are connected to the trail graph:
+Next we filter down to just the relevant peaks for the 3500 Club. This also attaches short codes to each peak (e.g. W for Wittenberg):
+
+    poetry run python filter_to_peak_list.py data/catskills/peaks.json data/catskills/peak-codes-gnis.txt > data/catskills/peaks-3500.json
+
+The nodes for peaks in OSM tend not to be on trails and in some cases (Vly) they are actually quite far off. The next step is to make a version of the peaks that are connected to the trail graph:
 
     poetry run python shift_peaks.py
     # produces data/peaks-connected.json

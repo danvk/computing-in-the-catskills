@@ -1,0 +1,42 @@
+# Manually curated list, see
+# https://docs.google.com/spreadsheets/d/1elptUXX8QTAP5n_IwcZVdJ7JhvOzbP6pglB7Dbeeg-0/edit?gid=171812853#gid=171812853
+# Not all Catskills peaks have GNIS IDs, so we fall back to Wikidata or, worse, name
+# HA Key	GNIS ID/Wikidata/Name	Name
+L	955819	Lone Mountain
+Ro	962784	Rocky Mountain
+Bp	943334	Bearpen Mountain
+BI	943907	Big Indian Mtn Mountain
+E	948930	Eagle Mountain
+Fi	950082	Fir Mountain
+Ha	952008	Halcott Mountain
+ND	958771	North Dome Mountain
+H	973354	Hunter Mountain
+SW	Q8526291	Southwest Hunter
+Pk	973358	Peekamoose Mountain
+S	975759	Slide Mountain
+WHP	971464	Windham High Peak
+BH	973343	Blackhead Mountain
+BD	973342	Blackdome Mountain
+TC	973362	Thomas Cole Mountain
+B	942953	Balsam Mountain
+Su	966729	Sugarloaf Mountain
+Pl	973359	Plateau Mountain
+C	973346	Cornell Mountain
+W	971528	Wittenberg Mountain
+BL	942952	Balsam Lake Mountain
+We	973363	West Kill Mountain
+Ta	973361	Table Mountain
+IH	953655	Indian Head Mountain
+Tw	968056	Twin Mountain
+P	959820	Panther Mountain
+KHP	952749	Kaaterskill High Peak
+Fr	950728	Friday Mountain
+BC	942944	Balsam Cap Mountain
+V	968592	Vly Mountain
+Sh	1829070	Sherrill Mountain
+Ru	963108	Rusk Mountain
+# Alternate peaks
+DB	948688	Dry Brook Ridge
+RT	963044	Roundtop
+MR	Millbrook Ridge	Millbrook Ridge
+D	Doubletop Mountain - South Peak	Doubletop Mountain - South Peak
