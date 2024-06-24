@@ -132,8 +132,7 @@ The nodes for peaks in OSM tend not to be on trails and in some cases (Vly) they
 
 Next we produce the preliminary `network.geojson` file, which connects trailheads to peaks via trails:
 
-    poetry run python extract_network.py
-    # produces data/network.geojson
+    poetry run python extract_network.py data/catskills/{spec.json,peaks-connected.json,combined-trails.json,roads.json} > data/catskills/network.geojson
 
 This script also removes lots of trails that don't connect to a high peak. A "trailhead" is a node where the road network and the trail network meet. It might be on private land, or it might be in a residential area where you can't park. For that reason it's better to start and end hikes with parking lots:
 

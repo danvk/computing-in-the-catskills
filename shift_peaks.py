@@ -32,16 +32,19 @@ def shift_peaks(peaks_file: str, trails_file: str):
     # way. This removes the option of narrowly bypassing a peak without bagging it,
     # which greatly reduces the number of possible hikes later.
     new_ways = []
+    num_dropped = 0
     for way in trail_ways:
         nodes = way['nodes']
         if way_length(nodes, trail_nodes) < 0.1:
             start = trail_end_nodes[nodes[0]]
             end = trail_end_nodes[nodes[-1]]
             if start == 1 and end == 1:
-                print(f'Dropping {element_link(way)}')
+                num_dropped += 1
+                sys.stderr.write(f'Dropping {element_link(way)}\n')
                 continue
         new_ways.append(way)
 
+    sys.stderr.write(f'Dropped {num_dropped} short spur ways.\n')
     trail_ways = new_ways
 
     on_trail = 0
@@ -73,8 +76,8 @@ def shift_peaks(peaks_file: str, trails_file: str):
         farthest = max(pt_m, farthest)
 
         # The Mill Brook Ridge peak node is 52.6m from the trail.
-        # The Friday peak node is 61.86m from the OSM herd path
-        if pt_m < 62:
+        # The Friday peak node is 98.6m from the OSM herd path
+        if pt_m < 100:
             pt_node['tags'] = {
                 **peak['tags'],
                 'original_node': peak_id,
