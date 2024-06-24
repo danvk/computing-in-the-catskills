@@ -136,8 +136,7 @@ Next we produce the preliminary `network.geojson` file, which connects trailhead
 
 This script also removes lots of trails that don't connect to a high peak. A "trailhead" is a node where the road network and the trail network meet. It might be on private land, or it might be in a residential area where you can't park. For that reason it's better to start and end hikes with parking lots:
 
-    poetry run python parking_lots.py
-    # produces data/network+parking.geojson
+    poetry run python parking_lots.py data/catskills/{spec.json,network.geojson,combined-trails.json,roads.json,parking.json,extra-lot-names.json,parking-connections.geojson,network+parking.geojson}
 
 This is the key file that `loops.py`, `tsp.py` and `subset_cover.py` work off of.
 
