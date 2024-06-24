@@ -88,3 +88,9 @@ def index_by(xs: Iterable[T], key: Callable[[T], U]) -> dict[U, list[T]]:
         out.setdefault(k, [])
         out[k].append(x)
     return out
+
+
+def orient(coords: list[T], desired_first: T) -> list[T]:
+    if coords[-1] == desired_first:
+        return coords[::-1]
+    return coords

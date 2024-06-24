@@ -140,6 +140,13 @@ This script also removes lots of trails that don't connect to a high peak. A "tr
 
 This is the key file that `loops.py`, `tsp.py` and `subset_cover.py` work off of.
 
+Pull in elevation data and add it to the network file:
+
+    poetry run eio clip -o data/catskills/ele.tif --bounds -74.9 41.6 -73.6 42.5
+    poetry run python elevation.py data/catskills/network+parking.geojson data/catskills/ele.tif > data/catskills/network+parking+ele.geojson
+
+
+
 [peaks]: http://catskill-3500-club.org/peaks.php
 [geojson-95.2]: https://geojson.io/#id=github:danvk/computing-in-the-catskills/blob/main/gallery/11-through-hikes-95.2-miles.geojson
 [geojson-104.9]: https://geojson.io/#id=github:danvk/computing-in-the-catskills/blob/main/gallery/12-loop-hikes-104.9-miles.geojson
