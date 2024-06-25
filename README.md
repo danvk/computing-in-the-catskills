@@ -198,6 +198,11 @@ Apply 30mi hard cap on hikes and copy over network data:
     cp data/catskills/network-relabeled.geojson ~/github/catskills-hike-planner/data/catskills/network.geojson
     cp data/adk/network-relabeled.geojson ~/github/catskills-hike-planner/data/adk/network.geojson
 
+Update static assets:
+
+    poetry run python generate_web_data.py data/catskills/network-relabeled.geojson geojson > ~/github/catskills/map-src/public/catskills-high-peaks.geojson
+    poetry run python generate_web_data.py data/adk/network-relabeled.geojson geojson > ~/github/catskills/map-src/public/adk-high-peaks.geojson
+
 [peaks]: http://catskill-3500-club.org/peaks.php
 [geojson-95.2]: https://geojson.io/#id=github:danvk/computing-in-the-catskills/blob/main/gallery/11-through-hikes-95.2-miles.geojson
 [geojson-104.9]: https://geojson.io/#id=github:danvk/computing-in-the-catskills/blob/main/gallery/12-loop-hikes-104.9-miles.geojson
