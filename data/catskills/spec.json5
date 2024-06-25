@@ -1,0 +1,16 @@
+{
+  bbox: {
+    north: 42.352,
+    south: 41.813,
+    east: -73.862,
+    west: -74.855,
+  },
+  num_peaks: 37,
+  invalid_parking_ids: [],
+  bad_lot_walks: [
+    [385488241, 385488236],
+    [385488238, 385488236],
+  ],
+  edges_to_toss: [],
+  forced_clusters: [],
+}

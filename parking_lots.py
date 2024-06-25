@@ -17,6 +17,7 @@ from collections import defaultdict
 import json
 import sys
 
+import json5
 from tqdm import tqdm
 import networkx as nx
 
@@ -324,7 +325,7 @@ if __name__ == '__main__':
         out_network,
     ) = sys.argv[1:]
 
-    spec = Spec(json.load(open(spec_file)))
+    spec = Spec(json5.load(open(spec_file)))
     features = json.load(open(network_file))['features']
     trails = json.load(open(trails_file))['elements']
     roads = json.load(open(roads_file))['elements']

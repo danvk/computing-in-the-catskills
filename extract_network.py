@@ -24,6 +24,7 @@ import json
 import sys
 from typing import Dict, List, Set, Tuple
 
+import json5
 import networkx as nx
 
 from osm import (
@@ -279,7 +280,7 @@ def extract_network(
 
 if __name__ == '__main__':
     spec_file, peaks_file, trails_file, roads_file = sys.argv[1:]
-    spec = Spec(json.load(open(spec_file)))
+    spec = Spec(json5.load(open(spec_file)))
     peaks, trails, roads = (
         json.load(open(path))['elements']
         for path in (peaks_file, trails_file, roads_file)

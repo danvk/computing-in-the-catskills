@@ -8,6 +8,7 @@ import json
 import math
 import sys
 
+import json5
 from tqdm import tqdm
 import networkx as nx
 
@@ -25,11 +26,7 @@ def load_and_index(spec: Spec, raw_features: list):
     # Nix these for now; they really expand the clusters which blows up the problem.
     features = [f for f in raw_features if f['properties'].get('type') != 'lot-to-lot']
 
-    # Very carefully add in lot<->lot walks
-    # ok_lot_walks = [
-    #    {10942786419, 2947971907},  # Burnam / McKinley Hollow
-    #    {1075850833, 995422357},  # Spruceton / Diamond Notch
-    # ]
+    # Add in lot<->lot walks
     for f in raw_features:
         p = f['properties']
         if (
@@ -289,7 +286,7 @@ def plausible_peak_sequences(
 
 if __name__ == '__main__':
     spec_file, network_file = sys.argv[1:]
-    spec = Spec(json.load(open(spec_file)))
+    spec = Spec(json5.load(open(spec_file)))
     features = json.load(open(network_file))['features']
     G, peaks_to_lots = load_and_index(spec, features)
 

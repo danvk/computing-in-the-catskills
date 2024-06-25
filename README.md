@@ -134,11 +134,11 @@ The nodes for peaks in OSM tend not to be on trails and in some cases (Vly) they
 
 Next we produce the preliminary `network.geojson` file, which connects trailheads to peaks via trails:
 
-    poetry run python extract_network.py data/catskills/{spec.json,peaks-connected.json,combined-trails.json,roads.json} > data/catskills/network.geojson
+    poetry run python extract_network.py data/catskills/{spec.json5,peaks-connected.json,combined-trails.json,roads.json} > data/catskills/network.geojson
 
 This script also removes lots of trails that don't connect to a high peak. A "trailhead" is a node where the road network and the trail network meet. It might be on private land, or it might be in a residential area where you can't park. For that reason it's better to start and end hikes with parking lots:
 
-    poetry run python parking_lots.py data/catskills/{spec.json,network.geojson,combined-trails.json,roads.json,parking.json,extra-lot-names.json,parking-connections.geojson,network+parking.geojson}
+    poetry run python parking_lots.py data/catskills/{spec.json5,network.geojson,combined-trails.json,roads.json,parking.json,extra-lot-names.json,parking-connections.geojson,network+parking.geojson}
 
 This is the key file that `loops.py`, `tsp.py` and `subset_cover.py` work off of.
 
@@ -149,7 +149,7 @@ Pull in elevation data and add it to the network file:
 
 Generate possible hikes:
 
-    poetry run python loops.py data/catskills/spec.json data/catskills/network+parking+ele.geojson > data/catskills/hikes.json
+    poetry run python loops.py data/catskills/spec.json5 data/catskills/network+parking+ele.geojson > data/catskills/hikes.json
 
 Relabel nodes:
 
@@ -157,7 +157,7 @@ Relabel nodes:
 
 Regenerate possible hikes with the new labels:
 
-    poetry run python loops.py data/catskills/spec.json data/catskills/network-relabeled.geojson > data/catskills/hikes.json
+    poetry run python loops.py data/catskills/spec.json5 data/catskills/network-relabeled.geojson > data/catskills/hikes.json
 
 Add elevation data to these hikes:
 
@@ -176,8 +176,8 @@ Similar to Catskills!
     poetry run python run_overpass_query.py queries/adk/*.txt
     poetry run python filter_to_peak_list.py data/adk/peaks.json data/adk/peak-codes-gnis.txt > data/adk/peaks-46ers.json
     poetry run python shift_peaks.py data/adk/peaks-46ers.json data/adk/trails.json > data/adk/peaks-connected.json
-    poetry run python extract_network.py data/adk/{spec.json,peaks-connected.json,trails.json,roads.json} > data/adk/network.geojson
-    poetry run python parking_lots.py data/adk/{spec.json,network.geojson,trails.json,roads.json,parking.json,extra-lot-names.json,parking-connections.geojson,network+parking.geojson}
+    poetry run python extract_network.py data/adk/{spec.json5,peaks-connected.json,trails.json,roads.json} > data/adk/network.geojson
+    poetry run python parking_lots.py data/adk/{spec.json5,network.geojson,trails.json,roads.json,parking.json,extra-lot-names.json,parking-connections.geojson,network+parking.geojson}
     poetry run eio clip -o data/adk/ele.tif --bounds -74.3 43.978 -73.613 44.460
     poetry run python elevation.py data/adk/{network+parking.geojson,ele.tif} > data/adk/network+parking+ele.geojson
 

@@ -1,0 +1,28 @@
+{
+  bbox: {
+    north: 44.46,
+    south: 43.978,
+    east: -73.613,
+    west: -74.3,
+  },
+  num_peaks: 46,
+  invalid_parking_ids: [160417079],
+  bad_lot_walks: [],
+  edges_to_toss: [
+    [4317527772, 4317528199],
+    // These are connections over the Ausables. These are fine, but we prefer to split.
+    [4821570241, 3116003544],
+    [3116003321, 5228455261],
+    [4505051847, 4505051844],
+    [3115878962, 4758243106],
+    [4504936038, 4504936037],
+    [4813716335, 4813716334],
+    [4505126948, 2425328348],
+  ],
+  forced_clusters: [
+    ["Ca", "Po"], // Cascade/Porter
+    ["Ny", "St"], // Nye/Street
+    ["Al"], // Allen
+  ],
+  roads_that_are_trails: ["Lake Road"],
+}
