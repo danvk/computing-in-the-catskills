@@ -1,0 +1,49 @@
+# Manually curated list, see
+# https://docs.google.com/spreadsheets/d/1wbhyZ_PxB6tUea2j3uSZWvsYVvtPE-zl7ITJCEYhZFk/edit?gid=0#gid=0
+# Code	gnis:id	Name of Mountain
+M	973357	Mount Marcy
+A	973340	Algonquin Peak
+H	973353	Mount Haystack
+Sk	973360	Mount Skylight
+WF	973364	Whiteface Mountain
+D	973347	Dix Mountain
+G	973351	Gray Peak
+I	973355	Iroquois Peak
+B	973341	Basin Mountain
+Go	973349	Gothics
+C	947091	Mount Colden
+Gi	2611110	Giant Mountain
+N	958617	Nippletop
+SP	964468	Santanoni Peak
+Re	962328	Mount Redfield
+Wr	971754	Wright Peak
+Sa	970556	Saddleback Mountain
+P	959830	Panther Peak
+T	966981	Tabletop Mountain
+RP	962786	Rocky Peak Ridge
+Mb	971960	Macomb Mountain
+Ar	942572	Armstrong Mountain
+Ho	953279	Hough Peak
+Se	964885	Seward Mountain
+MM	956573	Mount Marshall
+Al	942362	Allen Mountain
+BS	943955	Big Slide Mountain
+E	949720	Esther Mountain
+UW	968312	Upper Wolfjaw
+LW	956118	Lower Wolfjaw
+St	966631	Street Mountain
+Ph	960289	Phelps Mountain
+Do	948566	Mount Donaldson
+Sy	964894	Seymour Mountain
+Sw	964537	Sawteeth
+Ca	945952	Cascade Mountain
+SD	965737	South Dix
+Po	960994	Porter Mountain
+Co	947211	Mount Colvin
+Em	949645	Mount Emmons
+DL	948403	Dial Mountain
+ED	949060	Grace Peak / East Dix
+Bl	944215	Blake
+Cl	946865	Cliff Mountain
+Ny	959076	Nye Mountain
+Cu	947539	Couchsachraga Peak

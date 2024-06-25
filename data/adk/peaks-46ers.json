@@ -1,0 +1,682 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.1 084b4234",
+  "osm3s": {
+    "timestamp_osm_base": "2024-06-25T15:04:55Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+    {
+      "type": "node",
+      "id": 357544674,
+      "lat": 44.0707979,
+      "lon": -73.9398459,
+      "tags": {
+        "ele": "1312",
+        "gnis:feature_id": "942362",
+        "name": "Allen Mountain",
+        "natural": "peak",
+        "wikidata": "Q4731793",
+        "code": "Al"
+      }
+    },
+    {
+      "type": "node",
+      "id": 357545178,
+      "lat": 44.1345216,
+      "lon": -73.8497765,
+      "tags": {
+        "ele": "1320",
+        "gnis:feature_id": "942572",
+        "name": "Armstrong Mountain",
+        "natural": "peak",
+        "wikidata": "Q4793955",
+        "code": "Ar"
+      }
+    },
+    {
+      "type": "node",
+      "id": 357548909,
+      "lat": 44.1822038,
+      "lon": -73.870895,
+      "tags": {
+        "ele": "1280",
+        "gnis:feature_id": "943955",
+        "name": "Big Slide Mountain",
+        "natural": "peak",
+        "wikidata": "Q4906374",
+        "code": "BS"
+      }
+    },
+    {
+      "type": "node",
+      "id": 357549296,
+      "lat": 44.0812841,
+      "lon": -73.8449726,
+      "tags": {
+        "ele": "1212",
+        "gnis:feature_id": "944215",
+        "name": "Blake Peak",
+        "natural": "peak",
+        "wikidata": "Q4924459",
+        "code": "Bl"
+      }
+    },
+    {
+      "type": "node",
+      "id": 357552549,
+      "lat": 44.2185789,
+      "lon": -73.8601703,
+      "tags": {
+        "ele": "1249",
+        "gnis:feature_id": "945952",
+        "name": "Cascade Mountain",
+        "natural": "peak",
+        "tourism": "viewpoint",
+        "wikidata": "Q5048152",
+        "code": "Ca"
+      }
+    },
+    {
+      "type": "node",
+      "id": 357554607,
+      "lat": 44.1270357,
+      "lon": -73.9595242,
+      "tags": {
+        "ele": "1436",
+        "gnis:feature_id": "947091",
+        "name": "Mount Colden",
+        "natural": "peak",
+        "wikidata": "Q6920203",
+        "code": "C"
+      }
+    },
+    {
+      "type": "node",
+      "id": 357554870,
+      "lat": 44.0943021,
+      "lon": -73.8345616,
+      "tags": {
+        "ele": "1235",
+        "gnis:feature_id": "947211",
+        "name": "Mount Colvin",
+        "natural": "peak",
+        "wikidata": "Q6920213",
+        "code": "Co"
+      }
+    },
+    {
+      "type": "node",
+      "id": 357555420,
+      "lat": 44.0961509,
+      "lon": -74.1606609,
+      "tags": {
+        "ele": "1157",
+        "gnis:feature_id": "947539",
+        "name": "Couchsachraga Peak",
+        "natural": "peak",
+        "wikidata": "Q5175966",
+        "code": "Cu"
+      }
+    },
+    {
+      "type": "node",
+      "id": 357556604,
+      "lat": 44.1061605,
+      "lon": -73.796634,
+      "tags": {
+        "ele": "1215",
+        "gnis:feature_id": "948403",
+        "name": "Dial Mountain",
+        "natural": "peak",
+        "wikidata": "Q5270468",
+        "code": "DL"
+      }
+    },
+    {
+      "type": "node",
+      "id": 357556889,
+      "lat": 44.1540194,
+      "lon": -74.211209,
+      "tags": {
+        "ele": "1238",
+        "gnis:feature_id": "948566",
+        "name": "Donaldson Mountain",
+        "natural": "peak",
+        "wikidata": "Q5295363",
+        "code": "Do"
+      }
+    },
+    {
+      "type": "node",
+      "id": 357557474,
+      "lat": 44.0650526,
+      "lon": -73.7572439,
+      "tags": {
+        "ele": "1227",
+        "gnis:feature_id": "949060",
+        "name": "Grace Peak",
+        "natural": "peak",
+        "note": "absolutely gorgeous views;about 45/way from S. Dix.",
+        "old_name": "East Dix",
+        "wikidata": "Q5328237",
+        "code": "ED"
+      }
+    },
+    {
+      "type": "node",
+      "id": 357558429,
+      "lat": 44.1436698,
+      "lon": -74.2140464,
+      "tags": {
+        "ele": "1226",
+        "gnis:feature_id": "949645",
+        "name": "Mount Emmons",
+        "natural": "peak",
+        "wikidata": "Q6920641",
+        "code": "Em"
+      }
+    },
+    {
+      "type": "node",
+      "id": 357565545,
+      "lat": 44.0695439,
+      "lon": -73.7777716,
+      "tags": {
+        "ele": "1341",
+        "gnis:feature_id": "953279",
+        "name": "Hough Peak",
+        "natural": "peak",
+        "wikidata": "Q5912859",
+        "wikipedia": "en:Hough Peak",
+        "code": "Ho"
+      }
+    },
+    {
+      "type": "node",
+      "id": 357569866,
+      "lat": 44.148092,
+      "lon": -73.8330905,
+      "tags": {
+        "ele": "1273",
+        "gnis:feature_id": "956118",
+        "name": "Lower Wolfjaw Mountain",
+        "natural": "peak",
+        "wikidata": "Q6693909",
+        "wikipedia": "en:Lower Wolfjaw Mountain",
+        "code": "LW"
+      }
+    },
+    {
+      "type": "node",
+      "id": 357570629,
+      "lat": 44.1276367,
+      "lon": -74.0111588,
+      "tags": {
+        "ele": "1333",
+        "gnis:feature_id": "956573",
+        "name": "Mount Marshall",
+        "natural": "peak",
+        "wikidata": "Q6922027",
+        "code": "MM"
+      }
+    },
+    {
+      "type": "node",
+      "id": 357573649,
+      "lat": 44.0890497,
+      "lon": -73.816311,
+      "tags": {
+        "ele": "1393",
+        "gnis:feature_id": "958617",
+        "name": "Nippletop",
+        "natural": "peak",
+        "wikidata": "Q7039599",
+        "code": "N"
+      }
+    },
+    {
+      "type": "node",
+      "id": 357576084,
+      "lat": 44.0983559,
+      "lon": -74.1322278,
+      "tags": {
+        "ele": "1358",
+        "gnis:feature_id": "959830",
+        "name": "Panther Peak",
+        "natural": "peak",
+        "wikidata": "Q7131804",
+        "code": "P"
+      }
+    },
+    {
+      "type": "node",
+      "id": 357576773,
+      "lat": 44.1568609,
+      "lon": -73.9214754,
+      "tags": {
+        "ele": "1262",
+        "gnis:feature_id": "960289",
+        "name": "Phelps Mountain",
+        "natural": "peak",
+        "wikidata": "Q7181274",
+        "code": "Ph"
+      }
+    },
+    {
+      "type": "node",
+      "id": 357577812,
+      "lat": 44.2124011,
+      "lon": -73.8539195,
+      "tags": {
+        "ele": "1240",
+        "gnis:feature_id": "960994",
+        "name": "Porter Mountain",
+        "natural": "peak",
+        "wikidata": "Q7231640",
+        "wikipedia": "en:Porter Mountain",
+        "code": "Po"
+      }
+    },
+    {
+      "type": "node",
+      "id": 357581829,
+      "lat": 44.0952942,
+      "lon": -73.9492016,
+      "tags": {
+        "ele": "1403",
+        "gnis:feature_id": "962328",
+        "name": "Mount Redfield",
+        "natural": "peak",
+        "wikidata": "Q6923164",
+        "code": "Re"
+      }
+    },
+    {
+      "type": "node",
+      "id": 357588004,
+      "lat": 44.0824637,
+      "lon": -74.1309464,
+      "tags": {
+        "ele": "1401",
+        "gnis:feature_id": "964468",
+        "name": "Santanoni Peak",
+        "natural": "peak",
+        "wikidata": "Q7420073",
+        "code": "SP"
+      }
+    },
+    {
+      "type": "node",
+      "id": 357589026,
+      "lat": 44.1597799,
+      "lon": -74.1993239,
+      "tags": {
+        "ele": "1319",
+        "gnis:feature_id": "964885",
+        "name": "Seward Mountain",
+        "natural": "peak",
+        "wikidata": "Q7458181",
+        "wikipedia": "en:Seward Mountain (New York)",
+        "code": "Se"
+      }
+    },
+    {
+      "type": "node",
+      "id": 357589061,
+      "lat": 44.1577382,
+      "lon": -74.1726001,
+      "tags": {
+        "ele": "1236",
+        "gnis:feature_id": "964894",
+        "name": "Seymour Mountain",
+        "natural": "peak",
+        "wikidata": "Q8525969",
+        "code": "Sy"
+      }
+    },
+    {
+      "type": "node",
+      "id": 357590152,
+      "lat": 44.0599388,
+      "lon": -73.7743571,
+      "tags": {
+        "ele": "1242",
+        "gnis:feature_id": "965737",
+        "name": "South Dix",
+        "natural": "peak",
+        "note": "Peak is a tree with carving \"S Dix\" and a very small circle placard above eye level on the same tree.",
+        "wikidata": "Q7567063",
+        "code": "SD"
+      }
+    },
+    {
+      "type": "node",
+      "id": 357592172,
+      "lat": 44.140311,
+      "lon": -73.916052,
+      "tags": {
+        "ele": "1312",
+        "gnis:feature_id": "966981",
+        "name": "Table Top Mountain",
+        "natural": "peak",
+        "wikidata": "Q7673183",
+        "code": "T"
+      }
+    },
+    {
+      "type": "node",
+      "id": 357596504,
+      "lat": 44.1263618,
+      "lon": -73.8751109,
+      "tags": {
+        "ele": "1375",
+        "gnis:feature_id": "970556",
+        "name": "Saddleback Mountain",
+        "natural": "peak",
+        "wikidata": "Q7397752",
+        "wikipedia": "en:Saddleback Mountain (Keene, New York)",
+        "code": "Sa"
+      }
+    },
+    {
+      "type": "node",
+      "id": 357597986,
+      "lat": 44.1516339,
+      "lon": -73.9794899,
+      "tags": {
+        "ele": "1389",
+        "gnis:feature_id": "971754",
+        "name": "Wright Peak",
+        "natural": "peak",
+        "wikidata": "Q8038240",
+        "code": "Wr"
+      }
+    },
+    {
+      "type": "node",
+      "id": 357598246,
+      "lat": 44.0516916,
+      "lon": -73.7802392,
+      "tags": {
+        "ele": "1336",
+        "gnis:feature_id": "971960",
+        "name": "Macomb Mountain",
+        "natural": "peak",
+        "note": "Wooden sign stating \"macomb Mt\" is the peak.",
+        "wikidata": "Q6724801",
+        "code": "Mb"
+      }
+    },
+    {
+      "type": "node",
+      "id": 357598496,
+      "lat": 44.1435874,
+      "lon": -73.9866839,
+      "tags": {
+        "ele": "1555",
+        "gnis:feature_id": "973340",
+        "name": "Algonquin Peak",
+        "natural": "peak",
+        "wikidata": "Q4724340",
+        "code": "A"
+      }
+    },
+    {
+      "type": "node",
+      "id": 357598499,
+      "lat": 44.1211704,
+      "lon": -73.886477,
+      "tags": {
+        "ele": "1468",
+        "gnis:feature_id": "973341",
+        "name": "Basin Mountain",
+        "natural": "peak",
+        "wikidata": "Q4867492",
+        "wikipedia": "en:Basin Mountain (New York)",
+        "code": "B"
+      }
+    },
+    {
+      "type": "node",
+      "id": 357598514,
+      "lat": 44.0822884,
+      "lon": -73.7865188,
+      "tags": {
+        "ele": "1473",
+        "gnis:feature_id": "973347",
+        "name": "Dix Mountain",
+        "natural": "peak",
+        "wikidata": "Q5284763",
+        "code": "D"
+      }
+    },
+    {
+      "type": "node",
+      "id": 357598520,
+      "lat": 44.1277835,
+      "lon": -73.8573881,
+      "tags": {
+        "ele": "1425",
+        "gnis:feature_id": "973349",
+        "name": "Gothics",
+        "natural": "peak",
+        "wikidata": "Q5587893",
+        "code": "Go"
+      }
+    },
+    {
+      "type": "node",
+      "id": 357598527,
+      "lat": 44.1112807,
+      "lon": -73.9360819,
+      "tags": {
+        "ele": "1463",
+        "gnis:feature_id": "973351",
+        "name": "Gray Peak",
+        "natural": "peak",
+        "wikidata": "Q5598218",
+        "code": "G"
+      }
+    },
+    {
+      "type": "node",
+      "id": 357598534,
+      "lat": 44.1057882,
+      "lon": -73.9004196,
+      "tags": {
+        "ele": "1498",
+        "gnis:feature_id": "973353",
+        "name": "Mount Haystack",
+        "natural": "peak",
+        "wikidata": "Q6921097",
+        "code": "H"
+      }
+    },
+    {
+      "type": "node",
+      "id": 357598540,
+      "lat": 44.1367974,
+      "lon": -73.998083,
+      "tags": {
+        "ele": "1472",
+        "gnis:feature_id": "973355",
+        "name": "Iroquois Peak",
+        "natural": "peak",
+        "wikidata": "Q6073461",
+        "code": "I"
+      }
+    },
+    {
+      "type": "node",
+      "id": 357598546,
+      "lat": 44.1127777,
+      "lon": -73.9236983,
+      "tags": {
+        "description": "Highest Mountain in New York State",
+        "ele": "1617",
+        "gnis:feature_id": "973357",
+        "name": "Mount Marcy",
+        "natural": "peak",
+        "wikidata": "Q1858227",
+        "wikipedia": "en:Mount Marcy",
+        "code": "M"
+      }
+    },
+    {
+      "type": "node",
+      "id": 357598556,
+      "lat": 44.0994298,
+      "lon": -73.9311529,
+      "tags": {
+        "ele": "1495",
+        "gnis:feature_id": "973360",
+        "name": "Mount Skylight",
+        "natural": "peak",
+        "wikidata": "Q6923718",
+        "code": "Sk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 357598568,
+      "lat": 44.3657845,
+      "lon": -73.9029843,
+      "tags": {
+        "ele": "1466",
+        "gnis:feature_id": "973364",
+        "name": "Whiteface Mountain",
+        "natural": "peak",
+        "wikidata": "Q3434515",
+        "wikipedia": "en:Whiteface Mountain",
+        "code": "WF"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1431484619,
+      "lat": 44.1542143,
+      "lon": -73.7053688,
+      "tags": {
+        "ele": "1338",
+        "gnis:feature_id": "962786",
+        "name": "Rocky Peak Ridge",
+        "natural": "peak",
+        "website": "https://www.dec.ny.gov/lands/100750.html",
+        "wikidata": "Q7355957",
+        "wikipedia": "en:Rocky Peak Ridge",
+        "code": "RP"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1978958101,
+      "lat": 44.1611619,
+      "lon": -73.7202371,
+      "tags": {
+        "ele": "1410",
+        "gnis:feature_id": "2611110",
+        "name": "Giant Mountain",
+        "natural": "peak",
+        "website": "https://www.dec.ny.gov/lands/100750.html",
+        "wikidata": "Q8524323",
+        "code": "Gi"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2419904333,
+      "lat": 44.179418,
+      "lon": -74.0270089,
+      "tags": {
+        "ele": "1265",
+        "gnis:feature_id": "966631",
+        "name": "Street Mountain",
+        "natural": "peak",
+        "website": "https://en.wikipedia.org/wiki/Street_Mountain_(New_York)",
+        "wikidata": "Q7622887",
+        "wikipedia": "en:Street Mountain (New York)",
+        "code": "St"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2463436929,
+      "lat": 44.1403898,
+      "lon": -73.845253,
+      "tags": {
+        "ele": "1281",
+        "gnis:feature_id": "968312",
+        "name": "Upper Wolfjaw Mountain",
+        "natural": "peak",
+        "wikidata": "Q7899016",
+        "wikipedia": "en:Upper Wolfjaw Mountain",
+        "code": "UW"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3151231652,
+      "lat": 44.103266,
+      "lon": -73.9750872,
+      "tags": {
+        "ele": "1201",
+        "gnis:feature_id": "946865",
+        "name": "Cliff Mountain",
+        "natural": "peak",
+        "note": "Trail ends at summit with a signpost and no views on the wooded summit.",
+        "wikidata": "Q5132708",
+        "code": "Cl"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4299228062,
+      "lat": 44.1145097,
+      "lon": -73.8502961,
+      "tags": {
+        "ele": "1260",
+        "gnis:feature_id": "964537",
+        "name": "Sawteeth",
+        "natural": "peak",
+        "wikidata": "Q7428687",
+        "code": "Sw"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4317115220,
+      "lat": 44.3871575,
+      "lon": -73.8896718,
+      "tags": {
+        "ele": "1293",
+        "gnis:feature_id": "949720",
+        "name": "Esther Mountain",
+        "natural": "peak",
+        "wikidata": "Q5401250",
+        "code": "E"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4379698296,
+      "lat": 44.1872305,
+      "lon": -74.0238238,
+      "tags": {
+        "ele": "1271",
+        "gnis:feature_id": "959076",
+        "name": "Nye Mountain",
+        "natural": "peak",
+        "website": "https://en.wikipedia.org/wiki/Nye_Mountain",
+        "wikidata": "Q7071055",
+        "wikipedia": "en:Nye Mountain",
+        "code": "Ny"
+      }
+    }
+  ],
+  "cli": [
+    "filter_to_peak_list.py",
+    "data/adk/peaks.json",
+    "data/adk/peak-codes-gnis.txt"
+  ]
+}

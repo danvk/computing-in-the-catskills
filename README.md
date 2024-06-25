@@ -174,6 +174,7 @@ This produces data/hikes/*.geojson, which you can view using [geojson.io](https:
 Similar to Catskills!
 
     poetry run python run_overpass_query.py queries/adk/*.txt
+    poetry run python filter_to_peak_list.py data/adk/peaks.json data/adk/peak-codes-gnis.txt > data/adk/peaks-46ers.json
 
 [peaks]: http://catskill-3500-club.org/peaks.php
 [geojson-95.2]: https://geojson.io/#id=github:danvk/computing-in-the-catskills/blob/main/gallery/11-through-hikes-95.2-miles.geojson
