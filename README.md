@@ -145,7 +145,9 @@ Pull in elevation data and add it to the network file:
     poetry run eio clip -o data/catskills/ele.tif --bounds -74.9 41.6 -73.6 42.5
     poetry run python elevation.py data/catskills/network+parking.geojson data/catskills/ele.tif > data/catskills/network+parking+ele.geojson
 
+Generate possible hikes:
 
+    poetry run python loops.py data/catskills/spec.json data/catskills/network+parking+ele.geojson > data/catskills/hikes.json
 
 [peaks]: http://catskill-3500-club.org/peaks.php
 [geojson-95.2]: https://geojson.io/#id=github:danvk/computing-in-the-catskills/blob/main/gallery/11-through-hikes-95.2-miles.geojson

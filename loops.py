@@ -17,6 +17,10 @@ from spec import Spec
 from util import index_by
 
 
+def log(*args):
+    print(*args, file=sys.stderr)
+
+
 def load_and_index(spec: Spec, raw_features: list):
     # Nix these for now; they really expand the clusters which blows up the problem.
     features = [f for f in raw_features if f['properties'].get('type') != 'lot-to-lot']
@@ -46,8 +50,8 @@ def load_and_index(spec: Spec, raw_features: list):
     G_no_lots.remove_nodes_from(
         node for node in G.nodes() if G.nodes[node]['type'] == 'parking-lot'
     )
-    print(G.number_of_nodes(), '/', G.number_of_edges())
-    print(G_no_lots.number_of_nodes(), '/', G_no_lots.number_of_edges())
+    log(G.number_of_nodes(), '/', G.number_of_edges())
+    log(G_no_lots.number_of_nodes(), '/', G_no_lots.number_of_edges())
     forced_clusters = [
         {code_to_peak[code]['properties']['id'] for code in codes}
         for codes in spec.forced_clusters
@@ -56,7 +60,7 @@ def load_and_index(spec: Spec, raw_features: list):
     high_peak_nodes = [n for n in G.nodes() if G.nodes[n]['type'] == 'high-peak']
 
     G_high_peaks = make_subgraph(G_no_lots, high_peak_nodes)
-    print(G_high_peaks.number_of_nodes(), '/', G_high_peaks.number_of_edges())
+    log(G_high_peaks.number_of_nodes(), '/', G_high_peaks.number_of_edges())
 
     peak_components = [
         [n for n in cluster if n not in all_forced]
@@ -64,8 +68,8 @@ def load_and_index(spec: Spec, raw_features: list):
     ]
     peak_components += forced_clusters
 
-    print('# peak components:', len(peak_components))
-    print(peak_components)
+    log('# peak components:', len(peak_components))
+    log(peak_components)
 
     # tuple of peaks -> list of parking lots
     peaks_to_lots = defaultdict(list)
@@ -225,7 +229,7 @@ def plausible_peak_sequences(
     cache_key = (max_length, tuple(sorted(peaks)))
     result = _cache.get(cache_key)
     if result is not None:
-        # print(' ' * depth, f'{peaks} Cache hit (size={len(_cache)})')
+        # log(' ' * depth, f'{peaks} Cache hit (size={len(_cache)})')
         return result
 
     # You can start and end with any pair of peaks.
@@ -241,21 +245,21 @@ def plausible_peak_sequences(
         # For each set of "inner" peaks, choose the best sequence and eliminate
         # it if it crosses any surprise peaks.
         by_inner_peaks = index_by(remaining_seqs, lambda ds: tuple(sorted(ds[1])))
-        # print('by_inner_peaks', by_inner_peaks)
+        # log('by_inner_peaks', by_inner_peaks)
         by_start = peak_idx[start_peak]
         by_end = peak_idx[end_peak]
         for inner_peaks, inner_seqs in by_inner_peaks.items():
             best_d = math.inf
             best_inner_seq = None
-            # print('  inner_peaks', inner_peaks)
-            # print('  inner_seqs ', inner_seqs)
+            # log('  inner_peaks', inner_peaks)
+            # log('  inner_seqs ', inner_seqs)
             if len(inner_peaks) == 0 or max_length == 2:
                 best_d = by_start[end_peak].d_km
                 best_inner_seq = tuple()
             else:
                 for remaining_d, remaining_seq in inner_seqs:
-                    # print('    remaining_d  ', remaining_d)
-                    # print('    remaining_seq', remaining_seq)
+                    # log('    remaining_d  ', remaining_d)
+                    # log('    remaining_seq', remaining_seq)
                     start_d = by_start[remaining_seq[0]].d_km
                     end_d = by_end[remaining_seq[-1]].d_km
                     d = start_d + remaining_d + end_d
@@ -276,7 +280,7 @@ def plausible_peak_sequences(
 
     _cache[cache_key] = sequences
     if depth <= 1:
-        print(
+        log(
             ' ' * depth,
             f'Completed {peaks} ({len(sequences)} seqs), cache size={len(_cache)}',
         )
@@ -290,20 +294,20 @@ if __name__ == '__main__':
     G, peaks_to_lots = load_and_index(spec, features)
 
     for peaks, lots in sorted(peaks_to_lots.items(), key=lambda x: len(x[1])):
-        print('Lots:', len(lots), lots, 'Peaks:', len(peaks), peaks)
+        log('Lots:', len(lots), lots, 'Peaks:', len(peaks), peaks)
         for peak in peaks:
-            print('  ', node_link(peak, G.nodes[peak]['feature']['properties']['name']))
-    print(len(peaks_to_lots), 'connected clusters of peaks.')
+            log('  ', node_link(peak, G.nodes[peak]['feature']['properties']['name']))
+    log(len(peaks_to_lots), 'connected clusters of peaks.')
 
     # 10 peaks / 20 lots
     # 10 peaks / 8 lots
-    print('')
+    log('')
     hikes = []
     num_loops = 0
     num_thrus = 0
 
     for peaks, lots in tqdm(peaks_to_lots.items()):
-        print(len(peaks), peaks, len(lots), lots)
+        log(len(peaks), peaks, len(lots), lots)
         peak_idx = index_peaks(G, peaks)
         # Lot->Lot hikes are not interesting
         _cache = {}
@@ -312,23 +316,22 @@ if __name__ == '__main__':
             for p in plausible_peak_sequences(G, list(peaks), peak_idx, max_length=8)
             if p[1]
         ]
-        print(f'  plausible sequences: {len(plausible_seqs)}')
+        log(f'  plausible sequences: {len(plausible_seqs)}')
         loops = loop_hikes_for_peak_seq(G, lots, peaks, plausible_seqs)
         thrus = through_hikes_for_peak_seq(G, lots, peaks, plausible_seqs)
         hikes += loops
         hikes += thrus
-        print(f'  loops: {len(loops)}, thru: {len(thrus)}')
+        log(f'  loops: {len(loops)}, thru: {len(thrus)}')
         num_loops += len(loops)
         num_thrus += len(thrus)
 
     hikes = [(round(d_km, 3), nodes) for d_km, nodes in hikes]
 
-    with open('data/hikes.json', 'w') as out:
-        json.dump(hikes, out, separators=(',', ':'))
+    json.dump(hikes, sys.stdout, separators=(',', ':'))
 
-    print(f'Loops: {num_loops}')
-    print(f'Thrus: {num_thrus}')
-    print(f'Total hikes: {num_loops + num_thrus}')
+    log(f'Loops: {num_loops}')
+    log(f'Thrus: {num_thrus}')
+    log(f'Total hikes: {num_loops + num_thrus}')
 
 """
 This is the group of 12:
