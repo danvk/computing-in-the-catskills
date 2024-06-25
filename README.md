@@ -180,6 +180,9 @@ Similar to Catskills!
     poetry run python parking_lots.py data/adk/{spec.json5,network.geojson,trails.json,roads.json,parking.json,extra-lot-names.json,parking-connections.geojson,network+parking.geojson}
     poetry run eio clip -o data/adk/ele.tif --bounds -74.3 43.978 -73.613 44.460
     poetry run python elevation.py data/adk/{network+parking.geojson,ele.tif} > data/adk/network+parking+ele.geojson
+    poetry run python loops.py data/adk/spec.json5 data/adk/network+parking+ele.geojson > data/adk/hikes.json
+    poetry run python relabel_network.py data/adk/{network+parking+ele.geojson,hikes.json} > data/adk/network-relabeled.geojson
+    poetry run python loops.py data/adk/spec.json5 data/adk/network-relabeled.geojson > data/adk/hikes.json
 
 [peaks]: http://catskill-3500-club.org/peaks.php
 [geojson-95.2]: https://geojson.io/#id=github:danvk/computing-in-the-catskills/blob/main/gallery/11-through-hikes-95.2-miles.geojson

@@ -160,3 +160,6 @@ cython_debug/
 #.idea/
 
 .DS_Store
+
+# These files are quite large, so we choose to exclude them from git
+data/adk/hikes.json
