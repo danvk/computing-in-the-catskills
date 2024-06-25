@@ -163,3 +163,4 @@ cython_debug/
 
 # These files are quite large, so we choose to exclude them from git
 data/adk/hikes.json
+data/adk/hikes+ele.json
