@@ -1,0 +1,14 @@
+{
+  "bbox": {
+    "north": 44.46,
+    "south": 43.978,
+    "east": -73.613,
+    "west": -74.3
+  },
+  "num_peaks": 46,
+  "invalid_parking_ids": [160417079],
+  "bad_lot_walks": [],
+  "edges_to_toss": [],
+  "forced_clusters": [],
+  "roads_that_are_trails": ["Lake Road"]
+}

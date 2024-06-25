@@ -74,6 +74,17 @@ def extract_network(
 
     node_to_roads = defaultdict(list)
     road_ways = [el for el in road_elements if el['type'] == 'way']
+    if spec.roads_that_are_trails:
+        filtered_road_ways = [
+            el
+            for el in road_ways
+            if el['tags'].get('name') not in spec.roads_that_are_trails
+        ]
+        # There are three hits for "Lake Road"
+        assert len(road_ways) - len(filtered_road_ways) >= len(
+            spec.roads_that_are_trails
+        )
+        road_ways = filtered_road_ways
     for el in road_ways:
         for node in el['nodes']:
             node_to_roads[node].append(el['id'])

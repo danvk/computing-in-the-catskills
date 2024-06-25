@@ -11,6 +11,7 @@ class Spec:
         self.bad_lot_walks = [{a, b} for a, b in data.get('bad_lot_walks', [])]
         self.edges_to_toss = [(a, b) for a, b in data.get('edges_to_toss', [])]
         self.forced_clusters = [set(x) for x in data.get('forced_clusters', [])]
+        self.roads_that_are_trails = set(data.get('roads_that_are_trails', []))
 
     def is_in_bbox(self, lon: float, lat: float):
         return self.south <= lat <= self.north and self.west <= lon <= self.east
