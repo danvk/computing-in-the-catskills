@@ -261,7 +261,8 @@ def attach_parking(
             }
         )
 
-    sys.stderr.write(f'Unclaimed lot names, may be outdated: {id_to_extra_name}\n')
+    if id_to_extra_name:
+        sys.stderr.write(f'Unclaimed lot names, may be outdated: {id_to_extra_name}\n')
 
     lot_lot_paths = 0
     for a in tqdm(matched_lots):
