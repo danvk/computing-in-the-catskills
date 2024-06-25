@@ -7,7 +7,7 @@ from subset_cover import find_optimal_hikes_subset_cover
 if __name__ == '__main__':
     network_file, hikes_file = sys.argv[1:]
     features = json.load(open(network_file))['features']
-    all_hikes: list[tuple[float, list[int]]] = json.load(open('hikes_file'))
+    all_hikes: list[tuple[float, list[int]]] = json.load(open(hikes_file))
 
     print(f'Unrestricted hikes: {len(all_hikes)}')
     d_km, chosen, fc = find_optimal_hikes_subset_cover(features, all_hikes)
