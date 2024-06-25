@@ -1,0 +1,12 @@
+[out:json][timeout:25];
+// gather results
+(
+  node
+  ["natural"="peak"]
+  (if: t["ele"] > 1150)  // 1150m=3773ft
+  (43.978,-74.262,44.460,-73.613);
+);
+// print results
+out body;
+>;
+out skel qt;

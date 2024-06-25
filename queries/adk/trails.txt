@@ -1,0 +1,20 @@
+[out:json][timeout:25];
+// gather results
+(
+  // These are the blazed trails
+  relation["route"="hiking"]
+  (43.978,-74.3,44.460,-73.613);
+  // More paths; some overlap w/ route=hiking but there are many others, too, including herd paths.
+  relation["highway"~"^(path|track|footway)$"]
+  (43.978,-74.3,44.460,-73.613);
+  way["highway"~"^(path|track|footway)$"]
+  (43.978,-74.3,44.460,-73.613);
+  // This is critical for connectivity in the Ausable club.
+  // It _is_ walkable by the public, just not drivable.
+  way["highway"="residential"]["name"="Lake Road"]
+  (43.978,-74.3,44.460,-73.613);
+);
+// print results
+out body;
+>;
+out skel qt;

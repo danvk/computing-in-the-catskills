@@ -1,0 +1,12 @@
+[out:json][timeout:25];
+// gather results
+(
+  way["amenity"="parking"]
+  (43.978,-74.3,44.460,-73.613);
+  node["amenity"="parking"]
+  (43.978,-74.3,44.460,-73.613);
+);
+// print results
+out body;
+>;
+out skel qt;

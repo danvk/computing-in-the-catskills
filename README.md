@@ -110,6 +110,8 @@ These two forms of filtering can be applied recursively. For example, if we're c
 
 ## Data ingestion flow
 
+### Catskills
+
 Pull down data from OSM using the Overpass API:
 
     for query in queries/catskills/*.txt; poetry run python run_overpass_query.py $query
@@ -166,6 +168,12 @@ Generate optimal set of hikes using subset cover:
     poetry run python all_hikes_subset_cover.py data/catskills/{network-relabeled.geojson,hikes+ele.json} 13 20
 
 This produces data/hikes/*.geojson, which you can view using [geojson.io](https://geojson.io).
+
+### Adirondacks
+
+Similar to Catskills!
+
+    poetry run python run_overpass_query.py queries/adk/*.txt
 
 [peaks]: http://catskill-3500-club.org/peaks.php
 [geojson-95.2]: https://geojson.io/#id=github:danvk/computing-in-the-catskills/blob/main/gallery/11-through-hikes-95.2-miles.geojson
