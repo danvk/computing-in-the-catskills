@@ -7,9 +7,8 @@ from spec import Spec
 
 
 spec = Spec(json5.load(open('data/catskills/spec.json5')))
-G, peaks_to_lots = load_and_index(
-    spec, json.load(open('data/catskills/network+parking.geojson'))['features']
-)
+features = json.load(open('data/catskills/network+parking.geojson'))['features']
+G, peaks_to_lots = load_and_index(spec, features)
 
 
 def round_dseq(dseq):
@@ -142,29 +141,32 @@ def test_six_sequence():
     ]
 
 
-the_ten = (
-    -6003,
-    -6601,
-    2398015279,
-    2426171552,
-    2884119551,
-    2884119672,
-    7292479776,
-    9147145385,
-    9953707705,
-    9953729846,
+the_ten_codes = (
+    'L',  # Lone
+    'Ro',  # Rocky
+    'Pk',  # Peekamoose
+    'S',  # Slide
+    'C',  # Cornell
+    'W',  # Witt
+    'Ta',  # Table
+    'P',  # Panther
+    'Fr',  # Friday
+    'BC',  # Balsam Cap
+)
+the_ten = tuple(
+    next(f['properties']['id'] for f in features if f['properties'].get('code') == code)
+    for code in the_ten_codes
 )
 
 
 def test_ten_sequence():
-    # 2821 / 9864101
     all_seqs = call_plausible_peak_sequences(G, the_ten)
-    assert len(all_seqs) == 2821
+    assert len(all_seqs) == 2221
 
 
 def test_ten_sequence_max_depth():
     six_seqs = call_plausible_peak_sequences(G, the_ten, max_length=6)
-    assert len(six_seqs) < 2821
+    assert len(six_seqs) < 2221
     for _d, seq in six_seqs:
         assert len(seq) <= 6
     assert any(len(seq) == 6 for _d, seq in six_seqs)
