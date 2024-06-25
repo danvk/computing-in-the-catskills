@@ -1,10 +1,14 @@
 import json
 
+import json5
+
 from loops import load_and_index, index_peaks, plausible_peak_sequences
+from spec import Spec
 
 
+spec = Spec(json5.load(open('data/catskills/spec.json5')))
 G, peaks_to_lots = load_and_index(
-    json.load(open('data/network+parking.geojson'))['features']
+    spec, json.load(open('data/catskills/network+parking.geojson'))['features']
 )
 
 
@@ -97,7 +101,7 @@ def test_six_sequence():
     all_seqs = call_plausible_peak_sequences(
         G, [sherrill, northdome, westkill, sw_hunter, hunter, rusk]
     )
-    assert len(all_seqs) == 123
+    assert len(all_seqs) == 269
     # 177 sequences
     mega_spruceton = [
         (d, seq)
@@ -105,13 +109,13 @@ def test_six_sequence():
         if len(seq) == 6 and seq[0] == sherrill and seq[-1] == rusk
     ]
     assert mega_spruceton == [
-        (26.14, (sherrill, northdome, westkill, sw_hunter, hunter, rusk))
+        (26.16, (sherrill, northdome, westkill, sw_hunter, hunter, rusk))
     ]
 
     from_sw_hunter = [
         (d, seq) for d, seq in all_seqs if len(seq) == 6 and seq[0] == sw_hunter
     ]
-    # print(round_dseq(from_sw_hunter))
+    print(round_dseq(from_sw_hunter))
     assert from_sw_hunter == [
         (
             33.22,
@@ -120,6 +124,26 @@ def test_six_sequence():
         (
             40.46,
             (1938215682, 10010091368, 357574030, 2955311547, 1938201532, 10033501291),
+        ),
+    ]
+
+    [
+        (
+            25.89,
+            (1938215682, 1938201532, 10033501291, 2955311547, 357574030, 10010091368),
+            # SW         H           R            W           ND         S
+        ),
+        (
+            31.92,
+            (1938215682, 1938201532, 10033501291, 357574030, 10010091368, 2955311547),
+        ),
+        (
+            35.74,
+            (1938215682, 2955311547, 10010091368, 357574030, 10033501291, 1938201532),
+        ),
+        (
+            35.96,
+            (1938215682, 1938201532, 2955311547, 357574030, 10010091368, 10033501291),
         ),
     ]
 
