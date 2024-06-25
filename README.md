@@ -161,6 +161,12 @@ Add elevation data to these hikes:
 
     poetry run python add_elevation_to_hikes.py data/catskills/{network-relabeled.geojson,hikes.json} > data/catskills/hikes+ele.json
 
+Generate optimal set of hikes using subset cover:
+
+    poetry run python all_hikes_subset_cover.py data/catskills/{network-relabeled.geojson,hikes+ele.json} 13 20
+
+This produces data/hikes/*.geojson, which you can view using [geojson.io](https://geojson.io).
+
 [peaks]: http://catskill-3500-club.org/peaks.php
 [geojson-95.2]: https://geojson.io/#id=github:danvk/computing-in-the-catskills/blob/main/gallery/11-through-hikes-95.2-miles.geojson
 [geojson-104.9]: https://geojson.io/#id=github:danvk/computing-in-the-catskills/blob/main/gallery/12-loop-hikes-104.9-miles.geojson

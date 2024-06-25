@@ -5,17 +5,17 @@ import networkx as nx
 from SetCoverPy import setcover
 
 from graph import get_lot_index, get_peak_index, read_hiking_graph
-
-
-def orient(coords: list, desired_first: tuple[float, float]):
-    if coords[-1] == desired_first:
-        return coords[::-1]
-    return coords
+from util import orient
 
 
 def find_optimal_hikes_subset_cover(
-    features: list, hikes: list, peak_osm_ids: list[int] | None = None
+    features: list, hikes: list, peak_osm_ids: list[int] | None = None, maxiters=20
 ):
+    """hikes is a list of either:
+
+    - (d_km, ele_m, nodes_list)
+    - (cost, ele_m, nodes_list, d_km)
+    """
     G = read_hiking_graph(features)
     id_to_peak = get_peak_index(features)
     id_to_lot = get_lot_index(features)
@@ -29,7 +29,7 @@ def find_optimal_hikes_subset_cover(
     covers = np.zeros(shape=(num_peaks, num_loops), dtype=bool)
     costs = np.zeros(shape=(num_loops,), dtype=float)
     for j, hike in enumerate(hikes):
-        cost, loop = hike[:2]
+        cost, _ele, loop = hike[:3]
         costs[j] = cost
         for peak in loop[1:-1]:
             if peak in peak_id_to_idx:
@@ -39,27 +39,25 @@ def find_optimal_hikes_subset_cover(
     median_cost = np.median(costs)
     costs = costs / median_cost
 
-    solver = setcover.SetCover(covers, costs)
+    solver = setcover.SetCover(covers, costs, maxiters=maxiters)
     solver.SolveSCP()
-    # total_cost = solver.total_cost * median_cost
     chosen_hikes = []
     for j, hike in enumerate(hikes):
         if solver.s[j]:
             chosen_hikes.append(hike)
 
+    total_d_km = 0
+    tsp_fs = [f for f in peak_features if f['properties']['id'] in peak_id_to_idx]
     id_to_feature = {
         f['properties']['id']: f for f in features if 'id' in f['properties']
     }
-
-    total_d_km = 0
-    tsp_fs = [f for f in peak_features if f['properties']['id'] in peak_id_to_idx]
     for f in tsp_fs:
         f['properties']['marker-size'] = 'small'
     for i, hike in enumerate(chosen_hikes):
-        d_km, loop = hike[:2]
+        d_km, ele_m, loop = hike[:3]
         cost = None
-        if len(hike) > 2:
-            cost, loop, d_km = hike
+        if len(hike) > 3:
+            cost, ele_m, loop, d_km = hike
         total_d_km += d_km
         tsp_fs.append(id_to_lot[loop[0]])
         if loop[0] != loop[-1]:
@@ -82,6 +80,8 @@ def find_optimal_hikes_subset_cover(
                     'hike_index': i,
                     'd_km': round(d_km, 2),
                     'd_mi': round(d_km * 0.621371, 2),
+                    'ele_m': ele_m,
+                    'ele_ft': int(ele_m * 3.28084),
                     **({'cost': cost} if cost is not None else {}),
                     'peaks': [
                         id_to_peak[node]['properties']['name'] for node in loop[1:-1]

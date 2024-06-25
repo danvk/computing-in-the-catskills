@@ -1,6 +1,7 @@
 import itertools
 from math import radians, cos, sin, asin, sqrt
 import math
+import time
 from typing import Iterable, List, Tuple, TypeVar, Callable
 
 
@@ -26,6 +27,8 @@ def haversine(lon1, lat1, lon2, lat2):
 
 m_per_lng = 82526.71005845172
 m_per_lat = 111194.9266445589
+
+MI_PER_KM = 0.621371
 
 
 def catskills_haversine(lon1, lat1, lon2, lat2):
@@ -94,3 +97,13 @@ def orient(coords: list[T], desired_first: T) -> list[T]:
     if coords[-1] == desired_first:
         return coords[::-1]
     return coords
+
+
+class Timer:
+    def __enter__(self):
+        self.start_secs = time.time()
+        return self
+
+    def __exit__(self, type, value, traceback):
+        elapsed_secs = time.time() - self.start_secs
+        print(f'Elapsed time: {elapsed_secs:g}s')
