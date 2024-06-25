@@ -189,6 +189,15 @@ Then generate some hikes:
 
     poetry run python all_hikes_subset_cover.py data/adk/{network-relabeled.geojson,hikes+ele.json} 20 5
 
+## Update data for web UI
+
+Apply 30mi hard cap on hikes and copy over network data:
+
+    poetry run python cap_hike_length.py data/catskills/hikes+ele.json 30 > ~/github/catskills-hike-planner/data/catskills/hikes.json
+    poetry run python cap_hike_length.py data/adk/hikes+ele.json 30 > ~/github/catskills-hike-planner/data/adk/hikes.json
+    cp data/catskills/network-relabeled.geojson ~/github/catskills-hike-planner/data/catskills/network.geojson
+    cp data/adk/network-relabeled.geojson ~/github/catskills-hike-planner/data/adk/network.geojson
+
 [peaks]: http://catskill-3500-club.org/peaks.php
 [geojson-95.2]: https://geojson.io/#id=github:danvk/computing-in-the-catskills/blob/main/gallery/11-through-hikes-95.2-miles.geojson
 [geojson-104.9]: https://geojson.io/#id=github:danvk/computing-in-the-catskills/blob/main/gallery/12-loop-hikes-104.9-miles.geojson
