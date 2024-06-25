@@ -12,7 +12,7 @@ if __name__ == '__main__':
     print(f'Unrestricted hikes: {len(all_hikes)}')
     d_km, chosen, fc = find_optimal_hikes_subset_cover(features, all_hikes)
     print(f'  {len(chosen)} hikes: {d_km:.2f} km = {d_km * 0.621371:.2f} mi')
-    with open('data/unrestricted.geojson', 'w') as out:
+    with open('data/hikes/unrestricted.geojson', 'w') as out:
         json.dump(fc, out)
 
     print()
@@ -20,7 +20,7 @@ if __name__ == '__main__':
     print(f'Loop hikes: {len(loop_hikes)}')
     d_km, chosen, fc = find_optimal_hikes_subset_cover(features, loop_hikes)
     print(f'  {len(chosen)} hikes: {d_km:.2f} km = {d_km * 0.621371:.2f} mi')
-    with open('data/loops-only.geojson', 'w') as out:
+    with open('data/hikes/loops-only.geojson', 'w') as out:
         json.dump(fc, out)
 
     print()
@@ -28,7 +28,7 @@ if __name__ == '__main__':
     print(f'Day hikes: {len(day_hikes)}')
     d_km, chosen, fc = find_optimal_hikes_subset_cover(features, day_hikes)
     print(f'  {len(chosen)} hikes: {d_km:.2f} km = {d_km * 0.621371:.2f} mi')
-    with open('data/day-hikes-only.geojson', 'w') as out:
+    with open('data/hikes/day-hikes-only.geojson', 'w') as out:
         json.dump(fc, out)
 
     print()
@@ -38,7 +38,7 @@ if __name__ == '__main__':
     print(f'Day loop hikes: {len(day_loop_hikes)}')
     d_km, chosen, fc = find_optimal_hikes_subset_cover(features, day_loop_hikes)
     print(f'  {len(chosen)} hikes: {d_km:.2f} km = {d_km * 0.621371:.2f} mi')
-    with open('data/day-loop-hikes-only.geojson', 'w') as out:
+    with open('data/hikes/day-loop-hikes-only.geojson', 'w') as out:
         json.dump(fc, out)
 
     print()
@@ -48,7 +48,7 @@ if __name__ == '__main__':
     print(f'Preferred loop hikes: {len(day_hikes)}')
     d_km, chosen, fc = find_optimal_hikes_subset_cover(features, penalized_hikes)
     print(f'  {len(chosen)} hikes: {d_km:.2f} km = {d_km * 0.621371:.2f} mi')
-    with open('data/prefer-loop-hikes.geojson', 'w') as out:
+    with open('data/hikes/prefer-loop-hikes.geojson', 'w') as out:
         json.dump(fc, out)
 
     print()
@@ -58,5 +58,5 @@ if __name__ == '__main__':
     print(f'Preferred loop day hikes: {len(penalized_day_hikes)}')
     d_km, chosen, fc = find_optimal_hikes_subset_cover(features, penalized_day_hikes)
     print(f'  {len(chosen)} hikes: {d_km:.2f} km = {d_km * 0.621371:.2f} mi')
-    with open('data/day-prefer-loop-hikes.geojson', 'w') as out:
+    with open('data/hikes/day-prefer-loop-hikes.geojson', 'w') as out:
         json.dump(fc, out)
