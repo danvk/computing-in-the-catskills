@@ -149,6 +149,18 @@ Generate possible hikes:
 
     poetry run python loops.py data/catskills/spec.json data/catskills/network+parking+ele.geojson > data/catskills/hikes.json
 
+Relabel nodes:
+
+    poetry run python relabel_network.py data/catskills/{network+parking+ele.geojson,hikes.json} > data/catskills/network-relabeled.geojson
+
+Regenerate possible hikes with the new labels:
+
+    poetry run python loops.py data/catskills/spec.json data/catskills/network-relabeled.geojson > data/catskills/hikes.json
+
+Add elevation data to these hikes:
+
+    poetry run python add_elevation_to_hikes.py data/catskills/{network-relabeled.geojson,hikes.json} > data/catskills/hikes+ele.json
+
 [peaks]: http://catskill-3500-club.org/peaks.php
 [geojson-95.2]: https://geojson.io/#id=github:danvk/computing-in-the-catskills/blob/main/gallery/11-through-hikes-95.2-miles.geojson
 [geojson-104.9]: https://geojson.io/#id=github:danvk/computing-in-the-catskills/blob/main/gallery/12-loop-hikes-104.9-miles.geojson
