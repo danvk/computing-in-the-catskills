@@ -16,9 +16,9 @@ def geojson_for_hike(features, d_km, seq):
     fs = [f for f in peak_features if f['properties']['id'] in seq]
     for f in fs:
         f['properties']['marker-size'] = 'small'
-    fs.append(id_to_lot[seq[0]])
+    fs.append(id_to_feature[seq[0]])
     if seq[0] != seq[-1]:
-        fs.append(id_to_lot[seq[-1]])
+        fs.append(id_to_feature[seq[-1]])
     coordinates = []
     for a, b in zip(seq[:-1], seq[1:]):
         path = nx.shortest_path(G, a, b, weight='weight')

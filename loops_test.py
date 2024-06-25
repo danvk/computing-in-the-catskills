@@ -115,27 +115,21 @@ def test_six_sequence():
     from_sw_hunter = [
         (d, seq) for d, seq in all_seqs if len(seq) == 6 and seq[0] == sw_hunter
     ]
-    print(round_dseq(from_sw_hunter))
+    # print(round_dseq(from_sw_hunter))
     assert from_sw_hunter == [
-        (
-            33.22,
-            (1938215682, 10033501291, 1938201532, 2955311547, 357574030, 10010091368),
-        ),
-        (
-            40.46,
-            (1938215682, 10010091368, 357574030, 2955311547, 1938201532, 10033501291),
-        ),
-    ]
-
-    [
         (
             25.89,
             (1938215682, 1938201532, 10033501291, 2955311547, 357574030, 10010091368),
             # SW         H           R            W           ND         S
+            # Visualize with:
+            # poetry run python hike_sample.py --seq 1938215682,...,10010091368 \
+            # data/catskills/network+parking.geojson data/catskills/hikes+ele.json \
+            # | pbcopy
         ),
         (
             31.92,
             (1938215682, 1938201532, 10033501291, 357574030, 10010091368, 2955311547),
+            # SW         H           R            ND         S            W
         ),
         (
             35.74,
