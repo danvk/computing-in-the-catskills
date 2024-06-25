@@ -38,6 +38,7 @@ if __name__ == '__main__':
         sys.stderr.write(
             f'Random hike: {d_km:.2f} km = {d_km * 0.621371:.2f} mi, +{gain_ft}ft\n'
         )
+        sys.stderr.write('--seq {",".join(loop)}\n')
         for peak in loop:
             sys.stderr.write(f'  {node_link(peak)}\n')
 
