@@ -4,6 +4,17 @@ import json
 import sys
 
 
+def short_name(long: str):
+    # Must match catskills/map-src/HikePlanner.tsx
+    return (
+        long.replace(' High Point', '')
+        .replace(' High Peak', '')
+        .replace(' Mountain', '')
+        .replace('Mount ', '')
+        .replace(' Peak', '')
+    )
+
+
 if __name__ == '__main__':
     geojson_file, output_format = sys.argv[1:]
     assert output_format in ('ts', 'py', 'geojson')
@@ -32,11 +43,7 @@ if __name__ == '__main__':
                 "properties": {
                     **f['properties'],
                     "type": "dec",
-                    # Matches HikePlanner.tsx
-                    "name": f['properties']['name']
-                    .replace(' Mountain', '')
-                    .replace('Mount ', '')
-                    .replace(' Peak', ''),
+                    "name": short_name(f['properties']['name']),
                 },
             }
             for f in features
