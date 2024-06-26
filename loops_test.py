@@ -10,6 +10,13 @@ spec = Spec(json5.load(open('data/catskills/spec.json5')))
 features = json.load(open('data/catskills/network+parking.geojson'))['features']
 G, peaks_to_lots = load_and_index(spec, features)
 
+code_to_id = {
+    f['properties']['code']: f['properties']['id']
+    for f in features
+    if 'code' in f['properties']
+}
+id_to_code = {v: k for k, v in code_to_id.items()}
+
 
 def round_dseq(dseq):
     return [(round(d, 2), seq) for d, seq in dseq]
@@ -170,3 +177,37 @@ def test_ten_sequence_max_depth():
     for _d, seq in six_seqs:
         assert len(seq) <= 6
     assert any(len(seq) == 6 for _d, seq in six_seqs)
+
+
+the_nine_codes = (
+    'L',  # Lone
+    'Ro',  # Rocky
+    'Pk',  # Peekamoose = 2398015279
+    'S',  # Slide = 2426171552
+    'C',  # Cornell
+    'W',  # Witt
+    'Ta',  # Table
+    'Fr',  # Friday
+    'BC',  # Balsam Cap
+)
+the_nine = tuple(code_to_id[code] for code in the_nine_codes)
+
+
+def test_nine_sequence():
+    all_seqs = call_plausible_peak_sequences(G, the_nine)
+    # print(all_seqs[-1])
+    all_nine = [(d, s) for (d, s) in all_seqs if len(s) >= 9]
+
+    # print(code_to_id['Pk'])
+    # print(code_to_id['S'])
+    # print(all_seqs[:10])
+
+    pk_to_s = [
+        (d, s)
+        for (d, s) in all_nine
+        if s[0] == code_to_id['Pk'] and s[-1] == code_to_id['S']
+    ]
+    # print([id_to_code[id] for id in pk_to_s[0][1]])
+    # print(peaks_to_lots)
+
+    assert len(pk_to_s) == 1
