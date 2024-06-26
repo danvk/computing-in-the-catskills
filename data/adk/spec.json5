@@ -6,6 +6,8 @@
     west: -74.3,
   },
   num_peaks: 46,
+  // Eight peaks per hike is not justified, but is critical for performance.
+  max_peaks_per_hike: 8,
   invalid_parking_ids: [160417079],
   bad_lot_walks: [],
   edges_to_toss: [

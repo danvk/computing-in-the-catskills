@@ -7,6 +7,7 @@ class Spec:
         self.east = bbox['east']
         self.west = bbox['west']
         self.num_peaks = data['num_peaks']
+        self.max_peaks_per_hike = data['max_peaks_per_hike']
         self.invalid_parking_ids = set(data.get('invalid_parking_ids', []))
         self.bad_lot_walks = [{a, b} for a, b in data.get('bad_lot_walks', [])]
         self.edges_to_toss = [(a, b) for a, b in data.get('edges_to_toss', [])]

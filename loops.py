@@ -310,7 +310,9 @@ if __name__ == '__main__':
         _cache = {}
         plausible_seqs = [
             p
-            for p in plausible_peak_sequences(G, list(peaks), peak_idx, max_length=10)
+            for p in plausible_peak_sequences(
+                G, list(peaks), peak_idx, max_length=spec.max_peaks_per_hike
+            )
             if p[1]
         ]
         log(f'  plausible sequences: {len(plausible_seqs)}')

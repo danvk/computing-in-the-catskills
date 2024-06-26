@@ -6,6 +6,7 @@
     west: -74.855,
   },
   num_peaks: 37,
+  max_peaks_per_hike: 10,
   invalid_parking_ids: [],
   bad_lot_walks: [
     [385488241, 385488236],
