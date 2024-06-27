@@ -142,6 +142,12 @@ This script also removes lots of trails that don't connect to a high peak. A "tr
 
 This is the key file that `loops.py`, `tsp.py` and `subset_cover.py` work off of.
 
+At this point (optional), you can generate an optimal hike using Traveling Salesman (OR Tools):
+
+    poetry run python tsp.py data/catskills/network+parking.geojson > hikes/tsp.geojson
+
+This approach is slower and less flexible than Weighted Subset Cover, but it has the advantage of allowing hikes of any length using any number of peaks.
+
 Pull in elevation data and add it to the network file:
 
     poetry run eio clip -o data/catskills/ele.tif --bounds -74.9 41.6 -73.6 42.5
@@ -168,6 +174,7 @@ Generate optimal set of hikes using subset cover:
     poetry run python all_hikes_subset_cover.py data/catskills/{network-relabeled.geojson,hikes+ele.json} 13 20
 
 This produces data/hikes/*.geojson, which you can view using [geojson.io](https://geojson.io).
+
 
 ### Adirondacks
 
